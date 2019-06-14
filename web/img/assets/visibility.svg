@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="12px" viewBox="0 0 22 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/visibility</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Welcome" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1280_search_resault" transform="translate(-1105.000000, -294.000000)">
+            <!--<rect fill="#FFFFFF" x="0" y="0" width="1280" height="800"></rect>-->
+            <g id="icons/visibility" transform="translate(1104.000000, 288.000000)">
+                <g id="Shape">
+                    <polygon points="0 0 24 0 24 24 0 24"></polygon>
+                    <path d="M1.57350354,12 C3.32806292,14.98693 7.39632572,17 12,17 C16.6036743,17 20.6719371,14.98693 22.4264965,12 C20.6719371,9.01307 16.6036743,7 12,7 C7.39632572,7 3.32806292,9.01307 1.57350354,12 Z M12,16.75 C9.37785763,16.75 7.25,14.6221424 7.25,12 C7.25,9.37785763 9.37785763,7.25 12,7.25 C14.6221424,7.25 16.75,9.37785763 16.75,12 C16.75,14.6221424 14.6221424,16.75 12,16.75 Z M12,13.375 C12.7588576,13.375 13.375,12.7588576 13.375,12 C13.375,11.2411424 12.7588576,10.625 12,10.625 C11.2411424,10.625 10.625,11.2411424 10.625,12 C10.625,12.7588576 11.2411424,13.375 12,13.375 Z" stroke="#CAD0D9"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

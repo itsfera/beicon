@@ -1,0 +1,181 @@
+.content-wrapper-prop() {
+  max-width: 1230px;
+  min-width: 320px;
+  padding: 40px 30px;
+  margin: 0 auto;
+}
+
+.translate-x-50() {
+    -webkit-transform:  translateX(-50%);
+    -moz-transform:     translateX(-50%);
+    -ms-transform:      translateX(-50%);
+    -o-transform:       translateX(-50%);
+    transform:          translateX(-50%);
+}
+
+.translate-y-50() {
+    -webkit-transform:  translateY(-50%);
+    -moz-transform:     translateY(-50%);
+    -ms-transform:      translateY(-50%);
+    -o-transform:       translateY(-50%);
+    transform:          translateY(-50%);
+}
+
+.translate-xy-50() {
+    -webkit-transform:  translate(-50%, -50%);
+    -moz-transform:     translate(-50%, -50%);
+    -ms-transform:      translate(-50%, -50%);
+    -o-transform:       translate(-50%, -50%);
+    transform:          translate(-50%, -50%);
+}
+
+.center-block() {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  .translate-xy-50();
+}
+
+.page-branding-mode() {
+  background-repeat: no-repeat;
+  background-size: auto;
+  background-position: top left;
+ /* background-attachment: fixed;*/
+}
+
+.d-flex() {
+    display: -moz-flex;
+    display: -o-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+
+
+
+/* Buttons ************************************************************************************************************/
+.btn-main-prop() {
+  background-color: @text-decoration-color;
+  font-family: @header-font;
+  text-shadow: 0 1px 0 0 #FFFFFF;
+/*  box-shadow: inset 0 0 0 0 #FFFFFF, 0 4px 10px 0 rgba(94, 31, 92, 0.5);*/
+  color: #fff;
+  padding: 15px 38px;
+  font-size: 1.4rem;
+  line-height: 1.6rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.btn-min-prop() {
+    .btn-main-prop();
+    border-radius: 2px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    line-height: 1.1rem;
+    font-weight: 400;
+}
+
+.quantity-btn-inner() {
+    position: relative;
+    display: block;
+    width: 14px;
+    height: 14px;
+}
+
+.transparent-btn() {
+    border: none;
+    background: none;
+    outline: none;
+    padding: 0;
+    &:focus {
+        outline: none;
+    }
+}
+
+/* Headings *******************************************************************************************************/
+.page__heading-prop() {
+    font-family: inherit;
+    font-weight: inherit;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin: 0;
+}
+
+.section-heading-prop() {
+    font-family: @header-font;
+    color: @text-decoration-color;
+    font-size: 1.6rem;
+    text-align: center;
+    padding: 28px 0 33px;
+}
+
+/* Goods list and items ***********************************************************************************************/
+.img-fit() {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.img-stretch() {
+    width: 100%;
+    height: auto;
+}
+
+/* Form elements ******************************************************************************************************/
+.input-prop() {
+    font-family: @text-input;
+    display: block;
+    border: 1px solid @border-color-1;
+    outline: none;
+    &:not([type="submit"]) {
+        background-color: #fff;
+        box-sizing: border-box;
+    }
+    &:focus {
+        border: solid 1px @text-decoration-color;
+        outline: none;
+        box-shadow: none;
+    }
+}
+
+/* BG and Article overlay *********************************************************************************************/
+.overlay-common-prop() {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.overlay-bg-prop() {
+    .overlay-common-prop();
+    position: fixed;
+    display: none;
+    z-index: 90;
+}
+
+.popup-prop() {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform:  translate(-50%, -50%);
+    -moz-transform:     translate(-50%, -50%);
+    -ms-transform:      translate(-50%, -50%);
+    -o-transform:       translate(-50%, -50%);
+    transform:          translate(-50%, -50%);
+    width: 100%;
+}
+
+
+/* Hovers *************************************************************************************************************/
+.teaser-shadow() {
+    box-shadow: 0 6px 18px 2px rgba(179, 161, 112, 0.50);
+}
+
+.btn-hover() {
+    background: linear-gradient(180deg, #B3A170 0%, #9A8448 100%);
+    box-shadow: inset 0 4px 10px 0 rgba(156,143,107,0.59);
+}

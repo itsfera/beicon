@@ -1,0 +1,42 @@
+# Mod_Autoindex
+<IfModule mod_autoindex.c>
+  # Disable indexes
+    Options -Indexes
+</IfModule>
+
+# Mod_Rewrite
+<IfModule mod_rewrite.c>
+
+RewriteEngine on
+RewriteBase /
+
+# Переключает url в нижний регистр, если найдены символы в верхнем регистре
+RewriteCond %{REQUEST_URI} [A-Z]
+# Убедитесь, что это не файл на диске.
+RewriteCond %{REQUEST_FILENAME} !-s
+RewriteRule (.*) rewrite-strtolower.php?rewrite-strtolower-url=$1 [QSA,L]
+
+RewriteCond %{THE_REQUEST} \s/+(.+?)/+[?\s]
+RewriteRule /$ /%1 [R,L]
+
+  # Enable symlinks
+  Options +FollowSymlinks
+  # Enable mod_rewrite
+  RewriteEngine On
+
+  # If a directory or a file exists, use the request directly
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  # Otherwise forward the request to index.php
+  RewriteRule . index.php
+</IfModule>
+
+
+#<FilesMatch "\.(jpg|jpeg|png)$">
+#<IfModule mod_headers.c>
+#    Header add Access-Control-Allow-Origin "*"
+#</IfModule>
+#</FilesMatch>
+
+
+

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g>
+    <!--<g id="hovers" transform="translate(-956.000000, -208.000000)">-->
+    <!-- <g id="icons/chevron_right_L" transform="translate(956.000000, 208.000000)">-->
+    <!--<rect id="bounds" x="0" y="0" width="48" height="48"></rect>-->
+    <!-- <circle id="Oval-2" fill="#F2F6F8" fill-rule="evenodd" cx="24" cy="24" r="24"></circle>-->
+    <polygon id="Shape" fill="#788089" fill-rule="evenodd" points="21 19.4 22.4 18 28.4 24 22.4 30 21 28.6 25.6 24"></polygon>
+    <!-- </g>-->
+    <!--  </g>-->
+</g>
+</svg>
