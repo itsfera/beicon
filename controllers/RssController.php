@@ -1,72 +1,73 @@
 <?php
 
 namespace app\controllers;
-use app\models\Articles;
-use yii\rest\ActiveController;
+
 use app\models\Rss;
-use yii\helpers\ArrayHelper;
+use Yii;
+use yii\helpers\Url;
+use yii\web\Response;
+use app\components\XmlResponseFormatter;
 
-use yii\filters\auth\QueryParamAuth;
-class RssController extends \yii\rest\ActiveController
+
+class RssController extends \yii\web\Controller
 {
-    public $modelClass = 'app\models\Rss';
-    public function behaviors()
+
+    public function actionIndex($url)
     {
-        return ArrayHelper::merge(parent::behaviors(), [
-                'authenticator' => [
-                    'class' => QueryParamAuth::className(),
-                ],
 
-                'corsFilter' => [
-                    'class' => \yii\filters\Cors::className(),
-                    'cors'  => [
-                        'Origin'                           => ['*'],
-                        'Access-Control-Request-Method'    => ['POST', 'GET','PUT','DELETE','PATCH','OPTIONS'],
-                        'Access-Control-Allow-Credentials' => true,
-                        'Access-Control-Request-Headers' => ['*'],
-                        'Access-Control-Max-Age'           => 3600,                 // Cache (seconds)
-                        'Access-Control-Expose-Headers' => ['*'],
-                        'Access-Control-Allow-Origin' => ['*'],
+        $query = Rss::find()->where(['rss.url' => $url])->joinWith([
+            'articles' => function ($query) {
+                $query->andWhere(['status' => 'publish'])->joinWith('sectionData');
+            },
+        ]);
+
+        if ($query->count() == 0)
+        {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
+        }
 
 
-                    ]
-                ]
-            ]
-        );
+        Yii::$app->response->format = 'xml';
+        Yii::$app->response->formatters = ['xml' => ['class' => 'app\components\XmlResponseFormatter', 'rootTag' => 'rss', 'itemTag' => 'object', 'parameters'=>['xmlns:yandex'=>'http://news.yandex.ru', 'xmlns:rambler'=>'http://news.rambler.ru', 'version'=>'2.0', 'encoding'=>'utf-8']]];
+
+        $response = Yii::$app->getResponse();
+        $headers = $response->getHeaders();
+
+
+        $result =  [
+            'title' => 'Beicon',
+            'link' => 'https://www.beicon.ru',
+            'description' => 'Описание канала',
+            'language' => 'ru',
+
+        ];
+
+
+        $rss = $query->groupBy('articles.id')->asArray()->all();
+
+
+        foreach ($rss[0]['articles'] as $value) {
+
+
+            if ($value['status'] != 'publish') next;
+
+            $result[]['item'] = [
+                'title' => $value['name'],
+                'link' => 'https://beicon.ru'.Url::to(['articles/view', 'url' => $value['url'], 'section'=>$value['sectionData']['url']] ),
+                'pubDate' => date(DATE_RFC822, strtotime($value['date_publish'])),
+                'author' => 'Beicon',
+                'description'=>['cdata'=> html_entity_decode(strip_tags($value['preview_content']), ENT_NOQUOTES)],
+                'yandex:full-text'=>['cdata'=>html_entity_decode(preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", preg_replace('/<iframe.*?\/iframe>/i','', $value['content']))), 'namespace'=>'yandex', 'url'=>'http://news.rambler.ru'],
+                'rambler:fulltext'=>['cdata'=>html_entity_decode(preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", preg_replace('/<iframe.*?\/iframe>/i','',  $value['content']))), 'namespace'=>'rambler','url'=>'http://news.yandex.ru'],
+                'yandex:genre'=>['data'=>'article', 'namespace'=>'yandex'],
+                'enclosure'=>['setAttributes' => ['url'=>'https://beicon.ru'.UPLOAD_DIR.$value['id'].'-'.$value['preview_img'], 'type'=>"image/jpeg"]],
+            ];
+        }
+
+//        echo '<pre>';
+//        print_r($result);
+//        die;
+        return $result;
     }
-
-    public $serializer = [
-        'class' => 'yii\rest\Serializer',
-        'collectionEnvelope' => 'data'
-    ];
-
-
-
-    public function actions()
-    {
-        $actions = parent::actions();
-//        unset($actions["update"]);
-        // disable the "delete" and "create" actions
-//        unset($actions['delete'], $actions['create']);
-
-        // customize the data provider preparation with the "prepareDataProvider()" method
-        $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
-//        $actions['update']['prepareDataProvider'] = [$this, 'prepareDataProviderUpdate'];
-
-
-        return $actions;
-    }
-
-
-    public function prepareDataProvider()
-    {
-        // prepare and return a data provider for the "index" action
-        $model = new Rss();
-        $res = $model->search(\Yii::$app->request->queryParams);
-
-
-        return $res;
-    }
-
 
 }

@@ -132,7 +132,7 @@ $config = [
                 'sitemap.xml' => 'site/sitemap', //карта сайта
                 'sitemap' => 'site/sitemap-html', //карта сайта
                 'robots.txt' => 'site/robots', //карта сайта
-
+                '<url>.rss' => 'rss/index',
                 '<section>/<url>/' => 'articles/view',
                 '<url>' => 'sections/view',
 
