@@ -5,7 +5,6 @@ use yii\helpers\Url;
 use app\models\Socials;
 
 
-
 if($article["header_img"]) {
 
     if(file_exists($_SERVER["DOCUMENT_ROOT"].UPLOAD_DIR.$article["header_img"]))
@@ -69,7 +68,11 @@ if($article["header_img"]) {
                 </div>
                 <div class="left-block">
                     <!-- Add the .added class if the Article was added in Favorites articles list. And remove .added if the article was removed from the favorites list -->
-                    <button class="article__favorites"><svg class="inline-svg fav-article-svg"><use xlink:href="#favArticle"></use></svg></button>
+                    <a id="fav"
+                       rel="sidebar"
+                       href=""
+                       onclick="addFav();return false"
+                       class="link article__favorites AddFavViaSheens"><svg class="inline-svg fav-article-svg"><use xlink:href="#favArticle"></use></svg></a>
                     <div class="social-share__list_top">
                         <?
                         $socials = Socials::find()->orderBy(['sort' => SORT_ASC])->all();

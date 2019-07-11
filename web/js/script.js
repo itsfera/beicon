@@ -141,23 +141,36 @@ function initGalleryFullscreen(gallerySelector, previews, previewItem, fullscree
                 on: {
                     init: function() {
                         var mySwiper = $(this)[0],
-                        fullscreen = $(mySwiper.$wrapperEl[0].parentNode).closest('.gallery-fullscreen'),
-                        swiperContainer = fullscreen.find('.swiper-container');
+                            fullscreen = $(mySwiper.$wrapperEl[0].parentNode).closest('.gallery-fullscreen'),
+                            swiperContainer = fullscreen.find('.swiper-container');
                         if(swiperContainer.has('.swiper-slide-count')) {
                             fullscreen.find('.swiper-slide__current').text(mySwiper.activeIndex + 1);
                             fullscreen.find('.swiper-slide__total').text(mySwiper.slides.length);
                         }
-                        console.log('init');
+//                         console.log(mySwiper.imagesToLoad[mySwiper.activeIndex].baseURI);
+
+//                         console.log('init');
                     },
                     slideChange: function() {
+
                         var mySwiper = $(this)[0],
-                        fullscreen = $(mySwiper.$wrapperEl[0].parentNode).closest('.gallery-fullscreen'),
-                        swiperContainer = fullscreen.find('.swiper-container');
+                            fullscreen = $(mySwiper.$wrapperEl[0].parentNode).closest('.gallery-fullscreen'),
+                            swiperContainer = fullscreen.find('.swiper-container');
                         if(swiperContainer.has('.swiper-slide-count')) {
                             fullscreen.find('.swiper-slide__current').text(mySwiper.activeIndex + 1);
                         }
 
-                                var get = getUrlGetVars();
+                        let url = encodeURIComponent(mySwiper.imagesToLoad[mySwiper.activeIndex].baseURI);
+                        let title = mySwiper.imagesToLoad[mySwiper.activeIndex].alt;
+
+                        $('#vkGalleryShare').attr('href', 'https://vk.com/share.php?url='+url+'&title='+title+'&utm_source=share2');
+                        $('#facebookGalleryShare').attr('href', 'https://www.facebook.com/sharer.php?src=sp&u='+url+'&title='+title+'&utm_source=share2');
+                        $('#twitterGalleryShare').attr('href', 'https://twitter.com/intent/tweet?url='+url+'&text='+title+'&utm_source=share2');
+                        $('#okGalleryShare').attr('href', 'https://connect.ok.ru/offer?url='+url+'&title='+title+'&utm_source=share2');
+
+
+
+                        var get = getUrlGetVars();
 
                         if(parseInt(get["item"]) != mySwiper.activeIndex) {
                             window.history.pushState('?gallery=' + currentGallery + '&item=' + mySwiper.activeIndex, 'gallery=' + currentGallery + '&item=' + mySwiper.activeIndex, '?gallery=' + currentGallery + '&item=' + mySwiper.activeIndex);
@@ -377,13 +390,13 @@ $(document).ready(function () {
         popup.fadeOut(300);
         $(this).fadeOut(300);
         /*$('#searchIcon').removeClass('active');*/
-       /* navBar.removeClass('active');*/
+        /* navBar.removeClass('active');*/
     });
 
 
 
     slidePage.find('.close-btn').click(function () {
-       closeAll();
+        closeAll();
     });
 
 
@@ -498,7 +511,7 @@ $(document).ready(function () {
         } else {
             if (!isReseted) {
                 $('.nav-bar').css('height', '').find('.logo-img').css('transform', 'scale(1)');
-               /* $('.nav-bar').find('.logo-img').css('transform', 'scale(1)');*/
+                /* $('.nav-bar').find('.logo-img').css('transform', 'scale(1)');*/
                 isReseted = true;
             }
         }

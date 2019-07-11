@@ -61,7 +61,6 @@ class ArticlesController extends Controller
 
     public function actionView($section, $url)
     {
-
         $section = Sections::findOne(['url' => $section]);
         if($section === null){
             throw new NotFoundHttpException;

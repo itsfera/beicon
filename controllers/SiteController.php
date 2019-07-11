@@ -28,7 +28,7 @@ class SiteController extends Controller
         $headers = Yii::$app->response->headers;
         $headers->add('Content-Type', 'text/xml');
         $rss = Rss::find()->where(['url' => $url])->with([
-    	    'articles' => function ($query) { 
+    	    'articles' => function ($query) {
     		$query->andWhere(['status' => 'publish']);
     	    },
     	])->one();
@@ -57,8 +57,8 @@ class SiteController extends Controller
 
                     $article->content = preg_replace('/<iframe.*?\/iframe>/i','', $article->content);
                     $article->content = preg_replace('/<script.*?\/script>/i','', $article->content);
-                    
-                    
+
+
 
                     $fields = [
                         'link' => Url::to(['articles/view', 'url' => $article->url, 'section' => $article->sectionData->url]),
@@ -142,24 +142,24 @@ class SiteController extends Controller
     public function behaviors()
     {
         return [
-//            'access' => [
-//                'class' => AccessControl::className(),
-//                'only' => ['logout'],
-//                'rules' => [
-//                    [
-//                        'actions' => ['logout'],
-//                        'allow' => true,
-//                        'roles' => ['@'],
-//                    ],
-//                ],
-//            ],
-//            'verbs' => [
-//                'class' => VerbFilter::className(),
-//                'actions' => [
-//                    'logout' => ['post'],
-//                ],
-//            ],
-
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['logout'],
+                'rules' => [
+                    [
+                        'actions' => ['logout'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'logout' => ['post'],
+                ],
+            ],
+//
             'corsFilter' => [
                 'class' => \yii\filters\Cors::className(),
                 'cors'  => [
@@ -169,7 +169,7 @@ class SiteController extends Controller
                     'Access-Control-Request-Headers' => ['*'],
                     'Access-Control-Max-Age'           => 3600,                 // Cache (seconds)
                     'Access-Control-Expose-Headers' => ['*'],
-                //    'Access-Control-Allow-Origin' => ['*'],
+//                    'Access-Control-Allow-Origin' => ['*'],
 
                 ]
             ]

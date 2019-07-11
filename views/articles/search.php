@@ -59,6 +59,14 @@ $this->title = 'Поиск на Be Icon: '.$query;
             </div>
         </article>
         <? } ?>
+
+        <?php
+            if (!count($result))
+            {
+                echo '<span>Ничего не найдено</span>';
+            }
+
+        ?>
     </div>
 </div>
 <!-- End Search results -->

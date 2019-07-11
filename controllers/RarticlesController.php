@@ -305,16 +305,30 @@ class RarticlesController extends ActiveController
         }
     }
 
+
+
+
     public function actions()
     {
         $actions = parent::actions();
-    unset($actions["update"]);
-    unset($actions["create"]);
+        unset($actions["update"]);
+        unset($actions["create"]);
         // disable the "delete" and "create" actions
 //        unset($actions['delete'], $actions['create']);
 
         // customize the data provider preparation with the "prepareDataProvider()" method
-        $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
+
+        $actions['index']['prepareDataProvider'] = function () {
+            return new ActiveDataProvider([
+                'query' => $this->modelClass::find(),
+                'sort'  =>  [
+                    'defaultOrder'  =>  [
+                        'date_publish'    =>  SORT_DESC
+                    ]
+                ]
+            ]);
+        };
+
 //        $actions['update']['prepareDataProvider'] = [$this, 'prepareDataProviderUpdate'];
 
 
@@ -511,16 +525,6 @@ class RarticlesController extends ActiveController
         } else return array('status' => 'error', 'message' => 'Пустой запрос');
 
     }
-
-
-    public function prepareDataProviderUpdate()
-    {
-
-        print_r('asdasd');
-        die();
-    }
-
-
 
 
 
