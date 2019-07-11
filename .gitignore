@@ -22,6 +22,7 @@ composer.phar
 /web/files/*
 /web/admin/*
 /web/*.jpg
+/web/uploads
 
 # Mac DS_Store Files
 .DS_Store
