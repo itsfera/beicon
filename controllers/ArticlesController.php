@@ -276,7 +276,7 @@ class ArticlesController extends Controller
 
             $imgGalery = '';
 
-            if (\Yii::$app->request->get('item') && isset($galery->items[\Yii::$app->request->get('item')]['url']))
+            if (isset($galery->items[\Yii::$app->request->get('item')]['url']))
             {
                 $imgGalery = $galery->items[\Yii::$app->request->get('item')]['url'];
             }
@@ -315,10 +315,6 @@ class ArticlesController extends Controller
                 ]);
             }
 
-            if (!empty($imgGalery))
-            {
-// 	            die;
-            }
 
             if($seo->og_image != '' || !empty($imgGalery)) {
                 \Yii::$app->view->registerMetaTag([
