@@ -116,6 +116,7 @@ $config = [
                 'POST api/recomended/<id>' => 'rarticles/recupdate',
                 'POST api/catupdate/<id>' => 'rarticles/catupdate',
 
+                "search/" => 'articles/search',
                 "search/<query>" => 'articles/search',
                 'articles/<url>/preview' => 'articles/preview',
                 'tags/<url>/' => 'tags/view',
