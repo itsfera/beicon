@@ -41,7 +41,10 @@ class ArticlesController extends Controller
 
 
 
-    public function actionSearch($query){
+    public function actionSearch(){
+
+        $query = \Yii::$app->request->get('query');
+
         $obj = new Query();
         $ids_gallery = $obj->select('t2.article_id')->from(GalleryItems::tableName().' t1')->innerJoin(Gallery::tableName().' t2', 't1.gallery_id = t2.id')->where(['like', 't1.content', $query])->column();
         $obj = new Query();
