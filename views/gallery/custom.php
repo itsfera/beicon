@@ -25,17 +25,17 @@ $article->name = str_replace('"', '', $article->name);
         <ul class="gallery-tile-prev__list items_3">
             <? if(isset($galleryItems[0])){ ?>
                 <li class="gallery-tile-prev__item" data-gallery="<?=$gallery["id"]?>">
-                    <img src="<?=UPLOAD_DIR.ImageSizes::getResizesName($galleryItems[0]["url"], $firstSize, $gallery["id"])?>" alt="<?=(!empty($item['content']))?$item['content']:''?>" >
+                    <img src="<?=UPLOAD_DIR.ImageSizes::getResizesName($galleryItems[0]["url"], $firstSize, $gallery["id"])?>" <?=(!empty($item['content']))?'alt="'.$item['content'].'"':''?> >
                 </li>
             <? } ?>
             <? if(isset($galleryItems[1])){ ?>
                 <li class="gallery-tile-prev__item" data-gallery="<?=$gallery["id"]?>">
-                    <img src="<?=UPLOAD_DIR.ImageSizes::getResizesName($galleryItems[1]["url"], $secondSize, $gallery["id"])?>" alt="<?=(!empty($item['content']))?$item['content']:''?>">
+                    <img src="<?=UPLOAD_DIR.ImageSizes::getResizesName($galleryItems[1]["url"], $secondSize, $gallery["id"])?>" <?=(!empty($item['content']))?'alt="'.$item['content'].'"':''?>>
                 </li>
             <? } ?>
             <? if(isset($galleryItems[2])){ ?>
                 <li class="gallery-tile-prev__item" data-gallery="<?=$gallery["id"]?>">
-                    <img src="<?=UPLOAD_DIR.ImageSizes::getResizesName($galleryItems[2]["url"], $secondSize, $gallery["id"])?>" alt="<?=(!empty($item['content']))?$item['content']:''?>">
+                    <img src="<?=UPLOAD_DIR.ImageSizes::getResizesName($galleryItems[2]["url"], $secondSize, $gallery["id"])?>" <?=(!empty($item['content']))?'alt="'.$item['content'].'"':''?>>
 
                     <? if(count($galleryItems) > 3){ ?>
                         <span class="photo-counter">+<?=count($galleryItems)-3?></span>
@@ -55,7 +55,7 @@ $article->name = str_replace('"', '', $article->name);
                         <? foreach ($gallery->items as $item) { ?>
                         <div class="swiper-slide">
                             <div class="gallery-fullscreen__image-container">
-                                <img src="/uploads/<?=$item["url"]?>" alt="<?=(!empty($item['content']))?$item['content']:''?>">
+                                <img src="/uploads/<?=$item["url"]?>" <?=(!empty($item['content']))?'alt="'.$item['content'].'"':''?>>
                             </div>
                             <div class="right-aside">
                                 <p class="swiper-slide__description"><?=strip_tags($item->content)?></p>
