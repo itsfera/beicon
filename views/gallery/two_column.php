@@ -103,5 +103,10 @@ $article->name = str_replace('"', '', $article->name);
         margin-bottom: 25px;
     }
 
+    @media screen and (max-width: 768px) {
+        .social-share__list_bottom {
+            margin-left:10px;
+        }
+    }
 
 </style>
