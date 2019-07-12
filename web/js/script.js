@@ -277,8 +277,8 @@ function initGalleryMosaic() {
                             fullscreen.find('.swiper-slide__total').text(mySwiper.slides.length);
                         }
 
-                        let url = encodeURIComponent(mySwiper.imagesToLoad[mySwiper.activeIndex].baseURI);
-                        let title = mySwiper.imagesToLoad[mySwiper.activeIndex].alt;
+                        let url = encodeURIComponent(mySwiper.imagesToLoad[mySwiper.activeIndex+1].baseURI);
+                        let title = mySwiper.imagesToLoad[mySwiper.activeIndex+1].alt;
 
 
                         $('.vkGalleryShare').attr('href', 'https://vk.com/share.php?url='+url+'&title='+title+'&utm_source=share2');
@@ -296,8 +296,8 @@ function initGalleryMosaic() {
                         }
 
 
-                        let url = encodeURIComponent(mySwiper.imagesToLoad[mySwiper.activeIndex].baseURI);
-                        let title = mySwiper.imagesToLoad[mySwiper.activeIndex].alt;
+                        let url = encodeURIComponent(mySwiper.imagesToLoad[mySwiper.activeIndex + 1].baseURI);
+                        let title = mySwiper.imagesToLoad[mySwiper.activeIndex + 1].alt;
 
                         $('.vkGalleryShare').attr('href', 'https://vk.com/share.php?url='+url+'&title='+title+'&utm_source=share2');
                         $('.facebookGalleryShare').attr('href', 'https://www.facebook.com/sharer.php?src=sp&u='+url+'&title='+title+'&utm_source=share2');
