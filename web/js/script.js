@@ -167,20 +167,20 @@ function initGalleryFullscreen(gallerySelector, previews, previewItem, fullscree
                             fullscreen.find('.swiper-slide__current').text(mySwiper.activeIndex + 1);
                         }
 
-                        let url = encodeURIComponent(mySwiper.imagesToLoad[mySwiper.activeIndex+1].baseURI);
-                        let title = mySwiper.imagesToLoad[mySwiper.activeIndex+1].alt;
-
-                        $('.vkGalleryShare').attr('href', 'https://vk.com/share.php?url='+url+'&title='+title+'&utm_source=share2');
-                        $('.facebookGalleryShare').attr('href', 'https://www.facebook.com/sharer.php?src=sp&u='+url+'&title='+title+'&utm_source=share2');
-                        $('.twitterGalleryShare').attr('href', 'https://twitter.com/intent/tweet?url='+url+'&text='+title+'&utm_source=share2');
-                        $('.okGalleryShare').attr('href', 'https://connect.ok.ru/offer?url='+url+'&title='+title+'&utm_source=share2');
-
-
-
                         var get = getUrlGetVars();
 
                         if(parseInt(get["item"]) != mySwiper.activeIndex) {
                             window.history.pushState('?gallery=' + currentGallery + '&item=' + mySwiper.activeIndex, 'gallery=' + currentGallery + '&item=' + mySwiper.activeIndex, '?gallery=' + currentGallery + '&item=' + mySwiper.activeIndex);
+
+
+                            let url = encodeURIComponent(window.location);
+                            let title = mySwiper.imagesToLoad[mySwiper.activeIndex].alt;
+
+                            $('.vkGalleryShare').attr('href', 'https://vk.com/share.php?url='+url+'&title='+title+'&utm_source=share2');
+                            $('.facebookGalleryShare').attr('href', 'https://www.facebook.com/sharer.php?src=sp&u='+url+'&title='+title+'&utm_source=share2');
+                            $('.twitterGalleryShare').attr('href', 'https://twitter.com/intent/tweet?url='+url+'&text='+title+'&utm_source=share2');
+                            $('.okGalleryShare').attr('href', 'https://connect.ok.ru/offer?url='+url+'&title='+title+'&utm_source=share2');
+
                         }
 
                     }
@@ -296,19 +296,21 @@ function initGalleryMosaic() {
                         }
 
 
-                        let url = encodeURIComponent(mySwiper.imagesToLoad[mySwiper.activeIndex + 1].baseURI);
-                        let title = mySwiper.imagesToLoad[mySwiper.activeIndex + 1].alt;
-
-                        $('.vkGalleryShare').attr('href', 'https://vk.com/share.php?url='+url+'&title='+title+'&utm_source=share2');
-                        $('.facebookGalleryShare').attr('href', 'https://www.facebook.com/sharer.php?src=sp&u='+url+'&title='+title+'&utm_source=share2');
-                        $('.twitterGalleryShare').attr('href', 'https://twitter.com/intent/tweet?url='+url+'&text='+title+'&utm_source=share2');
-                        $('.okGalleryShare').attr('href', 'https://connect.ok.ru/offer?url='+url+'&title='+title+'&utm_source=share2');
-
 
                         var get = getUrlGetVars();
                         if(parseInt(get["item"]) != mySwiper.activeIndex) {
 
                             window.history.pushState('?gallery=' + currentGallery + '&item=' + mySwiper.activeIndex, 'gallery=' + currentGallery + '&item=' + mySwiper.activeIndex, '?gallery=' + currentGallery + '&item=' + mySwiper.activeIndex);
+
+                            let url = encodeURIComponent(window.location);
+                            let title = mySwiper.imagesToLoad[mySwiper.activeIndex].alt;
+
+                            $('.vkGalleryShare').attr('href', 'https://vk.com/share.php?url='+url+'&title='+title+'&utm_source=share2');
+                            $('.facebookGalleryShare').attr('href', 'https://www.facebook.com/sharer.php?src=sp&u='+url+'&title='+title+'&utm_source=share2');
+                            $('.twitterGalleryShare').attr('href', 'https://twitter.com/intent/tweet?url='+url+'&text='+title+'&utm_source=share2');
+                            $('.okGalleryShare').attr('href', 'https://connect.ok.ru/offer?url='+url+'&title='+title+'&utm_source=share2');
+
+
                         }
 
                     }
