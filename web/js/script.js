@@ -152,10 +152,10 @@ function initGalleryFullscreen(gallerySelector, previews, previewItem, fullscree
                         let title = mySwiper.imagesToLoad[mySwiper.activeIndex+1].alt;
 
 //                         console.log('init');
-                        $('#vkGalleryShare').attr('href', 'https://vk.com/share.php?url='+url+'&title='+title+'&utm_source=share2');
-                        $('#facebookGalleryShare').attr('href', 'https://www.facebook.com/sharer.php?src=sp&u='+url+'&title='+title+'&utm_source=share2');
-                        $('#twitterGalleryShare').attr('href', 'https://twitter.com/intent/tweet?url='+url+'&text='+title+'&utm_source=share2');
-                        $('#okGalleryShare').attr('href', 'https://connect.ok.ru/offer?url='+url+'&title='+title+'&utm_source=share2');
+                        $('.vkGalleryShare').attr('href', 'https://vk.com/share.php?url='+url+'&title='+title+'&utm_source=share2');
+                        $('.facebookGalleryShare').attr('href', 'https://www.facebook.com/sharer.php?src=sp&u='+url+'&title='+title+'&utm_source=share2');
+                        $('.twitterGalleryShare').attr('href', 'https://twitter.com/intent/tweet?url='+url+'&text='+title+'&utm_source=share2');
+                        $('.okGalleryShare').attr('href', 'https://connect.ok.ru/offer?url='+url+'&title='+title+'&utm_source=share2');
 
                     },
                     slideChange: function() {
@@ -170,10 +170,10 @@ function initGalleryFullscreen(gallerySelector, previews, previewItem, fullscree
                         let url = encodeURIComponent(mySwiper.imagesToLoad[mySwiper.activeIndex+1].baseURI);
                         let title = mySwiper.imagesToLoad[mySwiper.activeIndex+1].alt;
 
-                        $('#vkGalleryShare').attr('href', 'https://vk.com/share.php?url='+url+'&title='+title+'&utm_source=share2');
-                        $('#facebookGalleryShare').attr('href', 'https://www.facebook.com/sharer.php?src=sp&u='+url+'&title='+title+'&utm_source=share2');
-                        $('#twitterGalleryShare').attr('href', 'https://twitter.com/intent/tweet?url='+url+'&text='+title+'&utm_source=share2');
-                        $('#okGalleryShare').attr('href', 'https://connect.ok.ru/offer?url='+url+'&title='+title+'&utm_source=share2');
+                        $('.vkGalleryShare').attr('href', 'https://vk.com/share.php?url='+url+'&title='+title+'&utm_source=share2');
+                        $('.facebookGalleryShare').attr('href', 'https://www.facebook.com/sharer.php?src=sp&u='+url+'&title='+title+'&utm_source=share2');
+                        $('.twitterGalleryShare').attr('href', 'https://twitter.com/intent/tweet?url='+url+'&text='+title+'&utm_source=share2');
+                        $('.okGalleryShare').attr('href', 'https://connect.ok.ru/offer?url='+url+'&title='+title+'&utm_source=share2');
 
 
 
@@ -281,10 +281,10 @@ function initGalleryMosaic() {
                         let title = mySwiper.imagesToLoad[mySwiper.activeIndex].alt;
 
 
-                        $('#vkGalleryShare').attr('href', 'https://vk.com/share.php?url='+url+'&title='+title+'&utm_source=share2');
-                        $('#facebookGalleryShare').attr('href', 'https://www.facebook.com/sharer.php?src=sp&u='+url+'&title='+title+'&utm_source=share2');
-                        $('#twitterGalleryShare').attr('href', 'https://twitter.com/intent/tweet?url='+url+'&text='+title+'&utm_source=share2');
-                        $('#okGalleryShare').attr('href', 'https://connect.ok.ru/offer?url='+url+'&title='+title+'&utm_source=share2');
+                        $('.vkGalleryShare').attr('href', 'https://vk.com/share.php?url='+url+'&title='+title+'&utm_source=share2');
+                        $('.facebookGalleryShare').attr('href', 'https://www.facebook.com/sharer.php?src=sp&u='+url+'&title='+title+'&utm_source=share2');
+                        $('.twitterGalleryShare').attr('href', 'https://twitter.com/intent/tweet?url='+url+'&text='+title+'&utm_source=share2');
+                        $('.okGalleryShare').attr('href', 'https://connect.ok.ru/offer?url='+url+'&title='+title+'&utm_source=share2');
 
                     },
                     slideChange: function() {
@@ -299,10 +299,10 @@ function initGalleryMosaic() {
                         let url = encodeURIComponent(mySwiper.imagesToLoad[mySwiper.activeIndex].baseURI);
                         let title = mySwiper.imagesToLoad[mySwiper.activeIndex].alt;
 
-                        $('#vkGalleryShare').attr('href', 'https://vk.com/share.php?url='+url+'&title='+title+'&utm_source=share2');
-                        $('#facebookGalleryShare').attr('href', 'https://www.facebook.com/sharer.php?src=sp&u='+url+'&title='+title+'&utm_source=share2');
-                        $('#twitterGalleryShare').attr('href', 'https://twitter.com/intent/tweet?url='+url+'&text='+title+'&utm_source=share2');
-                        $('#okGalleryShare').attr('href', 'https://connect.ok.ru/offer?url='+url+'&title='+title+'&utm_source=share2');
+                        $('.vkGalleryShare').attr('href', 'https://vk.com/share.php?url='+url+'&title='+title+'&utm_source=share2');
+                        $('.facebookGalleryShare').attr('href', 'https://www.facebook.com/sharer.php?src=sp&u='+url+'&title='+title+'&utm_source=share2');
+                        $('.twitterGalleryShare').attr('href', 'https://twitter.com/intent/tweet?url='+url+'&text='+title+'&utm_source=share2');
+                        $('.okGalleryShare').attr('href', 'https://connect.ok.ru/offer?url='+url+'&title='+title+'&utm_source=share2');
 
 
                         var get = getUrlGetVars();
