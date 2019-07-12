@@ -45,19 +45,13 @@ class ArticlesController extends Controller
 
         $query = \Yii::$app->request->get('query');
 
-        if (!empty($query))
-        {
-            $obj = new Query();
-            $ids_gallery = $obj->select('t2.article_id')->from(GalleryItems::tableName().' t1')->innerJoin(Gallery::tableName().' t2', 't1.gallery_id = t2.id')->where(['like', 't1.content', $query])->column();
-            $obj = new Query();
-            $ids_articles = $obj->select('id')->from(Articles::tableName())->where(['like', 'name', $query])->andWhere(['status'=>'publish'])->column();
-            $ids = array_merge($ids_gallery, $ids_articles);
+        $obj = new Query();
+        $ids_gallery = $obj->select('t2.article_id')->from(GalleryItems::tableName().' t1')->innerJoin(Gallery::tableName().' t2', 't1.gallery_id = t2.id')->where(['like', 't1.content', $query])->column();
+        $obj = new Query();
+        $ids_articles = $obj->select('id')->from(Articles::tableName())->where(['like', 'name', $query])->andWhere(['status'=>'publish'])->column();
+        $ids = array_merge($ids_gallery, $ids_articles);
 
-            $model = Articles::find()->where(['id' => $ids])->orderBy(['date_publish' => SORT_DESC])->all();
-        }
-        else {
-            $model = [];
-        }
+        $model = Articles::find()->where(['id' => $ids])->orderBy(['date_publish' => SORT_DESC])->all();
         $this->hide_header = 1;
         $this->body_id = 'searchResultsPage';
         return $this->render('search', [
@@ -70,6 +64,7 @@ class ArticlesController extends Controller
 
     public function actionView($section, $url)
     {
+
         $section = Sections::findOne(['url' => $section]);
         if($section === null){
             throw new NotFoundHttpException;
@@ -165,8 +160,9 @@ class ArticlesController extends Controller
                     }
                 }
 
-                $galleryIDs[] = $galery["id"];
 
+
+                $galleryIDs[] = $galery["id"];
                 switch ($galery->type){
                     case 'default':
                         $model->content = str_replace($shortcode,  \Yii::$app->view->renderFile('@app/views/gallery/slider.php', array('gallery'=>$galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
@@ -271,6 +267,13 @@ class ArticlesController extends Controller
         if($seo) {
             \Yii::$app->view->title = $seo->title;
 
+            $imgGalery = '';
+
+            if (\Yii::$app->request->get('item') && isset($galery->items[\Yii::$app->request->get('item')]['url']))
+            {
+                $imgGalery = $galery->items[\Yii::$app->request->get('item')]['url'];
+            }
+
 
 
             if($seo->description != '') {
@@ -305,10 +308,15 @@ class ArticlesController extends Controller
                 ]);
             }
 
-            if($seo->og_image != '') {
+            if (!empty($imgGalery))
+            {
+// 	            die;
+            }
+
+            if($seo->og_image != '' || !empty($imgGalery)) {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'og:image',
-                    'content' => $seo->og_image
+                    'content' => !empty($imgGalery)?'http://beicon.ru/uploads'.$imgGalery:$seo->og_image
                 ]);
             } else {
                 if($model->header_img) $img = $model->header_img; else $img = $model->preview_img;
