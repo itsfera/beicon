@@ -52,7 +52,7 @@ class ArticlesController extends Controller
         $this->hide_header = 1;
         $this->body_id = 'searchResultsPage';
         return $this->render('search', [
-           'result' => $model,
+            'result' => $model,
             'query' => $query,
         ]);
     }
@@ -135,7 +135,7 @@ class ArticlesController extends Controller
             $matches = $matches[0];
             foreach ($matches as $shortcode){
 //                $shortcode = $shortcode[0];
-                 preg_match('/\d+/', $shortcode, $galeryId);
+                preg_match('/\d+/', $shortcode, $galeryId);
                 $galeryId = $galeryId[0];
                 $galery = Gallery::find()->where(['id' => $galeryId])->with('items')->one();
 
@@ -176,8 +176,8 @@ class ArticlesController extends Controller
 //                            $model->content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/two_column.php', array('gallery' => $galery, 'view_type' => $model["view_type"])), $model->content);
 //                            $model->preview_content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/two_column.php', array('gallery' => $galery, 'view_type' => $model["view_type"])), $model->preview_content);
 //                        } else {
-                            $model->content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/three_column.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
-                            $model->preview_content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/three_column.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->preview_content);
+                        $model->content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/three_column.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
+                        $model->preview_content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/three_column.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->preview_content);
 //                        }
                         break;
                     default:
@@ -262,6 +262,8 @@ class ArticlesController extends Controller
         if($seo) {
             \Yii::$app->view->title = $seo->title;
 
+
+
             if($seo->description != '') {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'description',
@@ -307,6 +309,17 @@ class ArticlesController extends Controller
                 ]);
             }
 
+            \Yii::$app->view->registerMetaTag([
+                'name' => 'og:type',
+                'content' => 'article'
+            ]);
+
+            \Yii::$app->view->registerMetaTag([
+                'name' => 'og:site_name',
+                'content' => 'Be Icon'
+            ]);
+
+
             if($seo->og_url != '') {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'og:url',
@@ -314,12 +327,12 @@ class ArticlesController extends Controller
                 ]);
             }
 
-            if($seo->description != '') {
-                \Yii::$app->view->registerMetaTag([
-                    'name' => 'og:site_name',
-                    'content' => $seo->og_site_name
-                ]);
-            }
+//            if($seo->description != '') {
+//                \Yii::$app->view->registerMetaTag([
+//                    'name' => 'og:site_name',
+//                    'content' => $seo->og_site_name
+//                ]);
+//            }
 
             if($seo->last_updated != '') {
                 \Yii::$app->view->registerMetaTag([
@@ -335,7 +348,7 @@ class ArticlesController extends Controller
 
         if($model["view_type"] == 'gallery-one-column'){
 //            $view = 'index2';
-$this->contentClass = 'one-column';
+            $this->contentClass = 'one-column';
         }
 
 
@@ -597,6 +610,12 @@ $this->contentClass = 'one-column';
                     'name' => 'og:image',
                     'content' => $seo->og_image
                 ]);
+
+                \Yii::$app->view->registerMetaTag([
+                    'name' => 'og:image:secure_url',
+                    'content' => $seo->og_image
+                ]);
+
             }
 
             if($seo->og_url != '') {
