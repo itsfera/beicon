@@ -13,27 +13,27 @@ $article->name = str_replace('"', '', $article->name);
         <ul class="gallery-tile-prev__list items_5">
             <? if(isset($galleryItems[0])){ ?>
                 <li class="gallery-tile-prev__item" data-gallery="<?=$gallery["id"]?>">
-                    <img src="<?=UPLOAD_DIR.ImageSizes::getResizesName($galleryItems[0]["url"], '1_1_516')?>" alt="<?=(!empty($item['content']))?$item['content']:$article->name?>">
+                    <img src="<?=UPLOAD_DIR.ImageSizes::getResizesName($galleryItems[0]["url"], '1_1_516')?>" alt="<?=(!empty($item['content']))?$item['content']:''?>">
                 </li>
             <? } ?>
             <? if(isset($galleryItems[1])){ ?>
                 <li class="gallery-tile-prev__item" data-gallery="<?=$gallery["id"]?>">
-                    <img src="<?=UPLOAD_DIR.ImageSizes::getResizesName($galleryItems[1]["url"], '1_1_516')?>" alt="<?=(!empty($item['content']))?$item['content']:$article->name?>">
+                    <img src="<?=UPLOAD_DIR.ImageSizes::getResizesName($galleryItems[1]["url"], '1_1_516')?>" alt="<?=(!empty($item['content']))?$item['content']:''?>">
                 </li>
             <? } ?>
             <? if(isset($galleryItems[2])){ ?>
                 <li class="gallery-tile-prev__item" data-gallery="<?=$gallery["id"]?>">
-                    <img src="<?=UPLOAD_DIR.ImageSizes::getResizesName($galleryItems[2]["url"], '16_9_830')?>" alt="<?=(!empty($item['content']))?$item['content']:$article->name?>">
+                    <img src="<?=UPLOAD_DIR.ImageSizes::getResizesName($galleryItems[2]["url"], '16_9_830')?>" alt="<?=(!empty($item['content']))?$item['content']:''?>">
                 </li>
             <? } ?>
             <? if(isset($galleryItems[3])){ ?>
                 <li class="gallery-tile-prev__item" data-gallery="<?=$gallery["id"]?>">
-                    <img src="<?=UPLOAD_DIR.ImageSizes::getResizesName($galleryItems[3]["url"], '16_9_830')?>" alt="<?=(!empty($item['content']))?$item['content']:$article->name?>">
+                    <img src="<?=UPLOAD_DIR.ImageSizes::getResizesName($galleryItems[3]["url"], '16_9_830')?>" alt="<?=(!empty($item['content']))?$item['content']:''?>">
                 </li>
             <? } ?>
             <? if(isset($galleryItems[4])){ ?>
                 <li class="gallery-tile-prev__item" data-gallery="<?=$gallery["id"]?>">
-                    <img src="<?=UPLOAD_DIR.ImageSizes::getResizesName($galleryItems[4]["url"], '16_9_830')?>" alt="<?=(!empty($item['content']))?$item['content']:$article->name?>">
+                    <img src="<?=UPLOAD_DIR.ImageSizes::getResizesName($galleryItems[4]["url"], '16_9_830')?>" alt="<?=(!empty($item['content']))?$item['content']:''?>">
 
                     <? if(count($galleryItems) > 5){ ?>
                         <span class="photo-counter">+<?=count($galleryItems)-5?></span>
@@ -51,7 +51,7 @@ $article->name = str_replace('"', '', $article->name);
                         <? foreach ($gallery->items as $item) { ?>
                             <div class="swiper-slide">
                                 <div class="gallery-fullscreen__image-container">
-                                    <img src="/uploads/<?=$item["url"]?>" alt="<?=(!empty($item['content']))?$item['content']:$article->name?>">
+                                    <img src="/uploads/<?=$item["url"]?>" alt="<?=(!empty($item['content']))?$item['content']:''?>">
                                 </div>
                                 <div class="right-aside">
                                     <p class="swiper-slide__description"><?=strip_tags($item->content)?></p>
