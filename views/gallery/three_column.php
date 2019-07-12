@@ -91,10 +91,10 @@ $article->name = str_replace('"', '', $article->name);
                                             <!--                <div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,twitter" data-bare="false"></div>-->
                                             <div class="social-share__list_bottom">
 
-                                                <a class="social-login__item11 fb-share-button" id="facebookGalleryShare" rel="nofollow "><svg class="inline-svg social-svg"><use xlink:href="#fb"></use></svg></a>
-                                                <a class="social-login__item11" id='vkGalleryShare' rel="nofollow "><svg class="inline-svg social-svg"><use xlink:href="#vk"></use></svg></a>
-                                                <a class="social-login__item11" id='twitterGalleryShare' rel="nofollow "><svg class="inline-svg social-svg"><use xlink:href="#twitter"></use></svg></a>
-                                                <a class="social-login__item11" id="okGalleryShare" rel="nofollow "><svg class="inline-svg social-svg"><use xlink:href="#ok"></use></svg></a>
+                                                <a class="social-login__item11 fb-share-button facebookGalleryShare"  rel="nofollow "><svg class="inline-svg social-svg"><use xlink:href="#fb"></use></svg></a>
+                                                <a class="social-login__item11 vkGalleryShare"  rel="nofollow "><svg class="inline-svg social-svg"><use xlink:href="#vk"></use></svg></a>
+                                                <a class="social-login__item11 twitterGalleryShare" rel="nofollow "><svg class="inline-svg social-svg"><use xlink:href="#twitter"></use></svg></a>
+                                                <a class="social-login__item11 okGalleryShare" rel="nofollow "><svg class="inline-svg social-svg"><use xlink:href="#ok"></use></svg></a>
                                             </div>
                                         </div>
                                     </div>

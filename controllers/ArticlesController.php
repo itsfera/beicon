@@ -45,13 +45,20 @@ class ArticlesController extends Controller
 
         $query = \Yii::$app->request->get('query');
 
-        $obj = new Query();
-        $ids_gallery = $obj->select('t2.article_id')->from(GalleryItems::tableName().' t1')->innerJoin(Gallery::tableName().' t2', 't1.gallery_id = t2.id')->where(['like', 't1.content', $query])->column();
-        $obj = new Query();
-        $ids_articles = $obj->select('id')->from(Articles::tableName())->where(['like', 'name', $query])->andWhere(['status'=>'publish'])->column();
-        $ids = array_merge($ids_gallery, $ids_articles);
 
-        $model = Articles::find()->where(['id' => $ids])->orderBy(['date_publish' => SORT_DESC])->all();
+        if (empty($query)) {
+            $obj = new Query();
+            $ids_gallery = $obj->select('t2.article_id')->from(GalleryItems::tableName() . ' t1')->innerJoin(Gallery::tableName() . ' t2', 't1.gallery_id = t2.id')->where(['like', 't1.content', $query])->column();
+            $obj = new Query();
+            $ids_articles = $obj->select('id')->from(Articles::tableName())->where(['like', 'name', $query])->andWhere(['status' => 'publish'])->column();
+            $ids = array_merge($ids_gallery, $ids_articles);
+
+            $model = Articles::find()->where(['id' => $ids])->orderBy(['date_publish' => SORT_DESC])->all();
+        }
+        else
+        {
+            $model = [];
+        }
         $this->hide_header = 1;
         $this->body_id = 'searchResultsPage';
         return $this->render('search', [
