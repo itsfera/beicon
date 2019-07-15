@@ -63,7 +63,7 @@ $this->title = 'Поиск на Be Icon: '.$query;
         <?php
             if (!count($result))
             {
-                echo '<span>Ничего не найдено</span>';
+                echo '<span>По вашему запросу ничего не найдено</span>';
             }
 
         ?>

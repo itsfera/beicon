@@ -41,18 +41,28 @@ class ArticlesController extends Controller
 
 
 
-    public function actionSearch($query){
-        $obj = new Query();
-        $ids_gallery = $obj->select('t2.article_id')->from(GalleryItems::tableName().' t1')->innerJoin(Gallery::tableName().' t2', 't1.gallery_id = t2.id')->where(['like', 't1.content', $query])->column();
-        $obj = new Query();
-        $ids_articles = $obj->select('id')->from(Articles::tableName())->where(['like', 'name', $query])->andWhere(['status'=>'publish'])->column();
-        $ids = array_merge($ids_gallery, $ids_articles);
+    public function actionSearch(){
 
-        $model = Articles::find()->where(['id' => $ids])->orderBy(['date_publish' => SORT_DESC])->all();
+        $query = \Yii::$app->request->get('query');
+
+
+        if (!empty($query)) {
+            $obj = new Query();
+            $ids_gallery = $obj->select('t2.article_id')->from(GalleryItems::tableName() . ' t1')->innerJoin(Gallery::tableName() . ' t2', 't1.gallery_id = t2.id')->where(['like', 't1.content', $query])->column();
+            $obj = new Query();
+            $ids_articles = $obj->select('id')->from(Articles::tableName())->where(['like', 'name', $query])->andWhere(['status' => 'publish'])->column();
+            $ids = array_merge($ids_gallery, $ids_articles);
+
+            $model = Articles::find()->where(['id' => $ids])->orderBy(['date_publish' => SORT_DESC])->all();
+        }
+        else
+        {
+            $model = [];
+        }
         $this->hide_header = 1;
         $this->body_id = 'searchResultsPage';
         return $this->render('search', [
-           'result' => $model,
+            'result' => $model,
             'query' => $query,
         ]);
     }
@@ -61,6 +71,7 @@ class ArticlesController extends Controller
 
     public function actionView($section, $url)
     {
+
         $section = Sections::findOne(['url' => $section]);
         if($section === null){
             throw new NotFoundHttpException;
@@ -135,7 +146,7 @@ class ArticlesController extends Controller
             $matches = $matches[0];
             foreach ($matches as $shortcode){
 //                $shortcode = $shortcode[0];
-                 preg_match('/\d+/', $shortcode, $galeryId);
+                preg_match('/\d+/', $shortcode, $galeryId);
                 $galeryId = $galeryId[0];
                 $galery = Gallery::find()->where(['id' => $galeryId])->with('items')->one();
 
@@ -156,8 +167,9 @@ class ArticlesController extends Controller
                     }
                 }
 
-                $galleryIDs[] = $galery["id"];
 
+
+                $galleryIDs[] = $galery["id"];
                 switch ($galery->type){
                     case 'default':
                         $model->content = str_replace($shortcode,  \Yii::$app->view->renderFile('@app/views/gallery/slider.php', array('gallery'=>$galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
@@ -176,8 +188,8 @@ class ArticlesController extends Controller
 //                            $model->content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/two_column.php', array('gallery' => $galery, 'view_type' => $model["view_type"])), $model->content);
 //                            $model->preview_content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/two_column.php', array('gallery' => $galery, 'view_type' => $model["view_type"])), $model->preview_content);
 //                        } else {
-                            $model->content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/three_column.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
-                            $model->preview_content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/three_column.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->preview_content);
+                        $model->content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/three_column.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
+                        $model->preview_content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/three_column.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->preview_content);
 //                        }
                         break;
                     default:
@@ -262,6 +274,15 @@ class ArticlesController extends Controller
         if($seo) {
             \Yii::$app->view->title = $seo->title;
 
+            $imgGalery = '';
+
+            if (isset($galery->items[\Yii::$app->request->get('item')]['url']))
+            {
+                $imgGalery = $galery->items[\Yii::$app->request->get('item')]['url'];
+            }
+
+
+
             if($seo->description != '') {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'description',
@@ -294,10 +315,11 @@ class ArticlesController extends Controller
                 ]);
             }
 
-            if($seo->og_image != '') {
+
+            if($seo->og_image != '' || !empty($imgGalery)) {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'og:image',
-                    'content' => $seo->og_image
+                    'content' => !empty($imgGalery)?'http://beicon.ru/uploads'.$imgGalery:$seo->og_image
                 ]);
             } else {
                 if($model->header_img) $img = $model->header_img; else $img = $model->preview_img;
@@ -307,6 +329,17 @@ class ArticlesController extends Controller
                 ]);
             }
 
+            \Yii::$app->view->registerMetaTag([
+                'name' => 'og:type',
+                'content' => 'article'
+            ]);
+
+            \Yii::$app->view->registerMetaTag([
+                'name' => 'og:site_name',
+                'content' => 'Be Icon'
+            ]);
+
+
             if($seo->og_url != '') {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'og:url',
@@ -314,12 +347,12 @@ class ArticlesController extends Controller
                 ]);
             }
 
-            if($seo->description != '') {
-                \Yii::$app->view->registerMetaTag([
-                    'name' => 'og:site_name',
-                    'content' => $seo->og_site_name
-                ]);
-            }
+//            if($seo->description != '') {
+//                \Yii::$app->view->registerMetaTag([
+//                    'name' => 'og:site_name',
+//                    'content' => $seo->og_site_name
+//                ]);
+//            }
 
             if($seo->last_updated != '') {
                 \Yii::$app->view->registerMetaTag([
@@ -335,7 +368,7 @@ class ArticlesController extends Controller
 
         if($model["view_type"] == 'gallery-one-column'){
 //            $view = 'index2';
-$this->contentClass = 'one-column';
+            $this->contentClass = 'one-column';
         }
 
 
@@ -597,6 +630,12 @@ $this->contentClass = 'one-column';
                     'name' => 'og:image',
                     'content' => $seo->og_image
                 ]);
+
+                \Yii::$app->view->registerMetaTag([
+                    'name' => 'og:image:secure_url',
+                    'content' => $seo->og_image
+                ]);
+
             }
 
             if($seo->og_url != '') {

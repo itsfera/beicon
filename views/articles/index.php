@@ -103,7 +103,7 @@ if($article["header_img"]) {
                             } ?>
                         <a href="<?=$imgSrc?>" class="lightbox-lnk">
 
-                            <img  itemprop="image" src="<?=$imgSrc?>" alt="">
+                            <img  itemprop="image" src="<?=$imgSrc?>" alt="<?=$article['name']?>">
                         </a>
                         </div><? } ?>
 
