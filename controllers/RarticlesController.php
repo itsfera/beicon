@@ -320,7 +320,7 @@ class RarticlesController extends ActiveController
 
         $actions['index']['prepareDataProvider'] = function () {
             return new ActiveDataProvider([
-                'query' => $this->modelClass::find(),
+                'query' => app\models\Articles::find(),
                 'sort'  =>  [
                     'defaultOrder'  =>  [
                         'date_publish'    =>  SORT_DESC
