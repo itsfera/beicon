@@ -1,3 +1,11 @@
+.mobile-only {
+    display: none;
+}
+
+.mobile-hide {
+    display: block;
+}
+
 .article-body {
     padding-left: 96px;
 }
@@ -6,6 +14,9 @@
     margin-top: 30px;
 }
 
+.article__announce-wrapper a {
+    text-decoration: underline;
+}
 
 article .article-body * {
     padding-left: 0;
@@ -76,6 +87,14 @@ iframe.instagram-media {
 @media screen and (max-width: 767px) {
     .gallery-mosaic__col-width, .gallery-mosaic__item {
         /*width: 270px;*/
+    }
+
+    .mobile-only {
+        display: block;
+    }
+
+    .mobile-hide {
+        display: none;
     }
 }
 
@@ -402,3 +421,4 @@ body .article-body > img {
     grid-column: 3;
     grid-row: 8 /  span 2;
 }
+

@@ -128,14 +128,13 @@ class ArticlesController extends Controller
         $dom->loadHTML('<?xml encoding="utf-8" ?>' . $model->content);
         $xpath = new \DOMXPath($dom);
         $imgs = $xpath->query('//img');
-
         foreach ($imgs as $element) {
             $src = $element->getAttribute('src');
             $value = \ymaker\social\share\widgets\SocialShare::widget([
                 'configurator' => 'socialShare',
-                'url' => Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url], true),
-                'title' => $article['name'],
-                'description' => strip_tags($article['preview_content']),
+                'url' => Url::to(['articles/view', 'url' => $model->url, 'section' => $model->sectionData->url], true),
+                'title' => $model->name,
+                'description' => strip_tags($model->preview_content),
                 'imageUrl' => \yii\helpers\Url::to($src, true),
             ]);
             $template = $dom->createDocumentFragment();

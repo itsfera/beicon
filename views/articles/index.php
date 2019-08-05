@@ -199,6 +199,7 @@ if ($article["header_img"]) {
 
                     <? } ?>
 
+
                     <!-- Start Recommendation Rich Block -->
 
                     <!-- End Recommendation Rich Block -->
@@ -217,10 +218,52 @@ if ($article["header_img"]) {
                             <a href="<?= Url::to(['tags/view/', 'url' => $tag["url"]]) ?>"><?= $tag->name ?></a>
                         <? } ?></div>
 
+                    <div class="share-block mobile-only">
+                        <div class="share-block__inner">
+                            <span class="share-block__shared">Поделись статьей</span>
+                            <!--                <script src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js"></script>-->
+                            <!--                <script src="//yastatic.net/share2/share.js"></script>-->
+                            <!--                <div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,twitter" data-bare="false"></div>-->
+                            <div class="social-share__list_bottom">
+
+                                <a class="social-login__item fb-share-button"
+                                   href="https://www.facebook.com/sharer.php?src=sp&u=<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url], true) ?>&title=<?= $article["name"] ?>&utm_source=share2"
+                                   rel="nofollow ">
+                                    <svg class="inline-svg social-svg">
+                                        <use xlink:href="#fb"></use>
+                                    </svg>
+                                </a>
+                                <a class="social-login__item"
+                                   href="https://vk.com/share.php?url=<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url], true) ?>&title=<?= $article["name"] ?>&utm_source=share2"
+                                   rel="nofollow ">
+                                    <svg class="inline-svg social-svg">
+                                        <use xlink:href="#vk"></use>
+                                    </svg>
+                                </a>
+                                <a class="social-login__item"
+                                   href="https://twitter.com/intent/tweet?url=<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url], true) ?>&text=<?= $article["name"] ?>&utm_source=share2"
+                                   rel="nofollow ">
+                                    <svg class="inline-svg social-svg">
+                                        <use xlink:href="#twitter"></use>
+                                    </svg>
+                                </a>
+                                <a class="social-login__item"
+                                   href="https://connect.ok.ru/offer?url=<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url], true) ?>&title=<?= $article["name"] ?>&utm_source=share2"
+                                   rel="nofollow ">
+                                    <svg class="inline-svg social-svg">
+                                        <use xlink:href="#ok"></use>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
+
 
             <? } ?>
             <!-- End Article Body -->
+
             <? if ($article["view_type"] == 'article' && (int)$article["section"] != 5) { ?>
             <!-- Start Right Column -->
             <aside class="right-column col_r">
@@ -294,7 +337,7 @@ if ($article["header_img"]) {
         <? } ?>
 
         <!--<div class="article__keywords article__keywords_bottom"><a href="#">ММКФ</a><a href="#">Звезды</a><a href="#">Кино</a><a href="#">Серебряников</a></div>-->
-        <div class="share-block">
+        <div class="share-block mobile-hide">
             <div class="share-block__inner">
                 <span class="share-block__shared">Поделись статьей</span>
                 <!--                <script src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js"></script>-->
