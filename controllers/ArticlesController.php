@@ -24,10 +24,9 @@ use yii\db\Query;
 use app\models\Image as customImage;
 
 use yii\filters\auth\QueryParamAuth;
+
 class ArticlesController extends Controller
 {
-
-
 
 
     CONST API_KEY = 'Pj55UTx5eAb34fqVCzfuR9jxrfk8Fz';
@@ -35,13 +34,10 @@ class ArticlesController extends Controller
 
     public $hide_header;
     public $body_id;
+    public $contentClass;
 
-
-
-
-
-
-    public function actionSearch(){
+    public function actionSearch()
+    {
 
         $query = \Yii::$app->request->get('query');
 
@@ -54,9 +50,7 @@ class ArticlesController extends Controller
             $ids = array_merge($ids_gallery, $ids_articles);
 
             $model = Articles::find()->where(['id' => $ids])->orderBy(['date_publish' => SORT_DESC])->all();
-        }
-        else
-        {
+        } else {
             $model = [];
         }
         $this->hide_header = 1;
@@ -67,13 +61,11 @@ class ArticlesController extends Controller
         ]);
     }
 
-    public $contentClass;
-
     public function actionView($section, $url)
     {
 
         $section = Sections::findOne(['url' => $section]);
-        if($section === null){
+        if ($section === null) {
             throw new NotFoundHttpException;
         }
 
@@ -85,38 +77,37 @@ class ArticlesController extends Controller
         $id = $model->id;
 
 
-
         $topic = Articles::find()->where(['topic_day' => 1, 'status' => 'publish'])->limit(10);
-        if($topic)
+        if ($topic)
             $topic = $topic->one();
         else $topic = false;
 
-        if($topic["id"] == $id) $topic = false;
+        if ($topic["id"] == $id) $topic = false;
 
 
         $categoryRes = SectionsCategory::find()->where(['section_id' => $section["id"]])->all();
         $cs = [];
 
-        foreach ($categoryRes as $cr){
+        foreach ($categoryRes as $cr) {
             $cs[] = $cr["category_id"];
         }
 
         $categories = Category::find()->where(['id' => $cs])->all();
 
         $not_miss = Articles::find()->where(['not_miss' => 1, 'status' => 'publish'])->andWhere(['!=', 'id', $id])->orderBy(['date_publish' => SORT_DESC])->limit(5);
-        if($not_miss)
+        if ($not_miss)
             $not_miss = $not_miss->all();
         else $not_miss = false;
 
         $recomendedIds = Recomended::find()->where(['article_id' => $id])->all();
 
-        if($recomendedIds){
+        if ($recomendedIds) {
             $recomended = array();
-            foreach ($recomendedIds as $recItem){
+            foreach ($recomendedIds as $recItem) {
 
                 $recItem = Articles::find()->where(['id' => $recItem["recomended_id"]])->andWhere(['!=', 'id', $id])->andWhere(['status' => 'publish'])->one();
 
-                if($recItem){
+                if ($recItem) {
                     $recomended[] = $recItem;
                 }
 
@@ -126,41 +117,58 @@ class ArticlesController extends Controller
         }
 
 
+        $model->content = str_replace('[[PRODUCT_BLOCK1]]', \Yii::$app->view->renderFile('@app/views/articles/productBlock.php'), $model->content);
+        $model->content = str_replace('[[PRODUCT_BLOCK2]]', \Yii::$app->view->renderFile('@app/views/articles/productBlock2.php'), $model->content);
+        $model->content = str_replace('[[BANNER_BLOCK]]', \Yii::$app->view->renderFile('@app/views/articles/banerBlock.php'), $model->content);
 
-        $model->content = str_replace('[[PRODUCT_BLOCK1]]',  \Yii::$app->view->renderFile('@app/views/articles/productBlock.php'), $model->content);
-        $model->content = str_replace('[[PRODUCT_BLOCK2]]',  \Yii::$app->view->renderFile('@app/views/articles/productBlock2.php'), $model->content);
-        $model->content = str_replace('[[BANNER_BLOCK]]',  \Yii::$app->view->renderFile('@app/views/articles/banerBlock.php'), $model->content);
+        //$model->content = str_replace('[[SHARE_BLOCK]]', \Yii::$app->view->renderFile('@app/views/articles/shareBlock.php', array()), $model->content);
 
+
+        $dom = new \DOMdocument();
+        $dom->loadHTML('<?xml encoding="utf-8" ?>' . $model->content);
+        $xpath = new \DOMXPath($dom);
+        $imgs = $xpath->query('//img');
+
+        foreach ($imgs as $element) {
+            $src = $element->getAttribute('src');
+            $value = \ymaker\social\share\widgets\SocialShare::widget([
+                'configurator' => 'socialShare',
+                'url' => Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url], true),
+                'title' => $article['name'],
+                'description' => strip_tags($article['preview_content']),
+                'imageUrl' => \yii\helpers\Url::to($src, true),
+            ]);
+            $template = $dom->createDocumentFragment();
+            $template->appendXML($value);
+            $element->parentNode->insertBefore($template, $element->nextSibling);
+        }
+        $model->content = $dom->saveXML();
 
 
         $marketing = Marketing::find()->all();
-        foreach ($marketing as $code){
-            $model->content = str_replace($code["shortcode"],  $code["content"], $model->content);
+        foreach ($marketing as $code) {
+            $model->content = str_replace($code["shortcode"], $code["content"], $model->content);
         }
 
         $model->content = str_replace('files/', '/basic/web/files/', $model->content);
 
         $galleryIDs = [];
-
-        if(preg_match_all("/{{GALLERY=\d+}}/", $model->content, $matches) || preg_match_all("/{{GALLERY=\d+}}/", $model->preview_content, $matches)){
+        if (preg_match_all("/{{GALLERY=\d+}}/", $model->content, $matches) || preg_match_all("/{{GALLERY=\d+}}/", $model->preview_content, $matches)) {
             $matches = $matches[0];
-            foreach ($matches as $shortcode){
+
+            foreach ($matches as $shortcode) {
 //                $shortcode = $shortcode[0];
                 preg_match('/\d+/', $shortcode, $galeryId);
                 $galeryId = $galeryId[0];
                 $galery = Gallery::find()->where(['id' => $galeryId])->with('items')->one();
 
 
-
-
-
-
-                foreach ($galery->items as $k => $item){
+                foreach ($galery->items as $k => $item) {
 
                     $image = new customImage;
                     $filename = explode('/', $item["url"]);
 
-                    if (!file_exists(dirname(dirname(__FILE__)) . '/web/uploads/galleries/'.$galery["id"].'/'.$filename[count($filename) - 1])) {
+                    if (!file_exists(dirname(dirname(__FILE__)) . '/web/uploads/galleries/' . $galery["id"] . '/' . $filename[count($filename) - 1])) {
 
 
                         $image->moveGalleryItem($galery["id"], $filename[count($filename) - 1]);
@@ -168,20 +176,19 @@ class ArticlesController extends Controller
                 }
 
 
-
                 $galleryIDs[] = $galery["id"];
-                switch ($galery->type){
+                switch ($galery->type) {
                     case 'default':
-                        $model->content = str_replace($shortcode,  \Yii::$app->view->renderFile('@app/views/gallery/slider.php', array('gallery'=>$galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
-                        $model->preview_content = str_replace($shortcode,  \Yii::$app->view->renderFile('@app/views/gallery/slider.php', array('gallery'=>$galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->preview_content);
+                        $model->content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/slider.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
+                        $model->preview_content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/slider.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->preview_content);
                         break;
                     case 'one_column':
-                        $model->content = str_replace($shortcode,  \Yii::$app->view->renderFile('@app/views/gallery/custom.php', array('gallery'=>$galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
-                        $model->preview_content = str_replace($shortcode,  \Yii::$app->view->renderFile('@app/views/gallery/custom.php', array('gallery'=>$galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->preview_content);
+                        $model->content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/custom.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
+                        $model->preview_content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/custom.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->preview_content);
                         break;
                     case 'two_column':
-                        $model->content = str_replace($shortcode,  \Yii::$app->view->renderFile('@app/views/gallery/two_column.php', array('gallery'=>$galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
-                        $model->preview_content = str_replace($shortcode,  \Yii::$app->view->renderFile('@app/views/gallery/two_column.php', array('gallery'=>$galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->preview_content);
+                        $model->content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/two_column.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
+                        $model->preview_content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/two_column.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->preview_content);
                         break;
                     case 'three_column':
 //                        if($model->section != 5){
@@ -193,8 +200,8 @@ class ArticlesController extends Controller
 //                        }
                         break;
                     default:
-                        $model->content = str_replace($shortcode,  \Yii::$app->view->renderFile('@app/views/gallery/slider.php', array('gallery'=>$galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
-                        $model->preview_content = str_replace($shortcode,  \Yii::$app->view->renderFile('@app/views/gallery/slider.php', array('gallery'=>$galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->preview_content);
+                        $model->content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/slider.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
+                        $model->preview_content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/slider.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->preview_content);
                         break;
                 }
 
@@ -202,21 +209,20 @@ class ArticlesController extends Controller
             }
 //            die();
         }
-        $model->content =  preg_replace("/<p[^>]*>[\s|&nbsp;]*<\/p>/", '', $model->content);
+        $model->content = preg_replace("/<p[^>]*>[\s|&nbsp;]*<\/p>/", '', $model->content);
 
-        if($model->section == 5){
+        if ($model->section == 5) {
             $galsRes = Gallery::find()->where(['article_id' => $model["id"]])->all();
 
+            foreach ($galsRes as $i) {
+                if (!in_array($i, $galleryIDs)) {
 
-            foreach ($galsRes as $i){
-                if(!in_array($i, $galleryIDs)){
-
-                    foreach ($i->items as $k => $item){
+                    foreach ($i->items as $k => $item) {
 
                         $image = new customImage;
                         $filename = explode('/', $item["url"]);
 
-                        if (!file_exists(dirname(dirname(__FILE__)) . '/web/uploads/galleries/'.$i["id"].'/'.$filename[count($filename) - 1])) {
+                        if (!file_exists(dirname(dirname(__FILE__)) . '/web/uploads/galleries/' . $i["id"] . '/' . $filename[count($filename) - 1])) {
 
 
                             $image->moveGalleryItem($i["id"], $filename[count($filename) - 1]);
@@ -224,19 +230,19 @@ class ArticlesController extends Controller
                     }
 
 
-                    $model->content.=\Yii::$app->view->renderFile('@app/views/gallery/three_column.php', array('gallery'=>$i, 'article' => $model, 'view_type' => $model["view_type"]));
+                    $model->content .= \Yii::$app->view->renderFile('@app/views/gallery/three_column.php', array('gallery' => $i, 'article' => $model, 'view_type' => $model["view_type"]));
                 }
             }
         }
 
-        if($model->preview_img){
+        if ($model->preview_img) {
             $model->preview_img = ImageSizes::getResizesName($model->preview_img, '16_9_1040');
         }
-        if($model->header_img){
+        if ($model->header_img) {
             $model->header_img = ImageSizes::getResizesName($model->header_img, '16_9_1040');
         }
 
-        if($not_miss) {
+        if ($not_miss) {
             foreach ($not_miss as $k => $value) {
 
                 if ($value->preview_img) {
@@ -248,7 +254,7 @@ class ArticlesController extends Controller
 
             }
         }
-        if($recomended) {
+        if ($recomended) {
             foreach ($recomended as $k => $value) {
 
                 if ($value->preview_img) {
@@ -263,52 +269,50 @@ class ArticlesController extends Controller
 
         $session = \Yii::$app->session;
 
-        if(!$session->has('view-'.$id)){
+        if (!$session->has('view-' . $id)) {
 
             $tmp = Articles::findOne($id);
-            $tmp->views = (int)$tmp->views+1;
+            $tmp->views = (int)$tmp->views + 1;
             $tmp->save();
-            $session->set('view-'.$id, 'true');
+            $session->set('view-' . $id, 'true');
         }
         $seo = Seo::find()->where(['tbl' => 'articles', 'id_record' => $id])->one();
-        if($seo) {
+        if ($seo) {
             \Yii::$app->view->title = $seo->title;
 
             $imgGalery = '';
 
-            if (isset($galery->items[\Yii::$app->request->get('item')]['url']))
-            {
+            if (isset($galery->items[\Yii::$app->request->get('item')]['url'])) {
                 $imgGalery = $galery->items[\Yii::$app->request->get('item')]['url'];
             }
 
 
-
-            if($seo->description != '') {
+            if ($seo->description != '') {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'description',
                     'content' => $seo->description
                 ]);
             }
-            if($seo->keywords != '') {
+            if ($seo->keywords != '') {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'keywords',
                     'content' => $seo->keywords
                 ]);
             }
-            if($seo->og_title != '') {
+            if ($seo->og_title != '') {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'og:title',
                     'content' => $seo->og_title
                 ]);
             }
-            if($seo->og_description != '') {
+            if ($seo->og_description != '') {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'og:description',
                     'content' => $seo->og_description
                 ]);
             }
 
-            if($seo->og_locale != '') {
+            if ($seo->og_locale != '') {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'og:locale',
                     'content' => $seo->og_locale
@@ -316,16 +320,16 @@ class ArticlesController extends Controller
             }
 
 
-            if($seo->og_image != '' || !empty($imgGalery)) {
+            if ($seo->og_image != '' || !empty($imgGalery)) {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'og:image',
-                    'content' => !empty($imgGalery)?'http://beicon.ru/uploads'.$imgGalery:$seo->og_image
+                    'content' => !empty($imgGalery) ? 'http://beicon.ru/uploads' . $imgGalery : $seo->og_image
                 ]);
             } else {
-                if($model->header_img) $img = $model->header_img; else $img = $model->preview_img;
+                if ($model->header_img) $img = $model->header_img; else $img = $model->preview_img;
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'og:image',
-                    'content' => 'http://beicon.ru/uploads/'.$img
+                    'content' => 'http://beicon.ru/uploads/' . $img
                 ]);
             }
 
@@ -340,7 +344,7 @@ class ArticlesController extends Controller
             ]);
 
 
-            if($seo->og_url != '') {
+            if ($seo->og_url != '') {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'og:url',
                     'content' => $seo->og_url
@@ -354,7 +358,7 @@ class ArticlesController extends Controller
 //                ]);
 //            }
 
-            if($seo->last_updated != '') {
+            if ($seo->last_updated != '') {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'last-modified',
                     'content' => $seo->last_updated
@@ -366,13 +370,13 @@ class ArticlesController extends Controller
         $view = 'index';
 
 
-        if($model["view_type"] == 'gallery-one-column'){
+        if ($model["view_type"] == 'gallery-one-column') {
 //            $view = 'index2';
             $this->contentClass = 'one-column';
         }
 
 
-        if(\Yii::$app->request->isAjax) {
+        if (\Yii::$app->request->isAjax) {
 
             return $this->renderPartial($view, [
                 'article' => $model,
@@ -401,6 +405,7 @@ class ArticlesController extends Controller
 
     }
 
+
     public function actionPreview($url)
     {
 
@@ -412,35 +417,35 @@ class ArticlesController extends Controller
 
 
         $topic = Articles::find()->where(['topic_day' => 1])->limit(10);
-        if($topic)
+        if ($topic)
             $topic = $topic->one();
         else $topic = false;
 
-        if($topic["id"] == $id) $topic = false;
+        if ($topic["id"] == $id) $topic = false;
 
         $section = Sections::findOne($model["section"]);
         $categoryRes = SectionsCategory::find()->where(['section_id' => $section["id"]])->all();
         $cs = [];
 
-        foreach ($categoryRes as $cr){
+        foreach ($categoryRes as $cr) {
             $cs[] = $cr["category_id"];
         }
 
         $categories = Category::find()->where(['id' => $cs])->all();
 
         $not_miss = Articles::find()->where(['not_miss' => 1, 'status' => 'publish'])->andWhere(['!=', 'id', $id])->orderBy(['date_publish' => SORT_DESC])->limit(5);
-        if($not_miss)
+        if ($not_miss)
             $not_miss = $not_miss->all();
         else $not_miss = false;
 
         $recomendedIds = Recomended::find()->where(['article_id' => $id])->all();
-        if($recomendedIds){
+        if ($recomendedIds) {
             $recomended = array();
-            foreach ($recomendedIds as $recItem){
+            foreach ($recomendedIds as $recItem) {
 
                 $recItem = Articles::find()->where(['id' => $recItem["recomended_id"]])->andWhere(['!=', 'id', $id])->one();
 
-                if($recItem){
+                if ($recItem) {
                     $recomended[] = $recItem;
                 }
 
@@ -450,37 +455,33 @@ class ArticlesController extends Controller
         }
 
 
+        $model->content = str_replace('[[PRODUCT_BLOCK1]]', \Yii::$app->view->renderFile('@app/views/articles/productBlock.php'), $model->content);
+        $model->content = str_replace('[[PRODUCT_BLOCK2]]', \Yii::$app->view->renderFile('@app/views/articles/productBlock2.php'), $model->content);
+        $model->content = str_replace('[[BANNER_BLOCK]]', \Yii::$app->view->renderFile('@app/views/articles/banerBlock.php'), $model->content);
 
-
-        $model->content = str_replace('[[PRODUCT_BLOCK1]]',  \Yii::$app->view->renderFile('@app/views/articles/productBlock.php'), $model->content);
-        $model->content = str_replace('[[PRODUCT_BLOCK2]]',  \Yii::$app->view->renderFile('@app/views/articles/productBlock2.php'), $model->content);
-        $model->content = str_replace('[[BANNER_BLOCK]]',  \Yii::$app->view->renderFile('@app/views/articles/banerBlock.php'), $model->content);
+        $model->content = str_replace('[[SHARE_BLOCK]]', \Yii::$app->view->renderFile('@app/views/articles/shareBlock.php', array()), $model->content);
 
         $marketing = Marketing::find()->all();
-        foreach ($marketing as $code){
-            $model->content = str_replace($code["shortcode"],  $code["content"], $model->content);
+        foreach ($marketing as $code) {
+            $model->content = str_replace($code["shortcode"], $code["content"], $model->content);
         }
 
         $model->content = str_replace('files/', '/basic/web/files/', $model->content);
-        if(preg_match_all("/{{GALLERY=\d+}}/", $model->content, $matches) || preg_match_all("/{{GALLERY=\d+}}/", $model->preview_content, $matches)){
+        if (preg_match_all("/{{GALLERY=\d+}}/", $model->content, $matches) || preg_match_all("/{{GALLERY=\d+}}/", $model->preview_content, $matches)) {
             $matches = $matches[0];
-            foreach ($matches as $shortcode){
+            foreach ($matches as $shortcode) {
 //                $shortcode = $shortcode[0];
                 preg_match('/\d+/', $shortcode, $galeryId);
                 $galeryId = $galeryId[0];
                 $galery = Gallery::find()->where(['id' => $galeryId])->with('items')->one();
 
 
-
-
-
-
-                foreach ($galery->items as $k => $item){
+                foreach ($galery->items as $k => $item) {
 
                     $image = new customImage;
                     $filename = explode('/', $item["url"]);
 
-                    if (!file_exists(dirname(dirname(__FILE__)) . '/web/uploads/galleries/'.$galery["id"].'/'.$filename[count($filename) - 1])) {
+                    if (!file_exists(dirname(dirname(__FILE__)) . '/web/uploads/galleries/' . $galery["id"] . '/' . $filename[count($filename) - 1])) {
 
 
                         $image->moveGalleryItem($galery["id"], $filename[count($filename) - 1]);
@@ -489,18 +490,18 @@ class ArticlesController extends Controller
 
                 $galleryIDs[] = $galery["id"];
 
-                switch ($galery->type){
+                switch ($galery->type) {
                     case 'default':
-                        $model->content = str_replace($shortcode,  \Yii::$app->view->renderFile('@app/views/gallery/slider.php', array('gallery'=>$galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
-                        $model->preview_content = str_replace($shortcode,  \Yii::$app->view->renderFile('@app/views/gallery/slider.php', array('gallery'=>$galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->preview_content);
+                        $model->content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/slider.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
+                        $model->preview_content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/slider.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->preview_content);
                         break;
                     case 'one_column':
-                        $model->content = str_replace($shortcode,  \Yii::$app->view->renderFile('@app/views/gallery/custom.php', array('gallery'=>$galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
-                        $model->preview_content = str_replace($shortcode,  \Yii::$app->view->renderFile('@app/views/gallery/custom.php', array('gallery'=>$galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->preview_content);
+                        $model->content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/custom.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
+                        $model->preview_content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/custom.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->preview_content);
                         break;
                     case 'two_column':
-                        $model->content = str_replace($shortcode,  \Yii::$app->view->renderFile('@app/views/gallery/two_column.php', array('gallery'=>$galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
-                        $model->preview_content = str_replace($shortcode,  \Yii::$app->view->renderFile('@app/views/gallery/two_column.php', array('gallery'=>$galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->preview_content);
+                        $model->content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/two_column.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
+                        $model->preview_content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/two_column.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->preview_content);
                         break;
                     case 'three_column':
 //                        if($model->section != 5){
@@ -512,8 +513,8 @@ class ArticlesController extends Controller
 //                        }
                         break;
                     default:
-                        $model->content = str_replace($shortcode,  \Yii::$app->view->renderFile('@app/views/gallery/slider.php', array('gallery'=>$galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
-                        $model->preview_content = str_replace($shortcode,  \Yii::$app->view->renderFile('@app/views/gallery/slider.php', array('gallery'=>$galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->preview_content);
+                        $model->content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/slider.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->content);
+                        $model->preview_content = str_replace($shortcode, \Yii::$app->view->renderFile('@app/views/gallery/slider.php', array('gallery' => $galery, 'article' => $model, 'view_type' => $model["view_type"])), $model->preview_content);
                         break;
                 }
 
@@ -521,21 +522,21 @@ class ArticlesController extends Controller
             }
 //            die();
         }
-        $model->content =  preg_replace("/<p[^>]*>[\s|&nbsp;]*<\/p>/", '', $model->content);
+        $model->content = preg_replace("/<p[^>]*>[\s|&nbsp;]*<\/p>/", '', $model->content);
 
-        if($model->section == 5){
+        if ($model->section == 5) {
             $galsRes = Gallery::find()->where(['article_id' => $model["id"]])->all();
 
 
-            foreach ($galsRes as $i){
-                if(!in_array($i, $galleryIDs)){
+            foreach ($galsRes as $i) {
+                if (!in_array($i, $galleryIDs)) {
 
-                    foreach ($i->items as $k => $item){
+                    foreach ($i->items as $k => $item) {
 
                         $image = new customImage;
                         $filename = explode('/', $item["url"]);
 
-                        if (!file_exists(dirname(dirname(__FILE__)) . '/web/uploads/galleries/'.$i["id"].'/'.$filename[count($filename) - 1])) {
+                        if (!file_exists(dirname(dirname(__FILE__)) . '/web/uploads/galleries/' . $i["id"] . '/' . $filename[count($filename) - 1])) {
 
 
                             $image->moveGalleryItem($i["id"], $filename[count($filename) - 1]);
@@ -543,19 +544,19 @@ class ArticlesController extends Controller
                     }
 
 
-                    $model->content.=\Yii::$app->view->renderFile('@app/views/gallery/three_column.php', array('gallery'=>$i, 'article' => $model, 'view_type' => $model["view_type"]));
+                    $model->content .= \Yii::$app->view->renderFile('@app/views/gallery/three_column.php', array('gallery' => $i, 'article' => $model, 'view_type' => $model["view_type"]));
                 }
             }
         }
 
-        if($model->preview_img){
+        if ($model->preview_img) {
             $model->preview_img = ImageSizes::getResizesName($model->preview_img, '16_9_1040');
         }
-        if($model->header_img){
+        if ($model->header_img) {
             $model->header_img = ImageSizes::getResizesName($model->header_img, '16_9_1040');
         }
 
-        if($not_miss) {
+        if ($not_miss) {
             foreach ($not_miss as $k => $value) {
 
                 if ($value->preview_img) {
@@ -567,7 +568,7 @@ class ArticlesController extends Controller
 
             }
         }
-        if($recomended) {
+        if ($recomended) {
             foreach ($recomended as $k => $value) {
 
                 if ($value->preview_img) {
@@ -582,50 +583,50 @@ class ArticlesController extends Controller
 
         $session = \Yii::$app->session;
 
-        if(!$session->has('view-'.$id)){
+        if (!$session->has('view-' . $id)) {
 
             $tmp = Articles::findOne($id);
-            $tmp->views = (int)$tmp->views+1;
+            $tmp->views = (int)$tmp->views + 1;
             $tmp->save();
-            $session->set('view-'.$id, 'true');
+            $session->set('view-' . $id, 'true');
         }
         $seo = Seo::find()->where(['tbl' => 'articles', 'id_record' => $id])->one();
-        if($seo) {
+        if ($seo) {
             \Yii::$app->view->title = $seo->title;
 
-            if($seo->description != '') {
+            if ($seo->description != '') {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'description',
                     'content' => $seo->description
                 ]);
             }
-            if($seo->keywords != '') {
+            if ($seo->keywords != '') {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'keywords',
                     'content' => $seo->keywords
                 ]);
             }
-            if($seo->og_title != '') {
+            if ($seo->og_title != '') {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'og:title',
                     'content' => $seo->og_title
                 ]);
             }
-            if($seo->og_description != '') {
+            if ($seo->og_description != '') {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'og:description',
                     'content' => $seo->og_description
                 ]);
             }
 
-            if($seo->og_locale != '') {
+            if ($seo->og_locale != '') {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'og:locale',
                     'content' => $seo->og_locale
                 ]);
             }
 
-            if($seo->og_image != '') {
+            if ($seo->og_image != '') {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'og:image',
                     'content' => $seo->og_image
@@ -638,21 +639,21 @@ class ArticlesController extends Controller
 
             }
 
-            if($seo->og_url != '') {
+            if ($seo->og_url != '') {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'og:url',
                     'content' => $seo->og_url
                 ]);
             }
 
-            if($seo->description != '') {
+            if ($seo->description != '') {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'og:site_name',
                     'content' => $seo->og_site_name
                 ]);
             }
 
-            if($seo->last_updated != '') {
+            if ($seo->last_updated != '') {
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'last-modified',
                     'content' => $seo->last_updated
@@ -664,7 +665,7 @@ class ArticlesController extends Controller
         $view = 'index';
 
 
-        if($model["view_type"] == 'gallery-one-column'){
+        if ($model["view_type"] == 'gallery-one-column') {
 //            $view = 'index2';
             $this->contentClass = 'one-column';
         }

@@ -17,7 +17,7 @@ use yii\web\AssetBundle;
  */
 class AppAsset extends AssetBundle
 {
-    public $sourcePath  = '@webroot';
+    public $sourcePath = '@webroot';
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
@@ -29,7 +29,7 @@ class AppAsset extends AssetBundle
     public $js = [
         '/packages/mosaic/masonry.pkgd.min.js',
         '/packages/mosaic/imagesloaded.pkgd.min.js',
-        '/packages/swiper/js/swiper.js',
+        '/packages/swiper/js/swiper.min.js',
         '/js/script.js'
     ];
     public $depends = [

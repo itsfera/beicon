@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this \yii\web\View */
+
 /* @var $content string */
 
 use app\widgets\Alert;
@@ -14,6 +15,7 @@ use app\models\Pages;
 use app\models\Mnu;
 use yii\helpers\Url;
 use app\models\Socials;
+
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -26,45 +28,51 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="index, follow">
 
-    <link rel="icon" href="/img/assets/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="/img/assets/favicon.ico" type="image/x-icon"/>
     <link rel="shortcut icon" href="/basic/web/img/assets/favicon.ico" type="image/x-icon">
 
+    <? $this->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()]); ?>
+
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans%7CMontserrat:200,400,500,700%7CSource+Sans+Pro%7CSpectral:400,500&amp;subset=cyrillic-ext" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans%7CMontserrat:200,400,500,700%7CSource+Sans+Pro%7CSpectral:400,500&amp;subset=cyrillic-ext"
+          rel="stylesheet">
     <!-- Jquery from Yandex CDN -->
-    <script src="https://yastatic.net/jquery/3.1.1/jquery.min.js"></script>
+    <script async src="/basic/web/js/jquery.min.js"></script>
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
+
     <?php $this->head() ?>
 
-<!---->
-<!--    <script src="/basic/web/packages/mosaic/masonry.pkgd.min.js"></script>-->
-<!--    <script src="/basic/web/packages/mosaic/imagesloaded.pkgd.min.js"></script>-->
-<!--    <script src="/basic/web/packages/swiper/js/swiper.js"></script>-->
-<!--    <script src="/basic/web/js/script.js"></script>-->
+
+    <!---->
+    <!--    <script src="/basic/web/packages/mosaic/masonry.pkgd.min.js"></script>-->
+    <!--    <script src="/basic/web/packages/mosaic/imagesloaded.pkgd.min.js"></script>-->
+    <!--    <script src="/basic/web/packages/swiper/js/swiper.js"></script>-->
+    <!--    <script src="/basic/web/js/script.js"></script>-->
 
     <?php
 
     $jsheader = \app\models\Meta::findOne(['keyname' => 'jsheader']);
-    if($jsheader){
+    if ($jsheader) {
         echo $jsheader->value;
     }
 
     $googleheader = \app\models\Meta::findOne(['keyname' => 'gtag.js']);
-    if($googleheader){
+    if ($googleheader) {
         echo $googleheader->value;
     }
     ?>
 
 
 </head>
-<body class="page-bg page-branding_l <? if(isset($this->context->body_id)) echo $this->context->body_id; ?>" id="" style="background: #fdecec; ">
+<body class="page-bg page-branding_l <? if (isset($this->context->body_id)) echo $this->context->body_id; ?>"
+      style="background: #fdecec; ">
 <?php $this->beginBody() ?>
 
 <?php
 if (Yii::$app->controller->id === 'articles' && Yii::$app->controller->action->id === 'view') {
     $mailru_top = \app\models\Meta::findOne(['keyname' => 'mailru_top']);
-    if($mailru_top){
+    if ($mailru_top) {
         echo $mailru_top->value;
     }
 }
@@ -73,7 +81,7 @@ if (Yii::$app->controller->id === 'articles' && Yii::$app->controller->action->i
 <?php
 
 $metrika = \app\models\Meta::findOne(['keyname' => 'ya_metrika']);
-if($metrika){
+if ($metrika) {
     echo $metrika->value;
 }
 ?>
@@ -85,7 +93,11 @@ if($metrika){
     <form name="search" id="searchFormMenu" action="#" method="get" class="search-form">
         <div class="fields-wrapper">
             <input type="text" id="searchRequestMenu" name="searchRequest" placeholder="Поиск" value="">
-            <button type="submit" id="searchRequestSubmitMenu" name="searchRequestSubmit"><svg class="inline-svg search-icon-dark"><use xlink:href="#searchDark"></use></svg></button>
+            <button type="submit" id="searchRequestSubmitMenu" name="searchRequestSubmit">
+                <svg class="inline-svg search-icon-dark">
+                    <use xlink:href="#searchDark"></use>
+                </svg>
+            </button>
         </div>
     </form>
     <!-- End Search form -->
@@ -97,7 +109,8 @@ if($metrika){
     <div class="menu-block__wrapper">
         <div class="menu-block__line menu-block__line_1 clearfix">
             <div class="menu-block__logo col_r">
-                <a href="/"><img class="logo-img" src="/img/assets/logo.svg" width="303" height="103" alt="Be-icon logo"></a>
+                <a href="/"><img class="logo-img" src="/img/assets/logo.svg" width="303" height="103"
+                                 alt="Be-icon logo"></a>
             </div>
             <ul class="menu-block__menu-list col_l">
                 <?php
@@ -105,9 +118,11 @@ if($metrika){
                 $sections = Sections::find()->where(['hidden' => 0])->orderBy('sort')->all();
 
                 foreach ($sections as $section) {
-                ?>
-                <li class="menu-block__menu-item"><a href="<?=Url::to(['sections/view/', 'url' => $section["url"]])?>"><?=$section["name"]?></a></li>
-            <? } ?>
+                    ?>
+                    <li class="menu-block__menu-item"><a
+                                href="<?= Url::to(['sections/view/', 'url' => $section["url"]]) ?>"><?= $section["name"] ?></a>
+                    </li>
+                <? } ?>
             </ul>
         </div>
         <div class="menu-block__lines-wrapper clearfix">
@@ -116,7 +131,12 @@ if($metrika){
                     <ul class="line__item account-wrapper">
                         <li class="account__login">
                             <!--<button class="account__btn login__btn to-login"><i class="account__login-icon"></i>Войти</button>-->
-                            <button class="account__btn login__btn to-login"><svg class="inline-svg account-svg"><use xlink:href="#account"></use></svg>Войти</button>
+                            <button class="account__btn login__btn to-login">
+                                <svg class="inline-svg account-svg">
+                                    <use xlink:href="#account"></use>
+                                </svg>
+                                Войти
+                            </button>
                         </li>
                         <li class="account__sign-up">
                             <button class="account__btn sign-up__btn to-reg">Регистрация</button>
@@ -129,16 +149,20 @@ if($metrika){
                         $socials = Socials::find()->orderBy(['sort' => SORT_ASC])->all();
 
                         foreach ($socials as $social) {
-                            if($social["href"] == '#' || !$social["href"]) continue;
-                        ?>
-                        <a class="social-login__item" href="<?=$social["href"]?>" target="_blank"><svg class="inline-svg social-svg"><use xlink:href="#<?=$social["name"]?>"></use></svg></a>
+                            if ($social["href"] == '#' || !$social["href"]) continue;
+                            ?>
+                            <a class="social-login__item" href="<?= $social["href"] ?>" target="_blank">
+                                <svg class="inline-svg social-svg">
+                                    <use xlink:href="#<?= $social["name"] ?>"></use>
+                                </svg>
+                            </a>
                         <? } ?>
                     </div>
                 </div>
             </div>
             <footer class="menu-block__line  menu-block__line-3">
                 <div class="footer__copyright col_l">
-                    <p>© <?=date('Y')?> Be Icon.</p>
+                    <p>© <?= date('Y') ?> Be Icon.</p>
                     <p>Все права защищены.</p>
                     <p>Для лиц старше 16 лет.</p>
                 </div>
@@ -150,9 +174,12 @@ if($metrika){
 
                         foreach ($list as $item) { ?>
 
-                        <li class="footer-links__item"><a href="<?=Url::to(['p/view', 'url' => $item["url"]])?>"><?=$item->name?></a></li>
+                            <li class="footer-links__item"><a
+                                        href="<?= Url::to(['p/view', 'url' => $item["url"]]) ?>"><?= $item->name ?></a>
+                            </li>
                         <? } ?>
-                        <li class="footer-links__item"><a href="<?=Url::to(['site/sitemap-html'])?>">Карта сайта</a></li>
+                        <li class="footer-links__item"><a href="<?= Url::to(['site/sitemap-html']) ?>">Карта сайта</a>
+                        </li>
                     </ul>
                 </div>
             </footer>
@@ -174,11 +201,22 @@ if($metrika){
                     <div class="burger-icon__line burger-icon__line-3"></div>
                 </div>
             </li>
-            <li class="nav-btn-item disable" id="shopIcon"><svg class="nav-icon shop-icon"><use xlink:href="#shopping"></use></svg>
-<!--                <span id="goodsCount">4</span>-->
+            <li class="nav-btn-item disable" id="shopIcon">
+                <svg class="nav-icon shop-icon">
+                    <use xlink:href="#shopping"></use>
+                </svg>
+                <!--                <span id="goodsCount">4</span>-->
             </li>
-            <li class="nav-btn-item disable" id="favoriteIcon"><svg class="nav-icon favorite-icon"><use xlink:href="#favorites"></use></svg></li>
-            <li class="nav-btn-item" id="searchIcon"><svg class="nav-icon search-icon"><use xlink:href="#search"></use></svg></li>
+            <li class="nav-btn-item disable" id="favoriteIcon">
+                <svg class="nav-icon favorite-icon">
+                    <use xlink:href="#favorites"></use>
+                </svg>
+            </li>
+            <li class="nav-btn-item" id="searchIcon">
+                <svg class="nav-icon search-icon">
+                    <use xlink:href="#search"></use>
+                </svg>
+            </li>
         </ul>
     </div>
     <div class="logo-wrapper">
@@ -197,7 +235,11 @@ if($metrika){
             <div class="slide-page-menu__item" id="tab1" role="button">Корзина</div>
             <div class="slide-page-menu__item" id="tab2" role="button">Нравится</div>
         </div>
-        <button class="close-btn"><svg class="close-icon"><use xlink:href="#close"></use></svg></button>
+        <button class="close-btn">
+            <svg class="close-icon">
+                <use xlink:href="#close"></use>
+            </svg>
+        </button>
     </div>
     <!-- End Shopping and Favorites Menu -->
 
@@ -206,7 +248,8 @@ if($metrika){
         <div class="goods-wrapper">
             <ul class="goods__list sp-content-wrapper">
                 <li class="goods__item shopping-good">
-                    <div class="goods__item__image-container"><img src="/img/good1.jpg" width="80" height="80" alt=""></div>
+                    <div class="goods__item__image-container"><img src="/img/good1.jpg" width="80" height="80" alt="">
+                    </div>
                     <div class="goods__item__info-wrapper">
                         <div class="goods__item__info-item">
                             <h3>Oscar de la Renta, весна-лето 2018</h3>
@@ -223,7 +266,8 @@ if($metrika){
                     </div>
                 </li>
                 <li class="goods__item shopping-good">
-                    <div class="goods__item__image-container"><img src="/img/good1.jpg" width="80" height="80" alt=""></div>
+                    <div class="goods__item__image-container"><img src="/img/good1.jpg" width="80" height="80" alt="">
+                    </div>
                     <div class="goods__item__info-wrapper">
                         <div class="goods__item__info-item">
                             <h3>Oscar de la Renta, весна-лето 2018</h3>
@@ -240,7 +284,8 @@ if($metrika){
                     </div>
                 </li>
                 <li class="goods__item shopping-good">
-                    <div class="goods__item__image-container"><img src="/img/good1.jpg" width="80" height="80" alt=""></div>
+                    <div class="goods__item__image-container"><img src="/img/good1.jpg" width="80" height="80" alt="">
+                    </div>
                     <div class="goods__item__info-wrapper">
                         <div class="goods__item__info-item">
                             <h3>Oscar de la Renta, весна-лето 2018</h3>
@@ -257,7 +302,8 @@ if($metrika){
                     </div>
                 </li>
                 <li class="goods__item shopping-good">
-                    <div class="goods__item__image-container"><img src="/img/good1.jpg" width="80" height="80" alt=""></div>
+                    <div class="goods__item__image-container"><img src="/img/good1.jpg" width="80" height="80" alt="">
+                    </div>
                     <div class="goods__item__info-wrapper">
                         <div class="goods__item__info-item">
                             <h3>Oscar de la Renta, весна-лето 2018</h3>
@@ -277,7 +323,8 @@ if($metrika){
 
         </div>
         <div class="shopping-footer">
-            <form name="shoppingFirstStep" action="/order.html" method="post" id="shoppingFirstStep" class="sp-content-wrapper">
+            <form name="shoppingFirstStep" action="/order.html" method="post" id="shoppingFirstStep"
+                  class="sp-content-wrapper">
                 <input type="email" name="user-email" id="userEmail" value="" placeholder="E-mail">
                 <div class="total-order-wrapper">
                     <div class="total">
@@ -310,7 +357,8 @@ if($metrika){
             <div class="favorites__content favorites__goods" id="favContent1">
                 <ul class="goods__list">
                     <li class="goods__item shopping-good clearfix">
-                        <div class="goods__item__image-container"><img src="/basic/web/img/good1.jpg" width="80" height="80" alt=""></div>
+                        <div class="goods__item__image-container"><img src="/basic/web/img/good1.jpg" width="80"
+                                                                       height="80" alt=""></div>
                         <div class="goods__item__info-wrapper">
                             <div class="goods__item__info-item">
                                 <h3>Oscar de la Renta, весна-лето 2018</h3>
@@ -325,7 +373,8 @@ if($metrika){
                         </div>
                     </li>
                     <li class="goods__item shopping-good clearfix">
-                        <div class="goods__item__image-container"><img src="/basic/web/img/good1.jpg" width="80" height="80" alt=""></div>
+                        <div class="goods__item__image-container"><img src="/basic/web/img/good1.jpg" width="80"
+                                                                       height="80" alt=""></div>
                         <div class="goods__item__info-wrapper">
                             <div class="goods__item__info-item">
                                 <h3>Oscar de la Renta, весна-лето 2018</h3>
@@ -340,7 +389,8 @@ if($metrika){
                         </div>
                     </li>
                     <li class="goods__item shopping-good clearfix">
-                        <div class="goods__item__image-container"><img src="/basic/web/img/good1.jpg" width="80" height="80" alt=""></div>
+                        <div class="goods__item__image-container"><img src="/basic/web/img/good1.jpg" width="80"
+                                                                       height="80" alt=""></div>
                         <div class="goods__item__info-wrapper">
                             <div class="goods__item__info-item">
                                 <h3>Oscar de la Renta, весна-лето 2018</h3>
@@ -355,7 +405,8 @@ if($metrika){
                         </div>
                     </li>
                     <li class="goods__item shopping-good clearfix">
-                        <div class="goods__item__image-container"><img src="/basic/web/img/good1.jpg" width="80" height="80" alt=""></div>
+                        <div class="goods__item__image-container"><img src="/basic/web/img/good1.jpg" width="80"
+                                                                       height="80" alt=""></div>
                         <div class="goods__item__info-wrapper">
                             <div class="goods__item__info-item">
                                 <h3>Oscar de la Renta, весна-лето 2018</h3>
@@ -370,7 +421,8 @@ if($metrika){
                         </div>
                     </li>
                     <li class="goods__item shopping-good clearfix">
-                        <div class="goods__item__image-container"><img src="/basic/web/img/good1.jpg" width="80" height="80" alt=""></div>
+                        <div class="goods__item__image-container"><img src="/basic/web/img/good1.jpg" width="80"
+                                                                       height="80" alt=""></div>
                         <div class="goods__item__info-wrapper">
                             <div class="goods__item__info-item">
                                 <h3>Oscar de la Renta, весна-лето 2018</h3>
@@ -391,7 +443,8 @@ if($metrika){
             <!-- Start Favorites Articles -->
             <div class="favorites__content articles__list_simple" id="favContent2">
                 <article class="article__item clearfix">
-                    <div class="article__teaser__image-container"><img src="/basic/web/img/article-prew.jpg" width="160" height="90" alt=""></div>
+                    <div class="article__teaser__image-container"><img src="/basic/web/img/article-prew.jpg" width="160"
+                                                                       height="90" alt=""></div>
                     <div class="article__teaser__wrapper">
                         <h3><a href="#">5 ювелирных брендов, которые могут стать в будущем легендарными</a></h3>
                         <div class="tags">
@@ -402,12 +455,17 @@ if($metrika){
                         </div>
                         <div class="article__teaser__info">
                             <div class="article__teaser__date">Сегодня</div>
-                            <div class="article__teaser__views"><span class="views__num">234</span><svg class="inline-svg views__icon"><use xlink:href="#visibility"></use></svg></div>
+                            <div class="article__teaser__views"><span class="views__num">234</span>
+                                <svg class="inline-svg views__icon">
+                                    <use xlink:href="#visibility"></use>
+                                </svg>
+                            </div>
                         </div>
                     </div>
                 </article>
                 <article class="article__item clearfix">
-                    <div class="article__teaser__image-container"><img src="/basic/web/img/article-prew.jpg" width="160" height="90" alt=""></div>
+                    <div class="article__teaser__image-container"><img src="/basic/web/img/article-prew.jpg" width="160"
+                                                                       height="90" alt=""></div>
                     <div class="article__teaser__wrapper">
                         <h3><a href="#">5 ювелирных брендов, которые могут стать в будущем легендарными</a></h3>
                         <div class="tags">
@@ -418,12 +476,17 @@ if($metrika){
                         </div>
                         <div class="article__teaser__info">
                             <div class="article__teaser__date">Сегодня</div>
-                            <div class="article__teaser__views"><span class="views__num">234</span><svg class="inline-svg views__icon"><use xlink:href="#visibility"></use></svg></div>
+                            <div class="article__teaser__views"><span class="views__num">234</span>
+                                <svg class="inline-svg views__icon">
+                                    <use xlink:href="#visibility"></use>
+                                </svg>
+                            </div>
                         </div>
                     </div>
                 </article>
                 <article class="article__item clearfix">
-                    <div class="article__teaser__image-container"><img src="/basic/web/img/article-prew.jpg" width="160" height="90" alt=""></div>
+                    <div class="article__teaser__image-container"><img src="/basic/web/img/article-prew.jpg" width="160"
+                                                                       height="90" alt=""></div>
                     <div class="article__teaser__wrapper">
                         <h3><a href="#">5 ювелирных брендов, которые могут стать в будущем легендарными</a></h3>
                         <div class="tags">
@@ -434,7 +497,11 @@ if($metrika){
                         </div>
                         <div class="article__teaser__info">
                             <div class="article__teaser__date">Сегодня</div>
-                            <div class="article__teaser__views"><span class="views__num">234</span><svg class="inline-svg views__icon"><use xlink:href="#visibility"></use></svg></div>
+                            <div class="article__teaser__views"><span class="views__num">234</span>
+                                <svg class="inline-svg views__icon">
+                                    <use xlink:href="#visibility"></use>
+                                </svg>
+                            </div>
                         </div>
                     </div>
                 </article>
@@ -445,7 +512,6 @@ if($metrika){
     <!-- End Favorites Body-->
 </div>
 <!-- End Shopping and Favorites Slide Page -->
-
 
 
 <!-- Start backgrounds overlays -->
@@ -463,7 +529,11 @@ if($metrika){
             <div class="slide-page-menu__item to-login active" id="signInTab" role="button">Вход</div>
             <div class="slide-page-menu__item to-reg" id="signUpTab" role="button">Регистрация</div>
         </div>
-        <button class="close-btn"><svg class="close-icon"><use xlink:href="#close"></use></svg></button>
+        <button class="close-btn">
+            <svg class="close-icon">
+                <use xlink:href="#close"></use>
+            </svg>
+        </button>
     </div>
     <!-- End Sign Popup Header -->
 
@@ -486,8 +556,12 @@ if($metrika){
         </form>
 
         <div class="no-enter">
-            <div class="not-reg"><button class="reg__btn to-reg">Я еще не зарегистрирован</button></div>
-            <div class="fgt-pass"><button class="fgt-pass__btn">Я забыл пароль</button></div>
+            <div class="not-reg">
+                <button class="reg__btn to-reg">Я еще не зарегистрирован</button>
+            </div>
+            <div class="fgt-pass">
+                <button class="fgt-pass__btn">Я забыл пароль</button>
+            </div>
         </div>
     </div>
     <!-- End Sign In Body -->
@@ -496,10 +570,12 @@ if($metrika){
     <div class="sp-content-wrapper slide-page__body" id="signUpContent">
 
 
-      <? echo \app\widgets\Registration::widget()?>
+        <? echo \app\widgets\Registration::widget() ?>
 
         <div class="no-enter">
-            <div class="not-reg"><button class="sign-in__btn to-login">У меня уже есть аккаунт</button></div>
+            <div class="not-reg">
+                <button class="sign-in__btn to-login">У меня уже есть аккаунт</button>
+            </div>
         </div>
     </div>
     <!-- End Sign Up Body -->
@@ -518,11 +594,31 @@ if($metrika){
         <div class="social-sign__label">Войти через соцсети</div>
         <div class="social-block">
             <div class="social-login__list">
-                <button class="social-login__item"><svg class="inline-svg social-svg"><use xlink:href="#fb"></use></svg></button>
-                <button class="social-login__item"><svg class="inline-svg social-svg"><use xlink:href="#insta"></use></svg></button>
-                <button class="social-login__item"><svg class="inline-svg social-svg"><use xlink:href="#vk"></use></svg></button>
-                <button class="social-login__item"><svg class="inline-svg social-svg"><use xlink:href="#twitter"></use></svg></button>
-                <button class="social-login__item"><svg class="inline-svg social-svg"><use xlink:href="#ok"></use></svg></button>
+                <button class="social-login__item">
+                    <svg class="inline-svg social-svg">
+                        <use xlink:href="#fb"></use>
+                    </svg>
+                </button>
+                <button class="social-login__item">
+                    <svg class="inline-svg social-svg">
+                        <use xlink:href="#insta"></use>
+                    </svg>
+                </button>
+                <button class="social-login__item">
+                    <svg class="inline-svg social-svg">
+                        <use xlink:href="#vk"></use>
+                    </svg>
+                </button>
+                <button class="social-login__item">
+                    <svg class="inline-svg social-svg">
+                        <use xlink:href="#twitter"></use>
+                    </svg>
+                </button>
+                <button class="social-login__item">
+                    <svg class="inline-svg social-svg">
+                        <use xlink:href="#ok"></use>
+                    </svg>
+                </button>
             </div>
         </div>
     </div>
@@ -531,47 +627,47 @@ if($metrika){
 <!-- End Sign in and Sign up Popup -->
 
 
-
 <?php
-if($this->context->id == 'sections' || $this->context->id == 'articles'){
+if ($this->context->id == 'sections' || $this->context->id == 'articles') {
 
-    if(!isset($this->context->hide_header)){
-    ?>
-    <header class="page-header <?if(!isset($_GET['section'])) { ?>underline<? } ?> page-wrapper">
-        <div class="menu-block__wrapper">
-            <div class="menu-block__line menu-block__line_1 clearfix">
-                <div class="menu-block__logo col_r">
-                    <a href="/"><img class="logo-img" src="/img/assets/logo.svg" width="303" height="103" alt="Be-icon logo"></a>
+    if (!isset($this->context->hide_header)) {
+        ?>
+        <header class="page-header <? if (!isset($_GET['section'])) { ?>underline<? } ?> page-wrapper">
+            <div class="menu-block__wrapper">
+                <div class="menu-block__line menu-block__line_1 clearfix">
+                    <div class="menu-block__logo col_r">
+                        <a href="/"><img class="logo-img" src="/img/assets/logo.svg" width="303" height="103"
+                                         alt="Be-icon logo"></a>
+                    </div>
+                    <ul class="menu-block__menu-list col_l">
+                        <?php
+
+                        $sections = Sections::find()->where(['hidden' => 0])->orderBy('sort')->all();
+
+                        foreach ($sections as $section) {
+                            if (isset($section["url"])) {
+
+
+                                ?>
+                                <li class="menu-block__menu-item <? if ((isset($_GET["url"]) && $_GET["url"] == $section["url"]) || (isset($_GET["section"]) && $_GET["section"] == $section["url"])) echo 'active'; ?>">
+                                    <a href="<?= Url::to(['sections/view/', 'url' => $section["url"]]) ?>"><?= $section["name"] ?></a>
+                                </li>
+                            <? }
+                        } ?>
+                    </ul>
                 </div>
-                <ul class="menu-block__menu-list col_l">
-                    <?php
-
-                    $sections = Sections::find()->where(['hidden' => 0])->orderBy('sort')->all();
-
-                    foreach ($sections as $section) {
-                        if(isset($section["url"])){
-
-
-                        ?>
-                        <li class="menu-block__menu-item <? if((isset($_GET["url"]) && $_GET["url"] == $section["url"]) || (isset($_GET["section"]) && $_GET["section"] == $section["url"])) echo 'active'; ?>"><a href="<?=Url::to(['sections/view/', 'url' => $section["url"]])?>"><?=$section["name"]?></a></li>
-                    <? } } ?>
-                </ul>
             </div>
-        </div>
-    </header>
-<? } } ?>
+        </header>
+    <? }
+} ?>
 
 
 <!-- Start Main Content -->
-<main class="main-content page-wrapper <? if(isset($this->context->contentClass)) echo $this->context->contentClass;?>">
+<main class="main-content page-wrapper <? if (isset($this->context->contentClass)) echo $this->context->contentClass; ?>">
 
-        <?= $content ?>
+    <?= $content ?>
 
 </main>
-
-
-
-
 
 
 <!-- Start SVG Sprite -->
@@ -582,7 +678,8 @@ if($this->context->id == 'sections' || $this->context->id == 'articles'){
                 <rect x="0" y="0" width="1280" height="720"></rect>
                 <g transform="translate(104.000000, 192.000000)">
                     <polygon points="0 0 40 0 40 40 0 40"></polygon>
-                    <path d="M20,3.33333333 C10.8,3.33333333 3.33333333,10.8 3.33333333,20 C3.33333333,29.2 10.8,36.6666667 20,36.6666667 C29.2,36.6666667 36.6666667,29.2 36.6666667,20 C36.6666667,10.8 29.2,3.33333333 20,3.33333333 L20,3.33333333 Z M20,8.33333333 C22.7666667,8.33333333 25,10.5666667 25,13.3333333 C25,16.1 22.7666667,18.3333333 20,18.3333333 C17.2333333,18.3333333 15,16.1 15,13.3333333 C15,10.5666667 17.2333333,8.33333333 20,8.33333333 L20,8.33333333 Z M20,32 C15.8333333,32 12.15,29.8666667 10,26.6333333 C10.05,23.3166667 16.6666667,21.5 20,21.5 C23.3166667,21.5 29.95,23.3166667 30,26.6333333 C27.85,29.8666667 24.1666667,32 20,32 L20,32 Z" fill="#788089"></path>
+                    <path d="M20,3.33333333 C10.8,3.33333333 3.33333333,10.8 3.33333333,20 C3.33333333,29.2 10.8,36.6666667 20,36.6666667 C29.2,36.6666667 36.6666667,29.2 36.6666667,20 C36.6666667,10.8 29.2,3.33333333 20,3.33333333 L20,3.33333333 Z M20,8.33333333 C22.7666667,8.33333333 25,10.5666667 25,13.3333333 C25,16.1 22.7666667,18.3333333 20,18.3333333 C17.2333333,18.3333333 15,16.1 15,13.3333333 C15,10.5666667 17.2333333,8.33333333 20,8.33333333 L20,8.33333333 Z M20,32 C15.8333333,32 12.15,29.8666667 10,26.6333333 C10.05,23.3166667 16.6666667,21.5 20,21.5 C23.3166667,21.5 29.95,23.3166667 30,26.6333333 C27.85,29.8666667 24.1666667,32 20,32 L20,32 Z"
+                          fill="#788089"></path>
                 </g>
             </g>
         </g>
@@ -620,7 +717,8 @@ if($this->context->id == 'sections' || $this->context->id == 'articles'){
             </g>
         </g>
         <defs>
-            <path d="M16.5,3 C14.76,3 13.09,3.81 12,5.09 C10.91,3.81 9.24,3 7.5,3 C4.42,3 2,5.42 2,8.5 C2,12.28 5.4,15.36 10.55,20.04 L12,21.35 L13.45,20.03 C18.6,15.36 22,12.28 22,8.5 C22,5.42 19.58,3 16.5,3 L16.5,3 Z" id="path-1"></path>
+            <path d="M16.5,3 C14.76,3 13.09,3.81 12,5.09 C10.91,3.81 9.24,3 7.5,3 C4.42,3 2,5.42 2,8.5 C2,12.28 5.4,15.36 10.55,20.04 L12,21.35 L13.45,20.03 C18.6,15.36 22,12.28 22,8.5 C22,5.42 19.58,3 16.5,3 L16.5,3 Z"
+                  id="path-1"></path>
         </defs>
     </symbol>
     <symbol id="shopping" viewBox="0 0 20 20">
@@ -628,7 +726,8 @@ if($this->context->id == 'sections' || $this->context->id == 'articles'){
             <g transform="translate(-17.000000, -90.000000)">
                 <g transform="translate(16.000000, 88.000000)">
                     <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                    <path d="M7,18 C5.9,18 5.01,18.9 5.01,20 C5.01,21.1 5.9,22 7,22 C8.1,22 9,21.1 9,20 C9,18.9 8.1,18 7,18 L7,18 Z M1,2 L1,4 L3,4 L6.6,11.59 L5.25,14.04 C5.09,14.32 5,14.65 5,15 C5,16.1 5.9,17 7,17 L19,17 L19,15 L7.42,15 C7.28,15 7.17,14.89 7.17,14.75 L7.2,14.63 L8.1,13 L15.55,13 C16.3,13 16.96,12.59 17.3,11.97 L20.88,5.48 C20.96,5.34 21,5.17 21,5 C21,4.45 20.55,4 20,4 L5.21,4 L4.27,2 L1,2 L1,2 Z M17,18 C15.9,18 15.01,18.9 15.01,20 C15.01,21.1 15.9,22 17,22 C18.1,22 19,21.1 19,20 C19,18.9 18.1,18 17,18 L17,18 Z" id="Shape" fill="#FFFFFF"></path>
+                    <path d="M7,18 C5.9,18 5.01,18.9 5.01,20 C5.01,21.1 5.9,22 7,22 C8.1,22 9,21.1 9,20 C9,18.9 8.1,18 7,18 L7,18 Z M1,2 L1,4 L3,4 L6.6,11.59 L5.25,14.04 C5.09,14.32 5,14.65 5,15 C5,16.1 5.9,17 7,17 L19,17 L19,15 L7.42,15 C7.28,15 7.17,14.89 7.17,14.75 L7.2,14.63 L8.1,13 L15.55,13 C16.3,13 16.96,12.59 17.3,11.97 L20.88,5.48 C20.96,5.34 21,5.17 21,5 C21,4.45 20.55,4 20,4 L5.21,4 L4.27,2 L1,2 L1,2 Z M17,18 C15.9,18 15.01,18.9 15.01,20 C15.01,21.1 15.9,22 17,22 C18.1,22 19,21.1 19,20 C19,18.9 18.1,18 17,18 L17,18 Z"
+                          id="Shape" fill="#FFFFFF"></path>
                 </g>
             </g>
         </g>
@@ -638,7 +737,8 @@ if($this->context->id == 'sections' || $this->context->id == 'articles'){
             <g transform="translate(-10.000000, -147.000000)">
                 <g transform="translate(8.000000, 144.000000)">
                     <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                    <path d="M12,21.35 L10.55,20.03 C5.4,15.36 2,12.28 2,8.5 C2,5.42 4.42,3 7.5,3 C9.24,3 10.91,3.81 12,5.09 C13.09,3.81 14.76,3 16.5,3 C19.58,3 22,5.42 22,8.5 C22,12.28 18.6,15.36 13.45,20.04 L12,21.35 L12,21.35 Z" fill="#FFFFFF"></path>
+                    <path d="M12,21.35 L10.55,20.03 C5.4,15.36 2,12.28 2,8.5 C2,5.42 4.42,3 7.5,3 C9.24,3 10.91,3.81 12,5.09 C13.09,3.81 14.76,3 16.5,3 C19.58,3 22,5.42 22,8.5 C22,12.28 18.6,15.36 13.45,20.04 L12,21.35 L12,21.35 Z"
+                          fill="#FFFFFF"></path>
                 </g>
             </g>
         </g>
@@ -648,7 +748,8 @@ if($this->context->id == 'sections' || $this->context->id == 'articles'){
             <g transform="translate(-19.000000, -203.000000)">
                 <g transform="translate(16.000000, 200.000000)">
                     <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                    <path d="M15.5,14 L14.71,14 L14.43,13.73 C15.41,12.59 16,11.11 16,9.5 C16,5.91 13.09,3 9.5,3 C5.91,3 3,5.91 3,9.5 C3,13.09 5.91,16 9.5,16 C11.11,16 12.59,15.41 13.73,14.43 L14,14.71 L14,15.5 L19,20.49 L20.49,19 L15.5,14 L15.5,14 Z M9.5,14 C7.01,14 5,11.99 5,9.5 C5,7.01 7.01,5 9.5,5 C11.99,5 14,7.01 14,9.5 C14,11.99 11.99,14 9.5,14 L9.5,14 Z" fill="#FFFFFF"></path>
+                    <path d="M15.5,14 L14.71,14 L14.43,13.73 C15.41,12.59 16,11.11 16,9.5 C16,5.91 13.09,3 9.5,3 C5.91,3 3,5.91 3,9.5 C3,13.09 5.91,16 9.5,16 C11.11,16 12.59,15.41 13.73,14.43 L14,14.71 L14,15.5 L19,20.49 L20.49,19 L15.5,14 L15.5,14 Z M9.5,14 C7.01,14 5,11.99 5,9.5 C5,7.01 7.01,5 9.5,5 C11.99,5 14,7.01 14,9.5 C14,11.99 11.99,14 9.5,14 L9.5,14 Z"
+                          fill="#FFFFFF"></path>
                 </g>
             </g>
         </g>
@@ -661,7 +762,8 @@ if($this->context->id == 'sections' || $this->context->id == 'articles'){
             <g transform="translate(-1105.000000, -294.000000)">
                 <g transform="translate(1104.000000, 288.000000)">
                     <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                    <path d="M1.57350354,12 C3.32806292,14.98693 7.39632572,17 12,17 C16.6036743,17 20.6719371,14.98693 22.4264965,12 C20.6719371,9.01307 16.6036743,7 12,7 C7.39632572,7 3.32806292,9.01307 1.57350354,12 Z M12,16.75 C9.37785763,16.75 7.25,14.6221424 7.25,12 C7.25,9.37785763 9.37785763,7.25 12,7.25 C14.6221424,7.25 16.75,9.37785763 16.75,12 C16.75,14.6221424 14.6221424,16.75 12,16.75 Z M12,13.375 C12.7588576,13.375 13.375,12.7588576 13.375,12 C13.375,11.2411424 12.7588576,10.625 12,10.625 C11.2411424,10.625 10.625,11.2411424 10.625,12 C10.625,12.7588576 11.2411424,13.375 12,13.375 Z" stroke="#CAD0D9"></path>
+                    <path d="M1.57350354,12 C3.32806292,14.98693 7.39632572,17 12,17 C16.6036743,17 20.6719371,14.98693 22.4264965,12 C20.6719371,9.01307 16.6036743,7 12,7 C7.39632572,7 3.32806292,9.01307 1.57350354,12 Z M12,16.75 C9.37785763,16.75 7.25,14.6221424 7.25,12 C7.25,9.37785763 9.37785763,7.25 12,7.25 C14.6221424,7.25 16.75,9.37785763 16.75,12 C16.75,14.6221424 14.6221424,16.75 12,16.75 Z M12,13.375 C12.7588576,13.375 13.375,12.7588576 13.375,12 C13.375,11.2411424 12.7588576,10.625 12,10.625 C11.2411424,10.625 10.625,11.2411424 10.625,12 C10.625,12.7588576 11.2411424,13.375 12,13.375 Z"
+                          stroke="#CAD0D9"></path>
                 </g>
             </g>
         </g>
@@ -682,24 +784,24 @@ if($this->context->id == 'sections' || $this->context->id == 'articles'){
 <!-- End SVG Sprite -->
 
 
-
 <?php $this->endBody() ?>
 
 <script>
-    $(function () {
-        $('.search-form').submit(function () {
-            var q = $(this).find('input').val();
-            location.href = '/search/'+q;
-            return false;
-        });
-    });
+	$(function () {
+		$('.search-form').submit(function () {
+			var q = $(this).find('input').val();
+			location.href = '/search/' + q;
+			return false;
+		});
+	});
 </script>
-
+<? /*
 <style>
     body .article-body > img {
         max-width: 100%;
     }
 </style>
+*/ ?>
 </body>
 </html>
 <?php $this->endPage() ?>

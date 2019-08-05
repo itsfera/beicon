@@ -1,5 +1,7 @@
 <?php
 
+use himiklab\sitemap\behaviors\SitemapBehavior;
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -9,17 +11,88 @@ $config = [
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'language' => 'ru-RU',
+    'modules' => [
+        'sitemap' => [
+            'class' => 'himiklab\sitemap\Sitemap',
+            'models' => [
+                'models\Articles',
+            ],
+            'urls' => [
+                // your additional urls
+                [
+                    'loc' => '/news',
+                    'changefreq' => SitemapBehavior::CHANGEFREQ_DAILY,
+                    'priority' => 0.8,
+                    'news' => [
+                        'publication' => [
+                            'name' => 'Example Blog',
+                            'language' => 'en',
+                        ],
+                        'access' => 'Subscription',
+                        'genres' => 'Blog, UserGenerated',
+                        'publication_date' => 'YYYY-MM-DDThh:mm:ssTZD',
+                        'title' => 'Example Title',
+                        'keywords' => 'example, keywords, comma-separated',
+                        'stock_tickers' => 'NASDAQ:A, NASDAQ:B',
+                    ],
+                    'images' => [
+                        [
+                            'loc' => 'http://example.com/image.jpg',
+                            'caption' => 'This is an example of a caption of an image',
+                            'geo_location' => 'City, State',
+                            'title' => 'Example image',
+                            'license' => 'http://example.com/license',
+                        ],
+                    ],
+                ],
+            ],
+            'enableGzip' => true, // default is false
+            'cacheExpire' => 1, // 1 second. Default is 24 hours
+        ]
+    ],
     'components' => [
+        'socialShare' => [
+            'class' => \ymaker\social\share\configurators\Configurator::class,
+            'socialNetworks' => [
+                'facebook' => [
+                    'class' => \ymaker\social\share\drivers\Facebook::class,
+                    'label' => Yii::t('app', 'Facebook'),
+                    'options' => ['class' => 'fb'],
+                ],
+                'Vkontakte' => [
+                    'class' => \ymaker\social\share\drivers\Vkontakte::class,
+                    'label' => Yii::t('app', 'ВКонтакте'),
+                    'options' => ['class' => 'vk'],
+                ],
+                'twitter' => [
+                    'class' => \ymaker\social\share\drivers\Twitter::class,
+                    'label' => Yii::t('app', 'Twitter'),
+                    'options' => ['class' => 'tw'],
+                    'config' => [
+                        'account' => $params['twitterAccount']
+                    ],
+                ],
+                'Odnoklassniki' => [
+                    'class' => \ymaker\social\share\drivers\Odnoklassniki::class,
+                    'label' => Yii::t('app', 'Одноклассники'),
+                    'options' => ['class' => 'ok'],
+                ],
+
+            ],
+            'options' => [
+                'class' => 'social-network',
+            ],
+        ],
         'assetManager' => [
             'bundles' => [
                 'yii\web\JqueryAsset' => [
-                    'js'=>[]
+                    'js' => []
                 ],
                 'yii\bootstrap\BootstrapPluginAsset' => [
-                    'js'=>[]
+                    'js' => []
                 ],
                 'yii\bootstrap\BootstrapAsset' => [
                     'css' => [],
@@ -67,11 +140,11 @@ $config = [
         'response' => [
             'class' => 'yii\web\Response',
             'on beforeSend' => function ($event) {
-    if(Yii::$app->response->statusCode == 401) {
+                if (Yii::$app->response->statusCode == 401) {
 
-        Yii::$app->response->headers->add('Access-Control-Allow-Origin','*');
-        Yii::$app->response->statusCode = 401;//I preferred that error code
-    }
+                    Yii::$app->response->headers->add('Access-Control-Allow-Origin', '*');
+                    Yii::$app->response->statusCode = 401;//I preferred that error code
+                }
             },
 
         ],
@@ -98,7 +171,8 @@ $config = [
                 'POST api/seodel' => 'seo/del',
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'subscribers', 'prefix' => 'api', 'only' => ['delete', 'create', 'update', 'view', 'index']],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'rss', 'prefix' => 'api', 'only' => ['delete', 'create', 'update', 'view', 'index']],
-        //        ['class' => 'yii\rest\UrlRule', 'controller' => 'rss', 'patterns' => ['PUT,PATCH {id}' => 'update', 'DELETE {id}' => 'delete', 'GET,HEAD {id}' => 'view', 'POST' => 'create', 'GET,HEAD' => 'index', '{id}' => 'options', '' => 'options'], 'prefix' => 'api'],
+                //        ['class' => 'yii\rest\UrlRule', 'controller' => 'rss', 'patterns' => ['PUT,PATCH {id}' => 'update', 'DELETE {id}' => 'delete', 'GET,HEAD {id}' => 'view', 'POST' => 'create', 'GET,HEAD' => 'index', '{id}' => 'options', '' => 'options'], 'prefix' => 'api'],
+                ['pattern' => 'sitemap', 'route' => 'sitemap/default/index', 'suffix' => '.xml'],
                 '/' => 'site/index',
                 'login' => 'site/login',
                 'logout' => 'site/logout',
@@ -157,14 +231,14 @@ if (YII_ENV_DEV) {
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        'allowedIPs' => ['127.0.0.1','178.121.149.245'],
+        'allowedIPs' => ['127.0.0.1', '178.121.149.245'],
     ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        'allowedIPs' => ['127.0.0.1',  '178.121.149.245'],
+        'allowedIPs' => ['127.0.0.1', '178.121.149.245'],
     ];
 }
 
