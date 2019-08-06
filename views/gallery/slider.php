@@ -31,7 +31,8 @@ $article->name = str_replace('"', '', $article->name);
                 <li class="gallery-slider-item swiper-slide gallery-tile-prev__item" style=""
                     data-gallery="<?= $gallery["id"] ?>">
                     <img src="<?= UPLOAD_DIR_NO_SLASH . ImageSizes::getResizesName($galleryItem["url"], '16_9_734_nocrop', $gallery["id"]) ?>"
-                         alt="<?= (!empty($item['content'])) ? $item['content'] : $article->name ?>">
+                         alt="<?= (!empty($item['content'])) ? $item['content'] : $article->name ?>"
+                         title="<?= (!empty($item['content'])) ? $item['content'] : $article->name ?>">
                 </li>
             <? } ?>
         </ul>
@@ -50,7 +51,9 @@ $article->name = str_replace('"', '', $article->name);
                             <div class="swiper-slide">
                                 <div class="gallery-fullscreen__image-container">
                                     <img src="<?= UPLOAD_DIR_NO_SLASH . $item["url"] ?>"
-                                         alt="<?= (!empty($item['content'])) ? $item['content'] : $article->name ?>">
+                                         alt="<?= (!empty($item['content'])) ? $item['content'] : $article->name ?>"
+                                         title="<?= (!empty($item['content'])) ? $item['content'] : $article->name ?>"
+                                    >
                                 </div>
                                 <div class="right-aside">
                                     <p class="swiper-slide__description"><?= strip_tags($item->content) ?></p>

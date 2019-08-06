@@ -252,7 +252,7 @@ if ($metrika) {
                     </div>
                     <div class="goods__item__info-wrapper">
                         <div class="goods__item__info-item">
-                            <h3>Oscar de la Renta, весна-лето 2018</h3>
+                            <div cl>Oscar de la Renta, весна-лето 2018</div>
                             <a class="goods__item__link" href="#" target="_blank">www.net-a-porter.com</a>
                         </div>
                         <div class="good__item__count-wrapper">
@@ -270,7 +270,7 @@ if ($metrika) {
                     </div>
                     <div class="goods__item__info-wrapper">
                         <div class="goods__item__info-item">
-                            <h3>Oscar de la Renta, весна-лето 2018</h3>
+                            <div class="h3">Oscar de la Renta, весна-лето 2018</div>
                             <a class="goods__item__link" href="#" target="_blank">www.net-a-porter.com</a>
                         </div>
                         <div class="good__item__count-wrapper">
@@ -288,7 +288,7 @@ if ($metrika) {
                     </div>
                     <div class="goods__item__info-wrapper">
                         <div class="goods__item__info-item">
-                            <h3>Oscar de la Renta, весна-лето 2018</h3>
+                            <div class="h3">Oscar de la Renta, весна-лето 2018</div>
                             <a class="goods__item__link" href="#" target="_blank">www.net-a-porter.com</a>
                         </div>
                         <div class="good__item__count-wrapper">
@@ -306,7 +306,7 @@ if ($metrika) {
                     </div>
                     <div class="goods__item__info-wrapper">
                         <div class="goods__item__info-item">
-                            <h3>Oscar de la Renta, весна-лето 2018</h3>
+                            <div class="h3">Oscar de la Renta, весна-лето 2018</div>
                             <a class="goods__item__link" href="#" target="_blank">www.net-a-porter.com</a>
                         </div>
                         <div class="good__item__count-wrapper">
@@ -361,7 +361,7 @@ if ($metrika) {
                                                                        height="80" alt=""></div>
                         <div class="goods__item__info-wrapper">
                             <div class="goods__item__info-item">
-                                <h3>Oscar de la Renta, весна-лето 2018</h3>
+                                <div class="h3">Oscar de la Renta, весна-лето 2018</div>
                                 <a class="goods__item__link" href="#" target="_blank">www.net-a-porter.com</a>
                             </div>
                             <div class="good__item__count-wrapper">
@@ -377,7 +377,7 @@ if ($metrika) {
                                                                        height="80" alt=""></div>
                         <div class="goods__item__info-wrapper">
                             <div class="goods__item__info-item">
-                                <h3>Oscar de la Renta, весна-лето 2018</h3>
+                                <div class="h3">Oscar de la Renta, весна-лето 2018</div>
                                 <a class="goods__item__link" href="#" target="_blank">www.net-a-porter.com</a>
                             </div>
                             <div class="good__item__count-wrapper">
@@ -393,7 +393,7 @@ if ($metrika) {
                                                                        height="80" alt=""></div>
                         <div class="goods__item__info-wrapper">
                             <div class="goods__item__info-item">
-                                <h3>Oscar de la Renta, весна-лето 2018</h3>
+                                <div class="h3">Oscar de la Renta, весна-лето 2018</div>
                                 <a class="goods__item__link" href="#" target="_blank">www.net-a-porter.com</a>
                             </div>
                             <div class="good__item__count-wrapper">
@@ -409,7 +409,7 @@ if ($metrika) {
                                                                        height="80" alt=""></div>
                         <div class="goods__item__info-wrapper">
                             <div class="goods__item__info-item">
-                                <h3>Oscar de la Renta, весна-лето 2018</h3>
+                                <div class="h3">Oscar de la Renta, весна-лето 2018</div>
                                 <a class="goods__item__link" href="#" target="_blank">www.net-a-porter.com</a>
                             </div>
                             <div class="good__item__count-wrapper">
@@ -425,7 +425,7 @@ if ($metrika) {
                                                                        height="80" alt=""></div>
                         <div class="goods__item__info-wrapper">
                             <div class="goods__item__info-item">
-                                <h3>Oscar de la Renta, весна-лето 2018</h3>
+                                <div class="h3">Oscar de la Renta, весна-лето 2018</div>
                                 <a class="goods__item__link" href="#" target="_blank">www.net-a-porter.com</a>
                             </div>
                             <div class="good__item__count-wrapper">
@@ -446,7 +446,8 @@ if ($metrika) {
                     <div class="article__teaser__image-container"><img src="/basic/web/img/article-prew.jpg" width="160"
                                                                        height="90" alt=""></div>
                     <div class="article__teaser__wrapper">
-                        <h3><a href="#">5 ювелирных брендов, которые могут стать в будущем легендарными</a></h3>
+                        <div class="h3"><a href="#">5 ювелирных брендов, которые могут стать в будущем легендарными</a>
+                        </div>
                         <div class="tags">
                             <ul class="tags__list">
                                 <li class="tags__item"><a href="#">Мода</a></li>
@@ -467,7 +468,8 @@ if ($metrika) {
                     <div class="article__teaser__image-container"><img src="/basic/web/img/article-prew.jpg" width="160"
                                                                        height="90" alt=""></div>
                     <div class="article__teaser__wrapper">
-                        <h3><a href="#">5 ювелирных брендов, которые могут стать в будущем легендарными</a></h3>
+                        <div class="h3"><a href="#">5 ювелирных брендов, которые могут стать в будущем легендарными</a>
+                        </div>
                         <div class="tags">
                             <ul class="tags__list">
                                 <li class="tags__item"><a href="#">Мода</a></li>
@@ -488,7 +490,8 @@ if ($metrika) {
                     <div class="article__teaser__image-container"><img src="/basic/web/img/article-prew.jpg" width="160"
                                                                        height="90" alt=""></div>
                     <div class="article__teaser__wrapper">
-                        <h3><a href="#">5 ювелирных брендов, которые могут стать в будущем легендарными</a></h3>
+                        <div class="h3"><a href="#">5 ювелирных брендов, которые могут стать в будущем легендарными</a>
+                        </div>
                         <div class="tags">
                             <ul class="tags__list">
                                 <li class="tags__item"><a href="#">Мода</a></li>
@@ -661,9 +664,8 @@ if ($this->context->id == 'sections' || $this->context->id == 'articles') {
     <? }
 } ?>
 
-
 <!-- Start Main Content -->
-<main class="main-content page-wrapper <? if (isset($this->context->contentClass)) echo $this->context->contentClass; ?>">
+<main class="main-content page-wrapper <? if (strlen($_GET["url"]) == 0) { ?>dzero<? } ?> <? if (isset($this->context->contentClass)) echo $this->context->contentClass; ?>">
 
     <?= $content ?>
 

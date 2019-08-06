@@ -1,11 +1,11 @@
-/*! normalize.css v7.0.0 | MIT License | github.com/necolas/normalize.css */
-/* Document
-   ========================================================================== */
-/**
- * 1. Correct the line height in all browsers.
- * 2. Prevent adjustments of font size after orientation changes in
- *    IE on Windows Phone and in iOS.
- */
+h2 /*! normalize.css v7.0.0 | MIT License | github.com/necolas/normalize.css */
+    /* Document
+       ========================================================================== */
+    /**
+     * 1. Correct the line height in all browsers.
+     * 2. Prevent adjustments of font size after orientation changes in
+     *    IE on Windows Phone and in iOS.
+     */
 html {
     line-height: 1.15;
     /* 1 */
@@ -1137,10 +1137,10 @@ p {
 }
 
 .article__teaser_vertical .article-overlay {
-    background-color: rgba(47, 65, 75, 0.2);
+    background-color: rgba(47, 65, 75, 0.1);
 }
 
-.article__teaser_vertical h3 {
+.article__teaser_vertical h3, .article__teaser_vertical .h3 {
     color: #fff;
     margin: 0 0 28px;
     min-height: auto;
@@ -1156,7 +1156,7 @@ p {
     background: linear-gradient(180deg, rgba(55, 56, 62, 0) 0%, #37383E 100%);
 }
 
-.article__teaser_vertical:hover h3 {
+.article__teaser_vertical:hover h3, .article__teaser_vertical:hover .h3 {
     color: #B3A170;
 }
 
@@ -1192,7 +1192,7 @@ p {
     overflow: hidden;
 }
 
-.article__teaser_half h3 {
+.article__teaser_half h3, .article__teaser_half .h3 {
     margin: 0;
     height: 104px;
     overflow: hidden;
@@ -1202,7 +1202,7 @@ p {
     box-shadow: 0 6px 18px 2px rgba(179, 161, 112, 0.5);
 }
 
-.article__teaser_half:hover h3 {
+.article__teaser_half:hover h3, .article__teaser_half:hover .h3 {
     color: #7E6F45;
 }
 
@@ -1313,7 +1313,7 @@ p {
     padding: 0;
 }
 
-.article__teaser_buy_rich .goods__item__info-item h3 {
+.article__teaser_buy_rich .goods__item__info-item h3, .article__teaser_buy_rich .goods__item__info-item .h3 {
     font-size: 1.2rem;
 }
 
@@ -1401,7 +1401,7 @@ p {
     padding-left: 20px;
 }
 
-.articles__list_simple h3 {
+.articles__list_simple h3, .articles__list_simple .h3 {
     line-height: 1.5rem;
     margin: 0 0 12px;
     min-height: 48px;
@@ -1503,7 +1503,7 @@ p {
     padding-right: 40px;
 }
 
-.cookie-block h3 {
+.cookie-block h3, .cookie-block .h3 {
     color: #B3A170;
 }
 
@@ -1831,7 +1831,7 @@ p {
     color: #B3A170;
 }
 
-.top-articles h3 {
+.top-articles h3, .top-articles .h3 {
     font-family: 'Spectral', serif;
     color: #FFFFFF;
     font-weight: normal;
@@ -1839,17 +1839,22 @@ p {
     margin-bottom: 8px;
 }
 
-.top-articles h3:hover a {
+.top-articles h3:hover a, .top-articles .h3:hover a {
     color: #B3A170;
 }
 
 .top-articles__bg {
     position: relative;
     width: 100%;
-    height: 622px;
+    height: 400px;
+    /*height: 622px;*/
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 50% 0;
+}
+
+.dzero .top-articles__bg {
+    height: 622px;
 }
 
 .top-articles__bg .img-overlay {
@@ -2646,7 +2651,7 @@ p {
     width: 70%;
 }
 
-.goods__item__info-item h3 {
+.goods__item__info-item h3, .goods__item__info-item .h3 {
     font-family: 'Spectral', serif;
     margin: 0;
     max-height: 38px;
@@ -4446,7 +4451,7 @@ button[name="searchRequestSubmit"]:hover .search-icon-dark {
     box-sizing: border-box;
 }
 
-.error-wrapper h3 {
+.error-wrapper h3, .error-wrapper .h3 {
     font-size: 1.6rem;
     font-weight: 700;
     line-height: 1.6rem;
@@ -4900,7 +4905,7 @@ button[name="searchRequestSubmit"]:hover .search-icon-dark {
         padding: 10px 8px;
     }
 
-    .article__teaser_vertical h3 {
+    .article__teaser_vertical h3, .article__teaser_vertical .h3 {
         margin: 0 0 9px;
     }
 
@@ -6252,7 +6257,7 @@ button[name="searchRequestSubmit"]:hover .search-icon-dark {
         width: 100%;
     }
 
-    .goods__item__info-item h3 {
+    .goods__item__info-item h3, .goods__item__info-item .h3 {
         font-size: 1rem;
     }
 
@@ -7111,7 +7116,7 @@ button[name="searchRequestSubmit"]:hover .search-icon-dark {
         padding: 0 8px;
     }
 
-    .error-wrapper h3 {
+    .error-wrapper h3, .error-wrapper .h3 {
         font-size: 1.3rem;
         line-height: 1.3rem;
     }

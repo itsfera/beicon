@@ -1,4 +1,5 @@
 <?
+
 use yii\widgets\ActiveForm;
 
 ?>
@@ -9,16 +10,15 @@ use yii\widgets\ActiveForm;
 ?>
 
 
-
 <!-- Start Subscribe aside -->
 <aside class="subscribe-block bl-wrapper">
     <div class="el-wrapper">
         <div class="subscribe-block__wrapper">
             <div class="subscribe-block__col subscribe-block__col_l">
-                <h2>Не пропусти самые вкусные новости</h2>
-<!--                <span class="subscribe-block__description">С нашей рассылкой не пропустишь</span>-->
+                <div class="h2">Не пропусти самые вкусные новости</div>
+                <!--                <span class="subscribe-block__description">С нашей рассылкой не пропустишь</span>-->
 
-                <? if(isset($status) && $status == 'ok') { ?>
+                <? if (isset($status) && $status == 'ok') { ?>
 
                     <!-- Start Sign in and Sign up Popup -->
                     <div class="popup " id="subscribePopup">
@@ -27,7 +27,11 @@ use yii\widgets\ActiveForm;
                             <div class="slide-page-menu sp-content-wrapper">
 
                             </div>
-                            <button class="close-btn"><svg class="close-icon"><use xlink:href="#close"></use></svg></button>
+                            <button class="close-btn">
+                                <svg class="close-icon">
+                                    <use xlink:href="#close"></use>
+                                </svg>
+                            </button>
                         </div>
                         <!-- End Sign Popup Header -->
                         <div class="sp-content-wrapper slide-page__body">
@@ -35,22 +39,22 @@ use yii\widgets\ActiveForm;
                         </div>
 
                     </div>
-                <script>
+                    <script>
 
-                    $(function () {
+						$(function () {
 
-                        $('.overlay-bg_dark').fadeIn(300);
-                        $('#subscribePopup').fadeIn(300);
-                        $('body').addClass('stop-scroll');
+							$('.overlay-bg_dark').fadeIn(300);
+							$('#subscribePopup').fadeIn(300);
+							$('body').addClass('stop-scroll');
 
 
-                        $('#subscribePopup .close-btn').click(function () {
-                            $('.overlay-bg_dark').fadeOut(300);
-                            $('#subscribePopup').fadeOut(300);
-                            $('body').removeClass('stop-scroll');
-                        });
-                    });
-                </script>
+							$('#subscribePopup .close-btn').click(function () {
+								$('.overlay-bg_dark').fadeOut(300);
+								$('#subscribePopup').fadeOut(300);
+								$('body').removeClass('stop-scroll');
+							});
+						});
+                    </script>
                     <style>
                         #subscribePopup {
                             padding: 6px 13px;
@@ -61,6 +65,7 @@ use yii\widgets\ActiveForm;
                             max-width: 450px;
                             font-family: 'Spectral', serif;
                         }
+
                         #subscribePopup .sp-content-wrapper {
                             display: block;
                         }
@@ -72,7 +77,7 @@ use yii\widgets\ActiveForm;
                     'options' => [
                         'class' => '',
                         'data' => [
-                                'pjax' => true
+                            'pjax' => true
                         ]
                     ],
                     'fieldConfig' => [

@@ -122,7 +122,8 @@ if ($article["header_img"]) {
                         } ?>
                         <a href="<?= $imgSrc ?>" class="lightbox-lnk">
 
-                            <img itemprop="image" src="<?= $imgSrc ?>" alt="<?= $article['name'] ?>">
+                            <img itemprop="image" src="<?= $imgSrc ?>" alt="<?= $article['name'] ?>"
+                                 title="<?= $article['name'] ?>">
                         </a>
                         </div><? } ?>
 
@@ -281,7 +282,8 @@ if ($article["header_img"]) {
                                                 <div class="article-overlay"></div>
                                                 <? if ($art["preview_img"] != '' || $art["header_img"] != '') { ?><img
                                                     src="<? if ($art["preview_img"]) echo '/uploads/' . $art["preview_img"]; else echo '/uploads/' . $art["header_img"]; ?>"
-                                                    width="80" height="80" alt=""><? } ?></div>
+                                                    width="80" height="80" alt="<?= $art["name"] ?>"
+                                                    title="<?= $art["name"] ?>"><? } ?></div>
                                             <div class="article__teaser__wrapper">
                                                 <h3><?= $art["name"] ?></h3>
                                                 <div class="article__teaser__info">
@@ -401,7 +403,7 @@ if ($article["header_img"]) {
                                             <img src="<? if (file_exists($_SERVER["DOCUMENT_ROOT"] . UPLOAD_DIR . $recItem["header_img"])) {
                                                 echo UPLOAD_DIR . $recItem["header_img"];
                                             } elseif (file_exists($_SERVER["DOCUMENT_ROOT"] . UPLOAD_DIR . $recItem["preview_img"])) echo UPLOAD_DIR . $recItem["preview_img"]; ?>"
-                                                 alt="">
+                                                 alt="<?= $recItem["name"] ?>" title="<?= $recItem["name"] ?>">
                                         <? } ?>
                                     </div>
 

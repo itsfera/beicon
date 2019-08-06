@@ -15,75 +15,53 @@ $config = [
     ],
     'language' => 'ru-RU',
     'modules' => [
-        'sitemap' => [
-            'class' => 'himiklab\sitemap\Sitemap',
-            'models' => [
-                'models\Articles',
-            ],
-            'urls' => [
-                // your additional urls
-                [
-                    'loc' => '/news',
-                    'changefreq' => SitemapBehavior::CHANGEFREQ_DAILY,
-                    'priority' => 0.8,
-                    'news' => [
-                        'publication' => [
-                            'name' => 'Example Blog',
-                            'language' => 'en',
-                        ],
-                        'access' => 'Subscription',
-                        'genres' => 'Blog, UserGenerated',
-                        'publication_date' => 'YYYY-MM-DDThh:mm:ssTZD',
-                        'title' => 'Example Title',
-                        'keywords' => 'example, keywords, comma-separated',
-                        'stock_tickers' => 'NASDAQ:A, NASDAQ:B',
-                    ],
-                    'images' => [
-                        [
-                            'loc' => 'http://example.com/image.jpg',
-                            'caption' => 'This is an example of a caption of an image',
-                            'geo_location' => 'City, State',
-                            'title' => 'Example image',
-                            'license' => 'http://example.com/license',
-                        ],
-                    ],
-                ],
-            ],
-            'enableGzip' => true, // default is false
-            'cacheExpire' => 1, // 1 second. Default is 24 hours
-        ]
+
     ],
     'components' => [
         'socialShare' => [
             'class' => \ymaker\social\share\configurators\Configurator::class,
+            'enableIcons' => false,
+            'icons' => [
+                \ymaker\social\share\drivers\Vkontakte::class => 'icon-vk', // CSS class
+                \ymaker\social\share\drivers\Odnoklassniki::class => 'icon-ok', // CSS class
+                \ymaker\social\share\drivers\Twitter::class => 'icon-twitter', // CSS class
+                \ymaker\social\share\drivers\Facebook::class => 'icon-facebook',  // CSS class
+            ],
             'socialNetworks' => [
-                'facebook' => [
-                    'class' => \ymaker\social\share\drivers\Facebook::class,
-                    'label' => Yii::t('app', 'Facebook'),
-                    'options' => ['class' => 'fb'],
-                ],
-                'Vkontakte' => [
-                    'class' => \ymaker\social\share\drivers\Vkontakte::class,
-                    'label' => Yii::t('app', 'ВКонтакте'),
-                    'options' => ['class' => 'vk'],
+                'Odnoklassniki' => [
+                    'class' => \ymaker\social\share\drivers\Odnoklassniki::class,
+                    'label' => '<svg class="inline-svg social-svg">
+                                        <use xlink:href="#ok"></use>
+                                    </svg>',
+                    'options' => ['class' => 'ok'],
                 ],
                 'twitter' => [
                     'class' => \ymaker\social\share\drivers\Twitter::class,
-                    'label' => Yii::t('app', 'Twitter'),
+                    'label' => '<svg class="inline-svg social-svg">
+                                        <use xlink:href="#twitter"></use>
+                                    </svg>',
                     'options' => ['class' => 'tw'],
                     'config' => [
                         'account' => $params['twitterAccount']
                     ],
                 ],
-                'Odnoklassniki' => [
-                    'class' => \ymaker\social\share\drivers\Odnoklassniki::class,
-                    'label' => Yii::t('app', 'Одноклассники'),
-                    'options' => ['class' => 'ok'],
+                'Vkontakte' => [
+                    'class' => \ymaker\social\share\drivers\Vkontakte::class,
+                    'label' => '<svg class="inline-svg social-svg">
+                                        <use xlink:href="#vk"></use>
+                                    </svg>',
+                    'options' => ['class' => 'vk'],
                 ],
-
+                'facebook' => [
+                    'class' => \ymaker\social\share\drivers\Facebook::class,
+                    'label' => '<svg class="inline-svg social-svg">
+                                        <use xlink:href="#fb"></use>
+                                    </svg>',
+                    'options' => ['class' => 'fb'],
+                ],
             ],
             'options' => [
-                'class' => 'social-network',
+                'class' => 'social-network-share-block',
             ],
         ],
         'assetManager' => [
@@ -204,10 +182,14 @@ $config = [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'pnews', 'only' => ['delete', 'create', 'update', 'view', 'index'], 'prefix' => 'api'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'isizes', 'only' => ['delete', 'create', 'update', 'view', 'index'], 'prefix' => 'api'],
 
-                'sitemap.xml' => 'site/sitemap', //карта сайта
+                'news_rss' => 'site/news', //новости сайта
+                'yandex_turbo' => 'site/turbo', //Turbo
+                'amp' => 'site/amp', //AMP
+                'sitemap_xml' => 'site/sitemap', //карта сайта
                 'sitemap' => 'site/sitemap-html', //карта сайта
                 'robots.txt' => 'site/robots', //карта сайта
-                '<url>.rss' => 'rss/index',
+                //'<url>.rss' => 'rss/index',
+                'feedrss' => 'rss/index',
                 '<section>/<url>/' => 'articles/view',
                 '<url>' => 'sections/view',
 

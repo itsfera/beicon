@@ -43,16 +43,17 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
     <div class="top-articles-wrapper">
 
 
-        <?php if (isset($articles[0])) { ?><h2><a
+        <?php if (isset($articles[0])) { ?>
+            <div class="h2"><a
                     href="<?= Url::to(['articles/view', 'url' => $articles[0]->url, 'section' => $articles[0]->sectionData->url]) ?>"><?= $articles[0]->name ?></a>
-            </h2><?php } ?>
+            </div><?php } ?>
         <ul class="top-articles__list bl-wrapper">
             <?php if (isset($articles[1])) { ?>
                 <?php $article = $articles[1]; ?>
                 <li class="top-article__item">
-                    <h3>
+                    <div class="h3">
                         <a href="<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url]) ?>"><?= $article->name ?></a>
-                    </h3>
+                    </div>
                     <div class="article__teaser__info clearfix">
                         <div class="article__teaser__date"><?= date('d.m.Y', strtotime($article["date_publish"])) ?></div>
                         <?php if ($article["views"] >= 5000) { ?>
@@ -66,9 +67,9 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
             <?php if (isset($articles[2])) { ?>
                 <?php $article = $articles[2]; ?>
                 <li class="top-article__item">
-                    <h3>
+                    <div class="h3">
                         <a href="<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url]) ?>"><?= $article->name ?></a>
-                    </h3>
+                    </div>
                     <div class="article__teaser__info clearfix">
                         <div class="article__teaser__date"><?= date('d.m.Y', strtotime($article["date_publish"])) ?></div>
                         <?php if ($article["views"] >= 5000) { ?>
@@ -82,9 +83,9 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
             <?php if (isset($articles[3])) { ?>
                 <?php $article = $articles[3]; ?>
                 <li class="top-article__item">
-                    <h3>
+                    <div class="h3">
                         <a href="<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url]) ?>"><?= $article->name ?></a>
-                    </h3>
+                    </div>
                     <div class="article__teaser__info clearfix">
                         <div class="article__teaser__date"><?= date('d.m.Y', strtotime($article["date_publish"])) ?></div>
                         <?php if ($article["views"] >= 5000) { ?>
@@ -113,9 +114,9 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
             <article class="article__item article__teaser_vertical el-wrapper clearfix">
                 <a href="<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url]) ?>">
                     <div class="article-overlay"></div>
-                    <img src="/uploads/<?= $img ?>" alt="">
+                    <img src="/uploads/<?= $img ?>" alt="<?= $article["name"] ?>" title="<?= $article["name"] ?>">
                     <div class="article-overlay_bottom">
-                        <h3><?= $article["name"] ?></h3>
+                        <div class="h3"><?= $article["name"] ?></div>
                         <div class="article__teaser__info">
                             <div class="article__teaser__date"><?= date('d.m.Y', strtotime($article["date_publish"])) ?></div>
                             <?php if ($article["views"] >= 5000) { ?>
@@ -137,9 +138,10 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
                 <a href="<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url]) ?>">
                     <div class="article__teaser__image-container">
                         <div class="article-overlay"></div>
-                        <img src="/uploads/<?= $img ?>" width="80" height="80" alt=""></div>
+                        <img src="/uploads/<?= $img ?>" width="80" height="80" alt="<?= $article["name"] ?>"
+                             title="<?= $article["name"] ?>"></div>
                     <div class="article__teaser__wrapper">
-                        <h3><?= $article["name"] ?></h3>
+                        <div class="h3"><?= $article["name"] ?></div>
                         <div class="article__teaser__info">
                             <div class="article__teaser__date"><?= date('d.m.Y', strtotime($article["date_publish"])) ?></div>
                             <?php if ($article["views"] >= 5000) { ?>
@@ -161,9 +163,10 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
                 <a href="<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url]) ?>">
                     <div class="article__teaser__image-container">
                         <div class="article-overlay"></div>
-                        <img src="/uploads/<?= $img ?>" width="80" height="80" alt=""></div>
+                        <img src="/uploads/<?= $img ?>" width="80" height="80" alt="<?= $article["name"] ?>"
+                             title="<?= $article["name"] ?>"></div>
                     <div class="article__teaser__wrapper">
-                        <h3><?= $article["name"] ?></h3>
+                        <div class="h3"><?= $article["name"] ?></div>
                         <div class="article__teaser__info">
                             <div class="article__teaser__date"><?= date('d.m.Y', strtotime($article["date_publish"])) ?></div>
                             <?php if ($article["views"] >= 5000) { ?>
@@ -185,9 +188,10 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
                 <a href="<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url]) ?>">
                     <div class="article__teaser__image-container">
                         <div class="article-overlay"></div>
-                        <img src="/uploads/<?= $img ?>" width="80" height="80" alt=""></div>
+                        <img src="/uploads/<?= $img ?>" width="80" height="80" alt="<?= $article["name"] ?>"
+                             title="<?= $article["name"] ?>"></div>
                     <div class="article__teaser__wrapper">
-                        <h3><?= $article["name"] ?></h3>
+                        <div class="h3"><?= $article["name"] ?></div>
                         <div class="article__teaser__info">
                             <div class="article__teaser__date"><?= date('d.m.Y', strtotime($article["date_publish"])) ?></div>
                             <?php if ($article["views"] >= 5000) { ?>
@@ -209,9 +213,10 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
                 <a href="<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url]) ?>">
                     <div class="article__teaser__image-container">
                         <div class="article-overlay"></div>
-                        <img src="/uploads/<?= $img ?>" width="80" height="80" alt=""></div>
+                        <img src="/uploads/<?= $img ?>" width="80" height="80" alt="<?= $article["name"] ?>"
+                             title="<?= $article["name"] ?>"></div>
                     <div class="article__teaser__wrapper">
-                        <h3><?= $article["name"] ?></h3>
+                        <div class="h3"><?= $article["name"] ?></div>
                         <div class="article__teaser__info">
                             <div class="article__teaser__date"><?= date('d.m.Y', strtotime($article["date_publish"])) ?></div>
                             <?php if ($article["views"] >= 5000) { ?>
@@ -236,9 +241,10 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
                 <a href="<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url]) ?>">
                     <div class="article__teaser__image-container">
                         <div class="article-overlay"></div>
-                        <img src="/uploads/<?= $img ?>" width="80" height="80" alt=""></div>
+                        <img src="/uploads/<?= $img ?>" width="80" height="80" alt="<?= $article["name"] ?>"
+                             title="<?= $article["name"] ?>"></div>
                     <div class="article__teaser__wrapper">
-                        <h3><?= $article["name"] ?></h3>
+                        <div class="h3"><?= $article["name"] ?></div>
                         <div class="article__teaser__info">
                             <div class="article__teaser__date"><?= date('d.m.Y', strtotime($article["date_publish"])) ?></div>
                             <?php if ($article["views"] >= 5000) { ?>
@@ -260,9 +266,10 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
                 <a href="<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url]) ?>">
                     <div class="article__teaser__image-container">
                         <div class="article-overlay"></div>
-                        <img src="/uploads/<?= $img ?>" width="80" height="80" alt=""></div>
+                        <img src="/uploads/<?= $img ?>" width="80" height="80" alt="<?= $article["name"] ?>"
+                             title="<?= $article["name"] ?>"></div>
                     <div class="article__teaser__wrapper">
-                        <h3><?= $article["name"] ?></h3>
+                        <div class="h3"><?= $article["name"] ?></div>
                         <div class="article__teaser__info">
                             <div class="article__teaser__date"><?= date('d.m.Y', strtotime($article["date_publish"])) ?></div>
                             <?php if ($article["views"] >= 5000) { ?>
@@ -284,11 +291,12 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
                 <a href="<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url]) ?>">
                     <div class="article-overlay"></div>
 
-                    <img src="/uploads/<?= $img ?>" alt="" class="article-img-full">
+                    <img src="/uploads/<?= $img ?>" alt="<?= $article["name"] ?>" title="<?= $article["name"] ?>"
+                         class="article-img-full">
                     <img src="<?= UPLOAD_DIR . ImageSizes::ResizeTmp($article["preview_img"], '16_9_1040'); ?>"
-                         alt="" class="article-img-small">
+                         alt="<?= $article["name"] ?>" title="<?= $article["name"] ?>" class="article-img-small">
                     <div class="article-overlay_bottom">
-                        <h3><?= $article["name"] ?></h3>
+                        <div class="h3"><?= $article["name"] ?></div>
                         <div class="article__teaser__info">
                             <div class="article__teaser__date"><?= date('d.m.Y', strtotime($article["date_publish"])) ?></div>
                             <?php if ($article["views"] >= 5000) { ?>
@@ -318,9 +326,10 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
                 <a href="<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url]) ?>">
                     <div class="article__teaser__image-container">
                         <div class="article-overlay"></div>
-                        <img src="/uploads/<?= $img ?>" width="80" height="80" alt=""></div>
+                        <img src="/uploads/<?= $img ?>" width="80" height="80" alt="<?= $article["name"] ?>"
+                             title="<?= $article["name"] ?>"></div>
                     <div class="article__teaser__wrapper">
-                        <h3><?= $article["name"] ?></h3>
+                        <div class="h3"><?= $article["name"] ?></div>
                         <div class="article__teaser__info">
                             <div class="article__teaser__date"><?= date('d.m.Y', strtotime($article["date_publish"])) ?></div>
                             <?php if ($article["views"] >= 5000) { ?>
@@ -365,9 +374,10 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
                     <a href="<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url]) ?>">
                         <div class="article__teaser__image-container">
                             <div class="article-overlay"></div>
-                            <img src="/uploads/<?= $img ?>" width="80" height="80" alt=""></div>
+                            <img src="/uploads/<?= $img ?>" width="80" height="80" alt="<?= $article["name"] ?>"
+                                 title="<?= $article["name"] ?>"></div>
                         <div class="article__teaser__wrapper">
-                            <h3><?= $article["name"] ?></h3>
+                            <div class="h3"><?= $article["name"] ?></div>
                             <div class="article__teaser__info">
                                 <div class="article__teaser__date"><?= date('d.m.Y', strtotime($article["date_publish"])) ?></div>
                                 <?php if ($article["views"] >= 5000) { ?>
@@ -395,11 +405,12 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
             <article class="article__teaser_vertical el-wrapper clearfix">
                 <a href="<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url]) ?>">
                     <div class="article-overlay"></div>
-                    <img src="/uploads/<?= $img ?>" alt="" class="article-img-full">
+                    <img src="/uploads/<?= $img ?>" alt="<?= $article["name"] ?>" title="<?= $article["name"] ?>"
+                         class="article-img-full">
                     <img src="<?= UPLOAD_DIR . ImageSizes::ResizeTmp($article["preview_img"], '16_9_1040'); ?>"
                          alt="" class="article-img-small">
                     <div class="article-overlay_bottom">
-                        <h3><?= $article["name"] ?></h3>
+                        <div class="h3"><?= $article["name"] ?></div>
                         <div class="article__teaser__info">
                             <div class="article__teaser__date"><?= date('d.m.Y', strtotime($article["date_publish"])) ?></div>
                             <?php if ($article["views"] >= 5000) { ?>
@@ -420,11 +431,12 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
             <article class="article__teaser_vertical el-wrapper clearfix">
                 <a href="<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url]) ?>">
                     <div class="article-overlay"></div>
-                    <img src="/uploads/<?= $img ?>" alt="" class="article-img-full">
+                    <img src="/uploads/<?= $img ?>" alt="<?= $article["name"] ?>" title="<?= $article["name"] ?>"
+                         class="article-img-full">
                     <img src="<?= UPLOAD_DIR . ImageSizes::ResizeTmp($article["preview_img"], '16_9_1040'); ?>"
                          alt="" class="article-img-small">
                     <div class="article-overlay_bottom">
-                        <h3><?= $article["name"] ?></h3>
+                        <div class="h3"><?= $article["name"] ?></div>
                         <div class="article__teaser__info">
                             <div class="article__teaser__date"><?= date('d.m.Y', strtotime($article["date_publish"])) ?></div>
                             <?php if ($article["views"] >= 5000) { ?>
@@ -452,11 +464,12 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
             <article class="article__item article__teaser_vertical el-wrapper clearfix">
                 <a href="<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url]) ?>">
                     <div class="article-overlay"></div>
-                    <img src="/uploads/<?= $img ?>" alt="" class="article-img-full">
+                    <img src="/uploads/<?= $img ?>" alt="<?= $article["name"] ?>" title="<?= $article["name"] ?>"
+                         class="article-img-full">
                     <img src="<?= UPLOAD_DIR . ImageSizes::ResizeTmp($article["preview_img"], '16_9_1040'); ?>"
                          alt="" class="article-img-small">
                     <div class="article-overlay_bottom">
-                        <h3><?= $article["name"] ?></h3>
+                        <div class="h3"><?= $article["name"] ?></div>
                         <div class="article__teaser__info">
                             <div class="article__teaser__date"><?= date('d.m.Y', strtotime($article["date_publish"])) ?></div>
                             <?php if ($article["views"] >= 5000) { ?>
@@ -477,11 +490,12 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
             <article class="article__item article__teaser_vertical el-wrapper clearfix">
                 <a href="<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url]) ?>">
                     <div class="article-overlay"></div>
-                    <img src="/uploads/<?= $img ?>" alt="" class="article-img-full">
+                    <img src="/uploads/<?= $img ?>" alt="<?= $article["name"] ?>" title="<?= $article["name"] ?>"
+                         class="article-img-full">
                     <img src="<?= UPLOAD_DIR . ImageSizes::ResizeTmp($article["preview_img"], '16_9_1040'); ?>"
                          alt="" class="article-img-small">
                     <div class="article-overlay_bottom">
-                        <h3><?= $article["name"] ?></h3>
+                        <div class="h3"><?= $article["name"] ?></div>
                         <div class="article__teaser__info">
                             <div class="article__teaser__date"><?= date('d.m.Y', strtotime($article["date_publish"])) ?></div>
                             <?php if ($article["views"] >= 5000) { ?>
@@ -502,11 +516,12 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
             <article class="article__item article__teaser_vertical el-wrapper clearfix">
                 <a href="<?= Url::to(['articles/view', 'url' => $article["url"], 'section' => $article->sectionData->url]) ?>">
                     <div class="article-overlay"></div>
-                    <img src="/uploads/<?= $img ?>" alt="" class="article-img-full">
+                    <img src="/uploads/<?= $img ?>" alt="<?= $article["name"] ?>" title="<?= $article["name"] ?>"
+                         class="article-img-full">
                     <img src="<?= UPLOAD_DIR . ImageSizes::ResizeTmp($article["preview_img"], '16_9_1040'); ?>"
                          alt="" class="article-img-small">
                     <div class="article-overlay_bottom">
-                        <h3><?= $article["name"] ?></h3>
+                        <div class="h3"><?= $article["name"] ?></div>
                         <div class="article__teaser__info">
                             <div class="article__teaser__date"><?= date('d.m.Y', strtotime($article["date_publish"])) ?></div>
                             <?php if ($article["views"] >= 5000) { ?>
@@ -525,7 +540,7 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
 <!-- End Articles Block Type 3 -->
 
 <section class="e-ch-articles-section">
-    <h2>Выбор редакции</h2>
+    <div class="h2">Выбор редакции</div>
     <div class="recommend-slider swiper-container swiper-container-horizontal swiper-container-free-mode">
         <ul class="e-ch-articles__list swiper-wrapper" style="">
 
@@ -548,13 +563,13 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
 
                                     ?>
                                     <img src="<?= UPLOAD_DIR . $img ?>"
-                                         alt="">
+                                         alt="<?= $recItem["name"] ?>" title="<?= $recItem["name"] ?>">
                                 <? } ?>
                             </div>
 
 
                             <div class="info-wrapper">
-                                <h3><?= $recItem["name"] ?></h3>
+                                <div class="h3"><?= $recItem["name"] ?></div>
                                 <div class="article__teaser__info clearfix">
                                     <div class="article__teaser__date"><? if ($recItem["date_publish"] != '0000-00-00 00:00:00') { ?><?= date('d.m.Y', strtotime($recItem["date_publish"])) ?><? } ?></div>
                                     <? if ($recItem["views"] >= 5000) { ?>

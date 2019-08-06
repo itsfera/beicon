@@ -94,7 +94,7 @@ class ArticlesController extends Controller
 
         $categories = Category::find()->where(['id' => $cs])->all();
 
-        $not_miss = Articles::find()->where(['not_miss' => 1, 'status' => 'publish'])->andWhere(['!=', 'id', $id])->orderBy(['date_publish' => SORT_DESC])->limit(5);
+        $not_miss = Articles::find()->where(['not_miss' => 1, 'status' => 'publish'])->andWhere(['!=', 'id', $id])->andWhere(['>=', 'date_publish', date('Y-m-d H:i:s')])->orderBy(['date_publish' => SORT_DESC])->limit(5);
         if ($not_miss)
             $not_miss = $not_miss->all();
         else $not_miss = false;
@@ -630,10 +630,17 @@ class ArticlesController extends Controller
                     'name' => 'og:image',
                     'content' => $seo->og_image
                 ]);
-
                 \Yii::$app->view->registerMetaTag([
                     'name' => 'og:image:secure_url',
                     'content' => $seo->og_image
+                ]);
+                \Yii::$app->view->registerMetaTag([
+                    'name' => 'og:image:height',
+                    'content' => 630
+                ]);
+                \Yii::$app->view->registerMetaTag([
+                    'name' => 'og:image:width',
+                    'content' => 1200
                 ]);
 
             }
