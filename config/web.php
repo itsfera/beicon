@@ -1,5 +1,7 @@
 <?php
 
+use himiklab\sitemap\behaviors\SitemapBehavior;
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -9,17 +11,66 @@ $config = [
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'language' => 'ru-RU',
+    'modules' => [
+
+    ],
     'components' => [
+        'socialShare' => [
+            'class' => \ymaker\social\share\configurators\Configurator::class,
+            'enableIcons' => false,
+            'icons' => [
+                \ymaker\social\share\drivers\Vkontakte::class => 'icon-vk', // CSS class
+                \ymaker\social\share\drivers\Odnoklassniki::class => 'icon-ok', // CSS class
+                \ymaker\social\share\drivers\Twitter::class => 'icon-twitter', // CSS class
+                \ymaker\social\share\drivers\Facebook::class => 'icon-facebook',  // CSS class
+            ],
+            'socialNetworks' => [
+                'Odnoklassniki' => [
+                    'class' => \ymaker\social\share\drivers\Odnoklassniki::class,
+                    'label' => '<svg class="inline-svg social-svg">
+                                        <use xlink:href="#ok"></use>
+                                    </svg>',
+                    'options' => ['class' => 'ok'],
+                ],
+                'twitter' => [
+                    'class' => \ymaker\social\share\drivers\Twitter::class,
+                    'label' => '<svg class="inline-svg social-svg">
+                                        <use xlink:href="#twitter"></use>
+                                    </svg>',
+                    'options' => ['class' => 'tw'],
+                    'config' => [
+                        'account' => $params['twitterAccount']
+                    ],
+                ],
+                'Vkontakte' => [
+                    'class' => \ymaker\social\share\drivers\Vkontakte::class,
+                    'label' => '<svg class="inline-svg social-svg">
+                                        <use xlink:href="#vk"></use>
+                                    </svg>',
+                    'options' => ['class' => 'vk'],
+                ],
+                'facebook' => [
+                    'class' => \ymaker\social\share\drivers\Facebook::class,
+                    'label' => '<svg class="inline-svg social-svg">
+                                        <use xlink:href="#fb"></use>
+                                    </svg>',
+                    'options' => ['class' => 'fb'],
+                ],
+            ],
+            'options' => [
+                'class' => 'social-network-share-block',
+            ],
+        ],
         'assetManager' => [
             'bundles' => [
                 'yii\web\JqueryAsset' => [
-                    'js'=>[]
+                    'js' => []
                 ],
                 'yii\bootstrap\BootstrapPluginAsset' => [
-                    'js'=>[]
+                    'js' => []
                 ],
                 'yii\bootstrap\BootstrapAsset' => [
                     'css' => [],
@@ -67,11 +118,11 @@ $config = [
         'response' => [
             'class' => 'yii\web\Response',
             'on beforeSend' => function ($event) {
-    if(Yii::$app->response->statusCode == 401) {
+                if (Yii::$app->response->statusCode == 401) {
 
-        Yii::$app->response->headers->add('Access-Control-Allow-Origin','*');
-        Yii::$app->response->statusCode = 401;//I preferred that error code
-    }
+                    Yii::$app->response->headers->add('Access-Control-Allow-Origin', '*');
+                    Yii::$app->response->statusCode = 401;//I preferred that error code
+                }
             },
 
         ],
@@ -98,7 +149,8 @@ $config = [
                 'POST api/seodel' => 'seo/del',
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'subscribers', 'prefix' => 'api', 'only' => ['delete', 'create', 'update', 'view', 'index']],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'rss', 'prefix' => 'api', 'only' => ['delete', 'create', 'update', 'view', 'index']],
-        //        ['class' => 'yii\rest\UrlRule', 'controller' => 'rss', 'patterns' => ['PUT,PATCH {id}' => 'update', 'DELETE {id}' => 'delete', 'GET,HEAD {id}' => 'view', 'POST' => 'create', 'GET,HEAD' => 'index', '{id}' => 'options', '' => 'options'], 'prefix' => 'api'],
+                //        ['class' => 'yii\rest\UrlRule', 'controller' => 'rss', 'patterns' => ['PUT,PATCH {id}' => 'update', 'DELETE {id}' => 'delete', 'GET,HEAD {id}' => 'view', 'POST' => 'create', 'GET,HEAD' => 'index', '{id}' => 'options', '' => 'options'], 'prefix' => 'api'],
+                ['pattern' => 'sitemap', 'route' => 'sitemap/default/index', 'suffix' => '.xml'],
                 '/' => 'site/index',
                 'login' => 'site/login',
                 'logout' => 'site/logout',
@@ -130,10 +182,14 @@ $config = [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'pnews', 'only' => ['delete', 'create', 'update', 'view', 'index'], 'prefix' => 'api'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'isizes', 'only' => ['delete', 'create', 'update', 'view', 'index'], 'prefix' => 'api'],
 
-                'sitemap.xml' => 'site/sitemap', //карта сайта
+                'news_rss' => 'site/news', //новости сайта
+                'yandex_turbo' => 'site/turbo', //Turbo
+                'amp' => 'site/amp', //AMP
+                'sitemap_xml' => 'site/sitemap', //карта сайта
                 'sitemap' => 'site/sitemap-html', //карта сайта
                 'robots.txt' => 'site/robots', //карта сайта
-                '<url>.rss' => 'rss/index',
+                //'<url>.rss' => 'rss/index',
+                'feedrss' => 'rss/index',
                 '<section>/<url>/' => 'articles/view',
                 '<url>' => 'sections/view',
 
@@ -157,14 +213,14 @@ if (YII_ENV_DEV) {
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        'allowedIPs' => ['127.0.0.1','178.121.149.245'],
+        'allowedIPs' => ['127.0.0.1', '178.121.149.245'],
     ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        'allowedIPs' => ['127.0.0.1',  '178.121.149.245'],
+        'allowedIPs' => ['127.0.0.1', '178.121.149.245'],
     ];
 }
 

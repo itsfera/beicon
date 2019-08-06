@@ -28,9 +28,11 @@ $article->name = str_replace('"', '', $article->name);
         <ul class="e-ch-articles__list swiper-wrapper" style="">
 
             <? foreach ($galleryItems as $galleryItem) { ?>
-                <li class="gallery-slider-item swiper-slide gallery-tile-prev__item" style="" data-gallery="<?=$gallery["id"]?>">
-                    <img src="<?= UPLOAD_DIR . ImageSizes::getResizesName($galleryItem["url"], '16_9_734_nocrop', $gallery["id"]) ?>"
-                         alt="<?=(!empty($item['content']))?$item['content']:$article->name?>">
+                <li class="gallery-slider-item swiper-slide gallery-tile-prev__item" style=""
+                    data-gallery="<?= $gallery["id"] ?>">
+                    <img src="<?= UPLOAD_DIR_NO_SLASH . ImageSizes::getResizesName($galleryItem["url"], '16_9_734_nocrop', $gallery["id"]) ?>"
+                         alt="<?= (!empty($item['content'])) ? $item['content'] : $article->name ?>"
+                         title="<?= (!empty($item['content'])) ? $item['content'] : $article->name ?>">
                 </li>
             <? } ?>
         </ul>
@@ -44,13 +46,17 @@ $article->name = str_replace('"', '', $article->name);
             <div class="gallery-fullscreen__inner">
                 <div class="swiper-container gallery-fullscreen__swiper">
                     <div class="swiper-wrapper gallery-fullscreen__content">
-                        <? foreach ($gallery->items as $item) { ?>
+                        <? foreach ($gallery->items as $item) {
+                            ?>
                             <div class="swiper-slide">
                                 <div class="gallery-fullscreen__image-container">
-                                    <img src="/uploads/<?=$item["url"]?>" alt="<?=(!empty($item['content']))?$item['content']:$article->name?>">
+                                    <img src="<?= UPLOAD_DIR_NO_SLASH . $item["url"] ?>"
+                                         alt="<?= (!empty($item['content'])) ? $item['content'] : $article->name ?>"
+                                         title="<?= (!empty($item['content'])) ? $item['content'] : $article->name ?>"
+                                    >
                                 </div>
                                 <div class="right-aside">
-                                    <p class="swiper-slide__description"><?=strip_tags($item->content)?></p>
+                                    <p class="swiper-slide__description"><?= strip_tags($item->content) ?></p>
                                     <div class="article__teaser_buy">
                                         <!--                                    <div class="image-container">-->
                                         <!--                                        <a href="#"><img src="/web/img/article-teaser-vert2.jpg" width="768" height="1200" alt=""></a>-->
@@ -64,10 +70,27 @@ $article->name = str_replace('"', '', $article->name);
                                             <!--                <div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,twitter" data-bare="false"></div>-->
                                             <div class="social-share__list_bottom">
 
-                                                <a class="social-login__item11 fb-share-button facebookGalleryShare"  rel="nofollow "><svg class="inline-svg social-svg"><use xlink:href="#fb"></use></svg></a>
-                                                <a class="social-login__item11 vkGalleryShare"  rel="nofollow"><svg class="inline-svg social-svg"><use xlink:href="#vk"></use></svg></a>
-                                                <a class="social-login__item11 twitterGalleryShare" rel="nofollow "><svg class="inline-svg social-svg"><use xlink:href="#twitter"></use></svg></a>
-                                                <a class="social-login__item11 okGalleryShare" rel="nofollow "><svg class="inline-svg social-svg"><use xlink:href="#ok"></use></svg></a>
+                                                <a class="social-login__item11 fb-share-button facebookGalleryShare"
+                                                   rel="nofollow ">
+                                                    <svg class="inline-svg social-svg">
+                                                        <use xlink:href="#fb"></use>
+                                                    </svg>
+                                                </a>
+                                                <a class="social-login__item11 vkGalleryShare" rel="nofollow">
+                                                    <svg class="inline-svg social-svg">
+                                                        <use xlink:href="#vk"></use>
+                                                    </svg>
+                                                </a>
+                                                <a class="social-login__item11 twitterGalleryShare" rel="nofollow ">
+                                                    <svg class="inline-svg social-svg">
+                                                        <use xlink:href="#twitter"></use>
+                                                    </svg>
+                                                </a>
+                                                <a class="social-login__item11 okGalleryShare" rel="nofollow ">
+                                                    <svg class="inline-svg social-svg">
+                                                        <use xlink:href="#ok"></use>
+                                                    </svg>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -78,15 +101,28 @@ $article->name = str_replace('"', '', $article->name);
 
                     </div>
                     <!-- Ads Slides Counter -->
-                    <div class="swiper-slide-count"><span class="swiper-slide__current"></span>/<span class="swiper-slide__total"></span></div>
+                    <div class="swiper-slide-count"><span class="swiper-slide__current"></span>/<span
+                                class="swiper-slide__total"></span></div>
 
                     <!-- Add Arrows -->
-                    <div class="swiper-button swiper-button-next"><svg class="inline-svg arrow-svg"><use xlink:href="#arrow"></use></svg></div>
-                    <div class="swiper-button swiper-button-prev"><svg class="inline-svg arrow-svg"><use xlink:href="#arrow"></use></svg></div>
+                    <div class="swiper-button swiper-button-next">
+                        <svg class="inline-svg arrow-svg">
+                            <use xlink:href="#arrow"></use>
+                        </svg>
+                    </div>
+                    <div class="swiper-button swiper-button-prev">
+                        <svg class="inline-svg arrow-svg">
+                            <use xlink:href="#arrow"></use>
+                        </svg>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="close-btn" role="button"><svg class="close-icon"><use xlink:href="#close"></use></svg></div>
+        <div class="close-btn" role="button">
+            <svg class="close-icon">
+                <use xlink:href="#close"></use>
+            </svg>
+        </div>
     </div>
 </div>
 
@@ -103,7 +139,7 @@ $article->name = str_replace('"', '', $article->name);
 
     @media screen and (max-width: 768px) {
         .social-share__list_bottom {
-            margin-left:10px;
+            margin-left: 10px;
         }
     }
 
