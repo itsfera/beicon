@@ -141,7 +141,8 @@ class ArticlesController extends Controller
             $template->appendXML($value);
             $element->parentNode->insertBefore($template, $element->nextSibling);
         }
-        $model->content = $dom->saveXML();
+        if ($imgs->length > 0)
+            $model->content = $dom->saveXML();
 
 
         $marketing = Marketing::find()->all();
@@ -458,7 +459,7 @@ class ArticlesController extends Controller
         $model->content = str_replace('[[PRODUCT_BLOCK2]]', \Yii::$app->view->renderFile('@app/views/articles/productBlock2.php'), $model->content);
         $model->content = str_replace('[[BANNER_BLOCK]]', \Yii::$app->view->renderFile('@app/views/articles/banerBlock.php'), $model->content);
 
-        $model->content = str_replace('[[SHARE_BLOCK]]', \Yii::$app->view->renderFile('@app/views/articles/shareBlock.php', array()), $model->content);
+        //$model->content = str_replace('[[SHARE_BLOCK]]', \Yii::$app->view->renderFile('@app/views/articles/shareBlock.php', array()), $model->content);
 
         $marketing = Marketing::find()->all();
         foreach ($marketing as $code) {

@@ -238,19 +238,19 @@ function initGalleryMosaic() {
 			body = $('body');
 
 		// Init Gallery Mosaic
-		/*
-				var $mosaic = galleryMosaic.masonry({
-					itemSelector: '.gallery-mosaic__item',
-					columnWidth: '.gallery-mosaic__col-width',
-					gutter: '.gallery-mosaic__space-items',
-					fitWidth: false,
-				});
 
-				// Render Layout Mosaic after each image loads
-				$mosaic.imagesLoaded().progress(function () {
-					//$mosaic.masonry('layout');
-				});
-		*/
+		var $mosaic = galleryMosaic.masonry({
+			itemSelector: '.gallery-mosaic__item',
+			columnWidth: '.gallery-mosaic__col-width',
+			gutter: '.gallery-mosaic__space-items',
+			fitWidth: false,
+		});
+
+		// Render Layout Mosaic after each image loads
+		$mosaic.imagesLoaded().progress(function () {
+			//$mosaic.masonry('layout');
+		});
+
 		// Open Gallery Fullscreen on click on image
 		galleryMosaicItems.click(function (e) {
 			e.preventDefault();

@@ -33,7 +33,7 @@ article .article-body .article__keywords > a {
 
 article .article-body .gallery-tile,
 article .article-body .gallery-mosaic {
-    /*margin-left: -96px;*/
+    margin-left: -96px;
 }
 
 iframe.instagram-media {
@@ -42,7 +42,7 @@ iframe.instagram-media {
 
 .gallery-mosaic__col-width,
 .gallery-mosaic__item {
-    /*width: 332px;*/
+    width: 332px;
     margin-bottom: 0;
 }
 
@@ -99,7 +99,7 @@ iframe.instagram-media {
 }
 
 .article-body.col_c .gallery-mosaic__col-width, .article-body.col_c .gallery-mosaic__item {
-    /*width: 30%;*/
+    width: 30%;
 }
 
 .gallery-tile-prev__item img {
