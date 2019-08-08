@@ -248,7 +248,7 @@ function initGalleryMosaic() {
 
 		// Render Layout Mosaic after each image loads
 		$mosaic.imagesLoaded().progress(function () {
-			//$mosaic.masonry('layout');
+			$mosaic.masonry('layout');
 		});
 
 		// Open Gallery Fullscreen on click on image

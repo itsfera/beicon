@@ -459,7 +459,7 @@ if ($nextArticleUrl) {
 			function onScroll() {
 
 				var get = getUrlVars;
-				console.log(get);
+				//console.log(get);
 
 				if (!get["gallery"]) {
 
@@ -469,7 +469,7 @@ if ($nextArticleUrl) {
 						var target = $(this);
 						if (target.position().top <= scroll_top + ($(window).height() - 500) && target.position().top + target.outerHeight() > scroll_top + ($(window).height() - 500) && !loading) {
 
-							console.log(url);
+							//console.log(url);
 							// console.log(window.history.state);
 							if (window.history.state !== url) {
 								// console.error(url);

@@ -94,7 +94,8 @@ class ArticlesController extends Controller
 
         $categories = Category::find()->where(['id' => $cs])->all();
 
-        $not_miss = Articles::find()->where(['not_miss' => 1, 'status' => 'publish'])->andWhere(['!=', 'id', $id])->andWhere(['>=', 'date_publish', date('Y-m-d H:i:s')])->orderBy(['date_publish' => SORT_DESC])->limit(5);
+        $not_miss = Articles::find()->where(['not_miss' => 1, 'status' => 'publish'])->andWhere(['!=', 'id', $id])->andWhere(['<=', 'date_publish', date('Y-m-d H:i:s')])->orderBy(['date_publish' => SORT_DESC])->limit(5);
+
         if ($not_miss)
             $not_miss = $not_miss->all();
         else $not_miss = false;
@@ -125,30 +126,34 @@ class ArticlesController extends Controller
 
 
         $dom = new \DOMdocument();
-        $dom->loadHTML('<?xml encoding="utf-8" ?>' . $model->content);
+        $content = mb_convert_encoding($model->content, 'HTML-ENTITIES', "UTF-8");
+        $dom->loadHTML('<html>' . $content . '</html>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         $xpath = new \DOMXPath($dom);
         $imgs = $xpath->query('//img');
         foreach ($imgs as $element) {
             $src = $element->getAttribute('src');
-            $value = \ymaker\social\share\widgets\SocialShare::widget([
-                'configurator' => 'socialShare',
-                'url' => Url::to(['articles/view', 'url' => $model->url, 'section' => $model->sectionData->url], true),
-                'title' => $model->name,
-                'description' => strip_tags($model->preview_content),
-                'imageUrl' => \yii\helpers\Url::to($src, true),
-            ]);
+            $value = '<div class="social-share-wrapper">' . \ymaker\social\share\widgets\SocialShare::widget([
+                    'configurator' => 'socialShare',
+                    'url' => Url::to(['articles/view', 'url' => $model->url, 'section' => $model->sectionData->url], true),
+                    'title' => $model->name,
+                    'description' => strip_tags($model->preview_content),
+                    'imageUrl' => \yii\helpers\Url::to($src, true),
+                ]) . '</div>';
             $template = $dom->createDocumentFragment();
             $template->appendXML($value);
             $element->parentNode->insertBefore($template, $element->nextSibling);
         }
-        if ($imgs->length > 0)
-            $model->content = $dom->saveXML();
+        if ($imgs->length > 0) {
+            //$model->content = $dom->saveHTML();
+            $model->content = str_replace(array('<html>', '</html>'), '', mb_convert_encoding($dom->saveHTML(), 'UTF-8', "HTML-ENTITIES"));
+        }
 
 
         $marketing = Marketing::find()->all();
         foreach ($marketing as $code) {
             $model->content = str_replace($code["shortcode"], $code["content"], $model->content);
         }
+
 
         $model->content = str_replace('files/', '/basic/web/files/', $model->content);
 
@@ -434,6 +439,7 @@ class ArticlesController extends Controller
         $categories = Category::find()->where(['id' => $cs])->all();
 
         $not_miss = Articles::find()->where(['not_miss' => 1, 'status' => 'publish'])->andWhere(['!=', 'id', $id])->orderBy(['date_publish' => SORT_DESC])->limit(5);
+
         if ($not_miss)
             $not_miss = $not_miss->all();
         else $not_miss = false;
@@ -460,6 +466,29 @@ class ArticlesController extends Controller
         $model->content = str_replace('[[BANNER_BLOCK]]', \Yii::$app->view->renderFile('@app/views/articles/banerBlock.php'), $model->content);
 
         //$model->content = str_replace('[[SHARE_BLOCK]]', \Yii::$app->view->renderFile('@app/views/articles/shareBlock.php', array()), $model->content);
+
+        $dom = new \DOMdocument();
+        $content = mb_convert_encoding($model->content, 'HTML-ENTITIES', "UTF-8");
+        $dom->loadHTML('<html>' . $content . '</html>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $xpath = new \DOMXPath($dom);
+        $imgs = $xpath->query('//img');
+        foreach ($imgs as $element) {
+            $src = $element->getAttribute('src');
+            $value = '<div class="social-share-wrapper">' . \ymaker\social\share\widgets\SocialShare::widget([
+                    'configurator' => 'socialShare',
+                    'url' => Url::to(['articles/view', 'url' => $model->url, 'section' => $model->sectionData->url], true),
+                    'title' => $model->name,
+                    'description' => strip_tags($model->preview_content),
+                    'imageUrl' => \yii\helpers\Url::to($src, true),
+                ]) . '</div>';
+            $template = $dom->createDocumentFragment();
+            $template->appendXML($value);
+            $element->parentNode->insertBefore($template, $element->nextSibling);
+        }
+        if ($imgs->length > 0) {
+            //$model->content = $dom->saveHTML();
+            $model->content = str_replace(array('<html>', '</html>'), '', mb_convert_encoding($dom->saveHTML(), 'UTF-8', "HTML-ENTITIES"));
+        }
 
         $marketing = Marketing::find()->all();
         foreach ($marketing as $code) {
