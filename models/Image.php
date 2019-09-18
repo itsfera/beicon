@@ -1,4 +1,5 @@
 <?php
+
 namespace app\models;
 
 use yii\base\Model;
@@ -8,24 +9,11 @@ use Yii;
 
 class Image extends Model
 {
-    /**
-     * @var UploadedFile
-     */
-    public $location;
-    public $sname;
-
-    public function rules()
-    {
-        return [
-            [['location'], 'file'],
-        ];
-    }
-
     static $propSizes = [
         '16x9' => [
-          ['width' => 830, 'height' => 467, 'postfix' => '16_9_830'],
-          ['width' => 1040, 'height' => 587, 'postfix' => '16_9_1040'],
-          ['width' => 587, 'height' => 1040, 'postfix' => '16_9_587'],
+            ['width' => 830, 'height' => 467, 'postfix' => '16_9_830'],
+            ['width' => 1040, 'height' => 587, 'postfix' => '16_9_1040'],
+            ['width' => 587, 'height' => 1040, 'postfix' => '16_9_587'],
 
             ['width' => 352, 'height' => 198, 'postfix' => '9_16_352_2'],
             ['width' => 352, 'height' => 198, 'postfix' => '9_16_352_2_exact', 'exact' => 'top'],
@@ -43,7 +31,6 @@ class Image extends Model
             ['width' => 80, 'height' => 80, 'postfix' => 'mini'],
         ]
     ];
-
     static $sizes = [
 //        ['width' => 950, 'height' => 400, 'postfix' => 'gallery_only_main'],
 //        ['width' => 412, 'height' => 200, 'postfix' => 'gallery_only_other'],
@@ -77,15 +64,17 @@ class Image extends Model
         ['width' => 352, 'height' => 198, 'postfix' => '9_16_352_2', 'origin' => '9x16'],
 
 
-
         ['width' => 690, 'height' => 800, 'postfix' => '1_1_690', 'origin' => '1x1'],
         ['width' => 560, 'height' => 560, 'postfix' => '1_1_560', 'origin' => '1x1'],
         ['width' => 80, 'height' => 80, 'postfix' => 'mini'],
 
 
-
-
     ];
+    /**
+     * @var UploadedFile
+     */
+    public $location;
+    public $sname;
 
     static function loadOldImage($pathImg)
     {
@@ -94,21 +83,21 @@ class Image extends Model
         $rand = rand(00000, 99999);
 //$file_name = md5(strtotime(date('Y-m-d H:i:s'))+$rand);
 
-        $file=Yii::getAlias($pathImg);
+        $file = Yii::getAlias($pathImg);
 
 //        $file=Yii::getAlias('@app/'.$pathImg);
-        $image=\Yii::$app->image->load($file);
+        $image = \Yii::$app->image->load($file);
         $imgName = explode('/', $pathImg);
-        $imgName = $imgName[count($imgName)-1];
+        $imgName = $imgName[count($imgName) - 1];
         $imgName = explode('#', $imgName);
         $imgName = $imgName[0];
         $imgFormat = explode('.', $imgName);
         $imgFormat = $imgFormat[1];
 
-        if(file_exists(dirname(dirname(__FILE__)). '/web/uploads/'.$imgName)) return;
+        if (file_exists(dirname(dirname(__FILE__)) . '/web/uploads/' . $imgName)) return;
 
         $newPath = $imgName;
-        $image->save($path.$newPath);
+        $image->save($path . $newPath);
 
 //        $article = Articles::findOne($articleId);
 //        if($type == 'preview')
@@ -118,17 +107,24 @@ class Image extends Model
 
         $sizes = ImageSizes::find()->all();
 
-        foreach ($sizes as $size){
+        foreach ($sizes as $size) {
 
             $fileName = explode('.', $imgName);
             $fileName = $fileName[0];
-            $file=Yii::getAlias('@app/web/uploads/'.$newPath);
-            $image=Yii::$app->image->load($file);
+            $file = Yii::getAlias('@app/web/uploads/' . $newPath);
+            $image = Yii::$app->image->load($file);
             $image->resize($size["width"], $size["height"], \yii\image\drivers\Image::PRECISE)->crop($size["width"], $size["height"]);
-            $image->save(dirname(dirname(__FILE__)) . '/web/uploads/'.$fileName.'_'.$size["postfix"].'.'.$imgFormat, $quality = 100);
+            $image->save(dirname(dirname(__FILE__)) . '/web/uploads/' . $fileName . '_' . $size["postfix"] . '.' . $imgFormat, $quality = 100);
 
 
         }
+    }
+
+    public function rules()
+    {
+        return [
+            [['location'], 'file'],
+        ];
     }
 
     public function upload()
@@ -139,44 +135,31 @@ class Image extends Model
             $file_name = strtotime(date('Y-m-d H:i:s'));
 
 
-            $this->sname =  $file_name.'.' . $this->location->extension;
+            $this->sname = $file_name . '.' . $this->location->extension;
             $this->location->saveAs($path . $this->sname);
 
             $sizes = ImageSizes::find()->all();
 
-            foreach ($sizes as $size){
-
-
-                $file=Yii::getAlias('@app/web/uploads/'.$this->sname);
-                $image=Yii::$app->image->load($file);
+            foreach ($sizes as $size) {
+                $file = Yii::getAlias('@app/web/uploads/' . $this->sname);
+                $image = Yii::$app->image->load($file);
 //                $image->resize($size["width"], $size["height"], \yii\image\drivers\Image::PRECISE);
-
-
-
-                if(isset($size["exact"]) && $size["exact"] == 'top'){
-
-
+                if (isset($size["exact"]) && $size["exact"] == 'top') {
                     $image->resize($size["width"], $size["height"], \yii\image\drivers\Image::PRECISE);
-
-                    if((($image->width - $size['width']) / 2) > 0) {
+                    if ((($image->width - $size['width']) / 2) > 0) {
                         $posX = ($image->width - $size['width']) / 2;
                     } else $posX = 0;
-                    $image->crop($size["width"], $size["height"],$posX, 0);
-
+                    $image->crop($size["width"], $size["height"], $posX, 0);
                 } else {
-                    if(isset($size["nocrop"])){
+                    if (isset($size["nocrop"])) {
                         $image->resize($size["width"], $size["height"], \yii\image\drivers\Image::ADAPT)->background('#fff');
                     } else {
                         $image->resize($size["width"], $size["height"], \yii\image\drivers\Image::PRECISE);
-
                         $image->crop($size["width"], $size["height"]);
                     }
                 }
-                $image->save(dirname(dirname(__FILE__)) . '/web/uploads/'.$file_name.'_'.$size["postfix"].'.'.$this->location->extension, $quality = 100);
-
-
+                $image->save(dirname(dirname(__FILE__)) . '/web/uploads/' . $file_name . '_' . $size["postfix"] . '.' . $this->location->extension, $quality = 60);
             }
-
 
             return true;
         } else {
@@ -185,43 +168,42 @@ class Image extends Model
         }
     }
 
-    public function moveGalleryItem($gallery_id, $fileName){
-        $path = dirname(dirname(__FILE__)) . '/web/uploads/galleries/'.$gallery_id.'/';
+    public function moveGalleryItem($gallery_id, $fileName)
+    {
+        $path = dirname(dirname(__FILE__)) . '/web/uploads/galleries/' . $gallery_id . '/';
         if (!file_exists(dirname(dirname(__FILE__)) . '/web/uploads/galleries')) {
             mkdir(dirname(dirname(__FILE__)) . '/web/uploads/galleries', 0775);
         }
-        if (!file_exists(dirname(dirname(__FILE__)) . '/web/uploads/galleries/'.$gallery_id)) {
-           $R = mkdir(dirname(dirname(__FILE__)) . '/web/uploads/galleries/'.$gallery_id, 0775);
+        if (!file_exists(dirname(dirname(__FILE__)) . '/web/uploads/galleries/' . $gallery_id)) {
+            $R = mkdir(dirname(dirname(__FILE__)) . '/web/uploads/galleries/' . $gallery_id, 0775);
 //           var_dump($R);
         }
 //        die();
 
-        if($this->validate())
-        {
+        if ($this->validate()) {
             $file_name = $fileName;
             $fileEx = explode('.', $file_name);
             $file_name = $fileEx[0];
             $fileEx = $fileEx[1];
 
-            $this->sname =  $file_name. '.' . $fileEx;
+            $this->sname = $file_name . '.' . $fileEx;
 
 
+            $file = Yii::getAlias(dirname(dirname(__FILE__)) . '/../tmp_uploads/galleries/' . $gallery_id . '/' . $this->sname);
+            $image = Yii::$app->image->load($file);
 
-            $file=Yii::getAlias(dirname(dirname(__FILE__)) .'/../tmp_uploads/galleries/'.$gallery_id.'/'.$this->sname);
-            $image=Yii::$app->image->load($file);
 
-
-            $image->save(dirname(dirname(__FILE__)) . '/web/uploads/galleries/'.$gallery_id.'/'.$file_name.'.'.$fileEx, $quality = 70);
+            $image->save(dirname(dirname(__FILE__)) . '/web/uploads/galleries/' . $gallery_id . '/' . $file_name . '.' . $fileEx, $quality = 70);
 
 //            $this->location->saveAs($path . $this->sname. '.'.$fileEx);
 
             $sizes = Image::$sizes;
 
-            foreach ($sizes as $size){
-                $file=Yii::getAlias('@app/web/uploads/galleries/'.$gallery_id.'/'.$this->sname);
-                $image=Yii::$app->image->load($file);
+            foreach ($sizes as $size) {
+                $file = Yii::getAlias('@app/web/uploads/galleries/' . $gallery_id . '/' . $this->sname);
+                $image = Yii::$app->image->load($file);
                 $image->resize($size["width"], $size["height"], \yii\image\drivers\Image::PRECISE)->crop($size["width"], $size["height"]);
-                $image->save(dirname(dirname(__FILE__)) . '/web/uploads/galleries/'.$gallery_id.'/'.$file_name.'_'.$size["postfix"].'.'.$fileEx, $quality = 70);
+                $image->save(dirname(dirname(__FILE__)) . '/web/uploads/galleries/' . $gallery_id . '/' . $file_name . '_' . $size["postfix"] . '.' . $fileEx, $quality = 70);
             }
 
             return true;
@@ -230,54 +212,51 @@ class Image extends Model
         }
     }
 
-    public function uploadGalleryItem($gallery_id){
-        $path = dirname(dirname(__FILE__)) . '/web/uploads/galleries/'.$gallery_id.'/';
+    public function uploadGalleryItem($gallery_id)
+    {
+        $path = dirname(dirname(__FILE__)) . '/web/uploads/galleries/' . $gallery_id . '/';
         if (!file_exists(dirname(dirname(__FILE__)) . '/web/uploads/galleries')) {
             mkdir(dirname(dirname(__FILE__)) . '/web/uploads/galleries', 0775);
         }
-        if (!file_exists(dirname(dirname(__FILE__)) . '/web/uploads/galleries/'.$gallery_id)) {
-            mkdir(dirname(dirname(__FILE__)) . '/web/uploads/galleries/'.$gallery_id, 0775);
-            chmod(dirname(dirname(__FILE__)) . '/web/uploads/galleries/'.$gallery_id, 0777);
+        if (!file_exists(dirname(dirname(__FILE__)) . '/web/uploads/galleries/' . $gallery_id)) {
+            mkdir(dirname(dirname(__FILE__)) . '/web/uploads/galleries/' . $gallery_id, 0775);
+            chmod(dirname(dirname(__FILE__)) . '/web/uploads/galleries/' . $gallery_id, 0777);
         }
 
-        if($this->validate())
-        {
+        if ($this->validate()) {
             $file_name = strtotime(date('Y-m-d H:i:s'));
             $rand = rand(11111, 99999);
-            $file_name = md5(strtotime(date('Y-m-d H:i:s'))+$rand);
-            $this->sname =  $file_name.'.' . $this->location->extension;
+            $file_name = md5(strtotime(date('Y-m-d H:i:s')) + $rand);
+            $this->sname = $file_name . '.' . $this->location->extension;
             try {
                 $r = $this->location->saveAs($path . $this->sname);
-            } catch (\Exception $e){
+            } catch (\Exception $e) {
 
                 die();
             }
             $sizes = Image::$sizes;
 
 
-            foreach ($sizes as $size){
-                $file=Yii::getAlias('@app/web/uploads/galleries/'.$gallery_id.'/'.$this->sname);
-                $image=Yii::$app->image->load($file);
+            foreach ($sizes as $size) {
+                $file = Yii::getAlias('@app/web/uploads/galleries/' . $gallery_id . '/' . $this->sname);
+                $image = Yii::$app->image->load($file);
 //                $image->resize($size["width"], $size["height"], \yii\image\drivers\Image::PRECISE)->crop($size["width"], $size["height"]);
 
 
-                if(isset($size["exact"]) && $size["exact"] == 'top'){
+                if (isset($size["exact"]) && $size["exact"] == 'top') {
 
 
                     $image->resize($size["width"], $size["height"], \yii\image\drivers\Image::PRECISE);
 
-                    if((($image->width - $size['width']) / 2) > 0) {
+                    if ((($image->width - $size['width']) / 2) > 0) {
                         $posX = ($image->width - $size['width']) / 2;
                     } else $posX = 0;
-                    $image->crop($size["width"], $size["height"],$posX, 0);
+                    $image->crop($size["width"], $size["height"], $posX, 0);
 
                 } else {
 
 
-
-
-
-                    if(isset($size["nocrop"])){
+                    if (isset($size["nocrop"])) {
                         $image->resize($size["width"], $size["height"], \yii\image\drivers\Image::ADAPT)->background('#fff');
                     } else {
                         $image->resize($size["width"], $size["height"], \yii\image\drivers\Image::PRECISE);
@@ -286,7 +265,7 @@ class Image extends Model
                     }
                 }
 
-                $image->save(dirname(dirname(__FILE__)) . '/web/uploads/galleries/'.$gallery_id.'/'.$file_name.'_'.$size["postfix"].'.'.$this->location->extension, $quality = 70);
+                $image->save(dirname(dirname(__FILE__)) . '/web/uploads/galleries/' . $gallery_id . '/' . $file_name . '_' . $size["postfix"] . '.' . $this->location->extension, $quality = 70);
             }
 
             return true;
@@ -299,24 +278,23 @@ class Image extends Model
 
     public function uploadResize($filename, $postfix, $path = false)
     {
-        if(!$path)
+        if (!$path)
             $path = dirname(dirname(__FILE__)) . '/web/uploads/';
-        else $path = dirname(dirname(__FILE__)) .'/web/'. $path;
+        else $path = dirname(dirname(__FILE__)) . '/web/' . $path;
         $filename = explode('.', $filename);
 
         if ($this->validate()) {
 
 
-
-            $this->sname =  $filename[0].'_'.$postfix.'.' . $filename[1];
+            $this->sname = $filename[0] . '_' . $postfix . '.' . $filename[1];
 //            echo $path.$this->sname;
 //            die();
             $this->location->saveAs($path . $this->sname);
             $tmp = explode('galleries', $path);
 
-            if(count($tmp) > 1) {
-                chmod(dirname(dirname(__FILE__)) . '/web/uploads/galleries/'.$tmp[1], 0777);
-                $this->sname = 'galleries/'.$tmp[1].'/'.$this->sname;
+            if (count($tmp) > 1) {
+                chmod(dirname(dirname(__FILE__)) . '/web/uploads/galleries/' . $tmp[1], 0777);
+                $this->sname = 'galleries/' . $tmp[1] . '/' . $this->sname;
 
             }
 
@@ -324,22 +302,18 @@ class Image extends Model
 
             $tmp = explode('galleries', $path);
 
-            if(count($tmp) > 1) {
-                $filename[0] = '/galleries'.$tmp[1].'/'.$filename[0];
+            if (count($tmp) > 1) {
+                $filename[0] = '/galleries' . $tmp[1] . '/' . $filename[0];
 
             }
 
-            foreach ($sizes as $k => $sizeArray){
+            foreach ($sizes as $k => $sizeArray) {
 
 
-
-                if($k == $postfix){
-
+                if ($k == $postfix) {
 
 
                     foreach ($sizeArray as $size) {
-
-
 
 
                         $file = Yii::getAlias('@app/web/uploads/' . $this->sname);

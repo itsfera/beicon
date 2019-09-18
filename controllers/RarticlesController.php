@@ -22,10 +22,16 @@ use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
 
 use yii\filters\auth\QueryParamAuth;
+
 class RarticlesController extends ActiveController
 {
 
     public $modelClass = 'app\models\Articles';
+    public $serializer = [
+        'class' => 'yii\rest\Serializer',
+        'collectionEnvelope' => 'data'
+    ];
+    public $searchRecParams = ['id', 'name', 'value'];
 
     /**
      * @inheritdoc
@@ -39,12 +45,12 @@ class RarticlesController extends ActiveController
                 ],
                 'corsFilter' => [
                     'class' => \yii\filters\Cors::className(),
-                    'cors'  => [
-                        'Origin'                           => ['*'],
-                        'Access-Control-Request-Method'    => ['POST', 'GET','PUT','DELETE','PATCH','OPTIONS'],
+                    'cors' => [
+                        'Origin' => ['*'],
+                        'Access-Control-Request-Method' => ['POST', 'GET', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
                         'Access-Control-Allow-Credentials' => true,
                         'Access-Control-Request-Headers' => ['*'],
-                        'Access-Control-Max-Age'           => 3600,                 // Cache (seconds)
+                        'Access-Control-Max-Age' => 3600,                 // Cache (seconds)
                         'Access-Control-Expose-Headers' => ['*'],
 //                        'Access-Control-Allow-Origin' => ['*', 'http://bi.verworren.net'],
 
@@ -54,21 +60,17 @@ class RarticlesController extends ActiveController
         );
     }
 
-    public $serializer = [
-        'class' => 'yii\rest\Serializer',
-        'collectionEnvelope' => 'data'
-    ];
-
     /**
      * @inheritdoc
      */
 
-    public function actionRss($id){
+    public function actionRss($id)
+    {
         $res = Arss::find()->where(['article_id' => $id]);
         $array = $res->all();
         $result = array();
 
-        foreach ($array as $r){
+        foreach ($array as $r) {
             $result[] = $r["rss_id"];
         }
         $items = $result;
@@ -77,8 +79,7 @@ class RarticlesController extends ActiveController
         $newResult = array();
 
 
-
-        foreach ($result as $i){
+        foreach ($result as $i) {
             $newResult[] = array(
                 'id' => $i["id"],
                 'name' => $i["name"],
@@ -89,56 +90,53 @@ class RarticlesController extends ActiveController
         return $newResult;
     }
 
-
-
-    public $searchRecParams = ['id', 'name', 'value'];
-    public function actionRecomended($id){
+    public function actionRecomended($id)
+    {
         $query = \Yii::$app->request->get();
+        $art = \app\models\Articles::find()->where(['id' => $id])->one();
         $sort = null;
         $res = Recomended::find()->where(['article_id' => $id]);
-
 
         $array = $res->all();
         $result = array();
 
-        foreach ($array as $r){
+        foreach ($array as $r) {
             $result[] = $r["recomended_id"];
         }
         $items = $result;
 
-        $result = Articles::find()->where(['status'=>'publish'])->orderBy(['date_publish' => SORT_DESC])->all();
-
-
-        if(isset($query["section_id"])){
+        $result = Articles::find()->where(['status' => 'publish'])->andWhere(['section' => $art['section']])->orderBy(['date_publish' => SORT_DESC])->all();
+        
+        if (isset($query["section_id"])) {
             $result = Articles::find()->where(["section" => $query["section_id"]])->andWhere(['status' => 'publish'])->orderBy(['date_publish' => SORT_DESC])->all();
         }
+
         $newResult = array();
 
 
+        foreach ($result as $i) {
 
-        foreach ($result as $i){
+            if (isset($query["name"]) && strpos($i["name"], $query["name"]) === false) continue;
+            if (isset($query["value"]) && $query["value"] != in_array($i["id"], $items) ? 1 : 0) continue;
 
-            if(isset($query["name"]) && strpos($i["name"], $query["name"])  === false) continue;
-            if(isset($query["value"]) && $query["value"] != in_array($i["id"], $items) ? 1 : 0) continue;
-
-                $newResult[] = array(
-                    'id' => $i["id"],
-                    'name' => $i["name"],
-                    'date_publish' => $i["date_publish"],
-                    'status' => $i["status"],
-                    'section_id' => $i["section"],
-                    'value' => in_array($i["id"], $items) ? 1 : 0
-                );
+            $newResult[] = array(
+                'id' => $i["id"],
+                'name' => $i["name"],
+                'date_publish' => $i["date_publish"],
+                'status' => $i["status"],
+                'section_id' => $i["section"],
+                'value' => in_array($i["id"], $items) ? 1 : 0
+            );
 
         }
 
 
         $ps = 20;
-        if(isset($query["psize"])){
+        if (isset($query["psize"])) {
             $ps = $query["psize"];
         }
 
-        if(isset($query["sort"])){
+        if (isset($query["sort"])) {
             $sort = $query["sort"];
         }
 
@@ -148,23 +146,24 @@ class RarticlesController extends ActiveController
                 'pageSize' => $ps,
             ],
             'sort' => [
-            'attributes' => [
-                'id',
-                'value',
-                'name',
-                'section_id'
-            ],
+                'attributes' => [
+                    'id',
+                    'value',
+                    'name',
+                    'section_id'
+                ],
             ]
         ]);
 
     }
 
-    public function actionCategories($id){
+    public function actionCategories($id)
+    {
         $res = SectionsCategory::find()->where(['category_id' => $id]);
         $array = $res->all();
         $result = array();
 
-        foreach ($array as $r){
+        foreach ($array as $r) {
             $result[] = $r["section_id"];
         }
         $items = $result;
@@ -173,8 +172,7 @@ class RarticlesController extends ActiveController
         $newResult = array();
 
 
-
-        foreach ($result as $i){
+        foreach ($result as $i) {
             $newResult[] = array(
                 'id' => $i["id"],
                 'name' => $i["name"],
@@ -186,25 +184,26 @@ class RarticlesController extends ActiveController
 
     }
 
-    public function actionRssupdate($id){
+    public function actionRssupdate($id)
+    {
         $post = \Yii::$app->request->post();
 
-        if($post["value"] == 0){
+        if ($post["value"] == 0) {
 
             $r = Arss::find()->where(['article_id' => $id, 'rss_id' => $post["rss_id"]]);
 
-            if($item = $r->one()) {
+            if ($item = $r->one()) {
                 $item->delete();
                 return ['status' => 'success', 'message' => 'Удалено'];
             } else return ['status' => 'error', 'message' => 'Рекомендация не найдена'];
         } else {
 
             $one = Articles::findOne($id);
-            if(!$one)
+            if (!$one)
                 return ['status' => 'error', 'message' => 'id не действительный'];
 
 
-            if($post["rss_id"] != 0) {
+            if ($post["rss_id"] != 0) {
 
                 $one = Rss::findOne($post["rss_id"]);
                 if (!$one)
@@ -218,9 +217,9 @@ class RarticlesController extends ActiveController
 
 
                 $rss = Rss::find()->all();
-                foreach ($rss as $item){
+                foreach ($rss as $item) {
                     $arss = Arss::find()->where(['rss_id' => $item["id"]])->andWhere(['article_id' => $id])->one();
-                    if(!$arss){
+                    if (!$arss) {
                         $newItem = new Arss;
                         $newItem->article_id = $id;
                         $newItem->rss_id = $item["id"];
@@ -231,35 +230,32 @@ class RarticlesController extends ActiveController
             }
 
 
-
-
-
-
-            if($result)
+            if ($result)
                 return ['status' => 'success'];
             else return ['status' => 'error', 'message' => $result->getErrors()];
         }
     }
 
-    public function actionRecupdate($id){
+    public function actionRecupdate($id)
+    {
         $post = \Yii::$app->request->post();
 
-        if($post["value"] == 0){
+        if ($post["value"] == 0) {
 
             $r = Recomended::find()->where(['article_id' => $id, 'recomended_id' => $post["article_id"]]);
 
-            if($item = $r->one()) {
+            if ($item = $r->one()) {
                 $item->delete();
                 return ['status' => 'success', 'message' => 'Удалено'];
             } else return ['status' => 'error', 'message' => 'Рекомендация не найдена'];
         } else {
 
             $one = Articles::findOne($post["article_id"]);
-            if(!$one)
+            if (!$one)
                 return ['status' => 'error', 'message' => 'article_id не действительный'];
 
             $one = Articles::findOne($id);
-            if(!$one)
+            if (!$one)
                 return ['status' => 'error', 'message' => 'id не действительный'];
 
 
@@ -267,31 +263,32 @@ class RarticlesController extends ActiveController
             $item->article_id = $id;
             $item->recomended_id = $post["article_id"];
 
-            if($result = $item->save())
+            if ($result = $item->save())
                 return ['status' => 'success'];
             else return ['status' => 'error', 'message' => $result->getErrors()];
         }
     }
 
-    public function actionCatupdate($id){
+    public function actionCatupdate($id)
+    {
         $post = \Yii::$app->request->post();
 
-        if($post["value"] == 0){
+        if ($post["value"] == 0) {
 
             $r = SectionsCategory::find()->where(['section_id' => $post["section_id"], 'category_id' => $id]);
 
-            if($item = $r->one()) {
+            if ($item = $r->one()) {
                 $item->delete();
                 return ['status' => 'success', 'message' => 'Удалено'];
             } else return ['status' => 'error', 'message' => 'Не найдено'];
         } else {
 
             $one = Sections::findOne($post["section_id"]);
-            if(!$one)
+            if (!$one)
                 return ['status' => 'error', 'message' => 'section_id не действительный'];
 
             $one = Category::findOne($id);
-            if(!$one)
+            if (!$one)
                 return ['status' => 'error', 'message' => 'id не действительный'];
 
 
@@ -299,14 +296,11 @@ class RarticlesController extends ActiveController
             $item->section_id = $post["section_id"];
             $item->category_id = $id;
 
-            if($result = $item->save())
+            if ($result = $item->save())
                 return ['status' => 'success'];
             else return ['status' => 'error', 'message' => $result->getErrors()];
         }
     }
-
-
-
 
     public function actions()
     {
@@ -318,12 +312,47 @@ class RarticlesController extends ActiveController
 
         // customize the data provider preparation with the "prepareDataProvider()" method
 
+
         $actions['index']['prepareDataProvider'] = function () {
+
+            $res = \app\models\Articles::find();
+            if (isset($_REQUEST['name'])) {
+                $_REQUEST['name'] = str_replace(["%25","%"],"",$_REQUEST['name']);
+                $res->andWhere(['like', 'name', $_REQUEST['name']]);
+            }
+            if (isset($_REQUEST['choise']))
+                $res->andWhere(['=', 'choise', $_REQUEST['choise']]);
+            if (isset($_REQUEST['not_miss']))
+                $res->andWhere(['=', 'not_miss', $_REQUEST['not_miss']]);
+            if (isset($_REQUEST['topic_day']))
+                $res->andWhere(['=', 'topic_day', $_REQUEST['topic_day']]);
+            if (isset($_REQUEST['section']))
+                $res->andWhere(['=', 'section', $_REQUEST['section']]);
+            if (isset($_REQUEST['author']))
+                $res->andWhere(['=', 'author', $_REQUEST['author']]);
+            if (isset($_REQUEST['main_sort']))
+                $res->andWhere(['=', 'main_sort', $_REQUEST['main_sort']]);
+            if (isset($_REQUEST['show_on_main']))
+                $res->andWhere(['=', 'show_on_main', $_REQUEST['show_on_main']]);
+            if (isset($_REQUEST['section_topic']))
+                $res->andWhere(['=', 'section_topic', $_REQUEST['section_topic']]);
+            if (isset($_REQUEST['date_publish']))
+                $res->andWhere(['like', 'date_publish', $_REQUEST['date_publish']]);   
+            if (isset($_REQUEST['date_create'])) {
+                $res->andWhere(['like', 'date_create', $_REQUEST['date_create']]); 
+            }
+            if (isset($_REQUEST['status']))
+                $res->andWhere(['=', 'status', $_REQUEST['status']]);
+            if (isset($_REQUEST['views'])){
+                $_REQUEST['views'] = str_replace(["%25","%"],"",$_REQUEST['views']);
+                $res->andWhere(['like', 'views', $_REQUEST['views']]); 
+            }
+
             return new ActiveDataProvider([
-                'query' => \app\models\Articles::find(),
-                'sort'  =>  [
-                    'defaultOrder'  =>  [
-                        'date_publish'    =>  SORT_DESC
+                'query' => $res,
+                'sort' => [
+                    'defaultOrder' => [
+                        'date_publish' => SORT_DESC
                     ]
                 ]
             ]);
@@ -345,24 +374,22 @@ class RarticlesController extends ActiveController
         return $res;
     }
 
-
-    public function actionCreate(){
+    public function actionCreate()
+    {
         $post = \Yii::$app->request->post();
         $object = new Articles();
         $object->load($post, '');
         $object->save();
 
-        if(isset($post["tags"])) {
+        if (isset($post["tags"])) {
             $tags = $post["tags"];
         }
 
-        if(isset($tags) && is_array($tags)) {
+        if (isset($tags) && is_array($tags)) {
 
             foreach ($tags as $tag) {
 
                 $r = Tags::find()->where(['name' => $tag])->one();
-
-
 
 
                 $atag = false;
@@ -395,7 +422,8 @@ class RarticlesController extends ActiveController
         return $object;
     }
 
-    public function actionUpdate(){
+    public function actionUpdate()
+    {
         $post = \Yii::$app->request->post();
         unset($post["preview_img"]);
         unset($post["header_img"]);
@@ -403,26 +431,26 @@ class RarticlesController extends ActiveController
         $post_id = (int)$post_id["id"];
         $item = Articles::findOne($post_id);
         $oldTags = $item->tags;
-        if(isset($post["tags"])) {
+        if (isset($post["tags"])) {
             $tags = $post["tags"];
 //            $tags = $item->tags;
         }
-        if(isset($post["persons"]))
+        if (isset($post["persons"]))
             $persons = $post["persons"];
         unset($post["tags"]);
         unset($post["persons"]);
-        if(isset($post["topic_day"]) && $post["topic_day"] == 1){
-           $topic =  Articles::find()->where(['topic_day' => 1])->one();
-           if($topic) {
-               $topic->topic_day = 0;
-               $topic->save();
-           }
+        if (isset($post["topic_day"]) && $post["topic_day"] == 1) {
+            $topic = Articles::find()->where(['topic_day' => 1])->one();
+            if ($topic) {
+                $topic->topic_day = 0;
+                $topic->save();
+            }
 
         }
 
 
 //        Удаляяем теги
-        if(isset($item->tags) && count($item->tags) > 0 && $item->tags != '' && isset($tags) && is_array($tags)) {
+        if (isset($item->tags) && count($item->tags) > 0 && $item->tags != '' && isset($tags) && is_array($tags)) {
             foreach ($oldTags as $tag) {
                 if (!in_array($tag->name, $tags)) {
 
@@ -436,15 +464,11 @@ class RarticlesController extends ActiveController
         }
         $item = Articles::findOne($post_id);
 
-        if($e = $item->load($post, '')){
-            if ($item->save() && $item->validate()){
+        if ($e = $item->load($post, '')) {
+            if ($item->save() && $item->validate()) {
 
 
-
-
-
-
-                if(isset($item->persons) && count($item->persons) > 0 && $item->persons != '' && isset($persons) && is_array($persons)) {
+                if (isset($item->persons) && count($item->persons) > 0 && $item->persons != '' && isset($persons) && is_array($persons)) {
 
 
                     foreach ($item->persons as $person) {
@@ -457,7 +481,7 @@ class RarticlesController extends ActiveController
                     }
                 }
 
-                if(isset($tags) && is_array($tags)) {
+                if (isset($tags) && is_array($tags)) {
 
                     foreach ($tags as $tag) {
 
@@ -489,7 +513,7 @@ class RarticlesController extends ActiveController
                     $item = Articles::findOne($post_id);
                 }
 
-                if(isset($persons) && is_array($persons)) {
+                if (isset($persons) && is_array($persons)) {
                     foreach ($persons as $person) {
                         $r = Persons::find()->where(['name' => $person])->one();
 
@@ -518,14 +542,13 @@ class RarticlesController extends ActiveController
                     $item = Articles::findOne($post_id);
                 }
 
-                    return array('status' => 'success', 'data' => $item);
+                return array('status' => 'success', 'data' => $item);
             } else {
                 return array('status' => 'error', 'message' => 'Не прошло валидацию', 'errors' => $item->getErrors());
             }
         } else return array('status' => 'error', 'message' => 'Пустой запрос');
 
     }
-
 
 
 }

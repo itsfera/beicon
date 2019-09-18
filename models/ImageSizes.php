@@ -16,9 +16,30 @@ class ImageSizes extends ActiveRecord
     static function ResizeTmp($img, $type, $ifGallery = false, $remake = false)
     {
         $fname = explode('.', $img);
-        $image = \Yii::$app->image->load($_SERVER["DOCUMENT_ROOT"] . UPLOAD_DIR . $fname[0] . ($type ? '_' . $type : '') . '.' . $fname[1]);
+        $typeName = $_SERVER["DOCUMENT_ROOT"] . UPLOAD_DIR . $fname[0] . ($type ? '_' . $type : '') . '.' . $fname[1];
+        $nonTypeName = $_SERVER["DOCUMENT_ROOT"] . UPLOAD_DIR . $fname[0] . '.' . $fname[1];
+        if (file_exists($typeName)) {
+            $image = \Yii::$app->image->load($typeName);
+        } elseif (file_exists($nonTypeName)) {
+            $image = \Yii::$app->image->load($nonTypeName);
+        } else {
+            $image = \Yii::$app->image->load($_SERVER["DOCUMENT_ROOT"] . "/img/assets/404.png");
+        }
         $name = $fname[0] . ($type ? '_' . $type : '') . '_resized.' . $fname[1];
         $image->save($_SERVER["DOCUMENT_ROOT"] . UPLOAD_DIR . $name, $quality = 60);
+        return $name;
+    }
+
+    static function GismeteoResize($img, $type, $ifGallery = false, $remake = false)
+    {
+        $size["width"] = '300px';
+        $size["height"] = '200px';
+        $fname = explode('.', $img);
+        $image = \Yii::$app->image->load($_SERVER["DOCUMENT_ROOT"] . UPLOAD_DIR . $fname[0] . ($type ? '_' . $type : '') . '.' . $fname[1]);
+        $image->resize($size["width"], $size["height"], \yii\image\drivers\Image::PRECISE);
+        $image->crop($size["width"], $size["height"]);
+        $name = $fname[0] . ($type ? '_' . $type : '') . '_gisresized.' . $fname[1];
+        $image->save($_SERVER["DOCUMENT_ROOT"] . UPLOAD_DIR . $name, $quality = 80);
         return $name;
     }
 
@@ -55,8 +76,8 @@ class ImageSizes extends ActiveRecord
                 $file = \Yii::getAlias('@app/web/uploads/' . $fname[0] . '.' . $fname[1]);
             }
 
-//echo $file;
-//            return;
+            //echo $file;
+            //            return;
 
 
             $image = \Yii::$app->image->load($file);

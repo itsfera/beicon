@@ -282,8 +282,8 @@ $bg2 = ImageSizes::ResizeTmp($articles[0]->header_img, '9_16_352');
                     </div>
                 </a>
             </article>
-        <?php } ?>
-        <?php if (isset($articles[11])) {
+        <? } ?>
+        <? if (isset($articles[11])) {
             $article = $articles[11];
             $img = ImageSizes::ResizeTmp($article->preview_img, '1_1_690');
             ?>

@@ -64,22 +64,20 @@ use app\models\ImageSizes;
                 <a href="<?= Url::to(['articles/view', 'url' => strtolower($article["url"]), 'section' => $article->sectionData->url]) ?>">
                     <div class="article-overlay"></div>
                     <img src="<? if ($article["preview_img"]) {
-
                         if ($n == 0) {
-                            echo UPLOAD_DIR . ImageSizes::getResizesName($article["preview_img"], '16_9_1040');
+                            if ($article["preview_img"])
+                                echo UPLOAD_DIR . ImageSizes::getResizesName($article["preview_img"], '16_9_1040');
                         } else {
-
-                            echo UPLOAD_DIR . ImageSizes::getResizesName($article["preview_img"], '1_1_690');
+                            if ($article["preview_img"])
+                                echo UPLOAD_DIR . ImageSizes::getResizesName($article["preview_img"], '1_1_690');
                         }
-
-
                     } else {
-
                         if ($n == 0) {
-                            echo UPLOAD_DIR . ImageSizes::getResizesName($article["header_img"], '16_9_1040');
+                            if ($article["header_img"])
+                                echo UPLOAD_DIR . ImageSizes::getResizesName($article["header_img"], '16_9_1040');
                         } else {
-
-                            echo UPLOAD_DIR . ImageSizes::getResizesName($article["header_img"], '1_1_690');
+                            if ($article["header_img"])
+                                echo UPLOAD_DIR . ImageSizes::getResizesName($article["header_img"], '1_1_690');
                         }
                     } ?>" width="" height="" alt="<?= $article["name"] ?>" title="<?= $article["name"] ?>"
                          class="article-img-full">

@@ -87,9 +87,8 @@ class News extends Model
         $host = 'https://www.beicon.ru'; // домен сайта
         $content = isset($customNames[$rssName]['content']) ? $customNames[$rssName]['content'] : 'content';
 //        $host = Yii::$app->request->hostInfo;
+
         ob_start();
-
-
         echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
         <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
                 xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
@@ -109,8 +108,6 @@ class News extends Model
             <?
         } ?>
         </urlset><?php
-
-
         return ob_get_clean();
     }
 

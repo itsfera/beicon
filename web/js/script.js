@@ -351,6 +351,14 @@ $(document).ready(function () {
 	//Remove href from logo on Main page
 	$('#mainPage').find('.logo-img').parent('a').removeAttr('href');
 
+	//changing youtube's video width
+	$("iframe").each(function (i) {
+		if ($(this).attr("src").search("youtube") >= 0) {
+			$(this).wrap("<div class='youtube-video-wrapper'></div>");
+			//$(this).attr("width", "100%").attr("height", "100%");
+		}
+	});
+
 
 	var menuBlock = $('#menuBlock'),
 		slidePage = $('#slidePage'),

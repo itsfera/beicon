@@ -118,8 +118,12 @@ $config = [
         'response' => [
             'class' => 'yii\web\Response',
             'on beforeSend' => function ($event) {
+                Yii::$app->response->headers->add('Access-Control-Allow-Credentials', false);
+                Yii::$app->response->headers->add('Access-Control-Allow-Origin', 'https://admin.beicon.ru');
+                //Yii::$app->response->headers->add('Access-Control-Allow-Origin', '*');
+                
+                //Yii::$app->response->headers->add('Access-Control-Allow-Origin', 'https://admin.beicon.ru');
                 if (Yii::$app->response->statusCode == 401) {
-
                     Yii::$app->response->headers->add('Access-Control-Allow-Origin', '*');
                     Yii::$app->response->statusCode = 401;//I preferred that error code
                 }
@@ -185,6 +189,7 @@ $config = [
                 'news_rss' => 'site/news', //новости сайта
                 'yandex_turbo' => 'site/turbo', //Turbo
                 'amp' => 'site/amp', //AMP
+                'gismeteorss' => 'site/gismeteorss', //GismeteoRSS
                 'sitemap_xml' => 'site/sitemap', //карта сайта
                 'sitemap' => 'site/sitemap-html', //карта сайта
                 'robots.txt' => 'site/robots', //карта сайта

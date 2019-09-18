@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Arss;
 use app\models\forms\Subscribe;
 use app\models\Meta;
 use app\models\Sitemap;
@@ -341,8 +342,8 @@ class SiteController extends Controller
 
     public function actionTurbo()
     {
-        $art = Articles::find()->where(['status' => 'publish'])->andWhere(['<=', 'date_publish', date('Y-m-d H:i:s')])->orderBy(['date_publish' => SORT_DESC])->limit(10)->all();
-        //echo '<pre>', print_r($art[0], true), '</pre>';
+        $art = Articles::find()->where(['status' => 'publish'])->andWhere(['<=', 'date_publish', date('Y-m-d H:i:s')])->orderBy(['date_publish' => SORT_DESC])->limit(999)->all();
+
         $host = 'https://www.beicon.ru';
         ob_start();
         echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
@@ -361,12 +362,12 @@ class SiteController extends Controller
                     Ресторанные новости.
                 </description>
                 <language>ru</language>
-                <turbo:analytics></turbo:analytics>
-                <turbo:adNetwork></turbo:adNetwork>
+                <turbo:analytics type="Yandex" id="52250608"></turbo:analytics>
+                <?/*<turbo:adNetwork></turbo:adNetwork>*/ ?>
                 <?
                 foreach ($art as $article) { ?>
                     <item turbo="true">
-                        <link><?= $host . $article["url"] ?></link>
+                        <link><?= $host . Url::to(['articles/view', 'url' => $article->url, 'section' => $article->sectionData->url]) . "/" ?></link>
                         <turbo:source></turbo:source>
                         <turbo:topic><?= str_replace('&', '&amp;', $article["name"]) ?></turbo:topic>
                         <pubDate><?= gmdate(DATE_RFC822, strtotime($article["date_publish"])) ?></pubDate>
@@ -374,6 +375,9 @@ class SiteController extends Controller
                         <yandex:related></yandex:related>
                         <turbo:content>
                             <![CDATA[
+                            <header>
+                                <h1><?= str_replace('&', '&amp;', $article["name"]) ?></h1>
+                            </header>
                             <?= $article['content'] ?>
                             ]]>
                         </turbo:content>
@@ -391,11 +395,60 @@ class SiteController extends Controller
         return $xml;
     }
 
+    public function actionGismeteorss()
+    {
+        $res = Arss::find()->where(['rss_id' => 8]);
+        $array = $res->all();
+        $result = array();
+        foreach ($array as $r)
+            $result[] = $r["article_id"];
+
+        $art = Articles::find()->where(['status' => 'publish', 'id' => $result])->andWhere(['<=', 'date_publish', date('Y-m-d H:i:s')])->orderBy(['date_publish' => SORT_DESC])->limit(100)->all();
+
+        $host = 'https://www.beicon.ru';
+        ob_start();
+        echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
+        <rss version="2.0">
+            <channel>
+                <title>BeIcon – события, мода, красота, путешествие, стиль жизни, рестораны</title>
+                <link><?= $host ?></link>
+                <description>BeIcon.ru – сайт о моде, красоте, стиле жизни и культурных событиях Москвы. Самые
+                    актуальные репортажи со всех знаковых культурных мероприятий столицы. Лучшие модные обзоры.
+                    Экспертные комментарии в области красоты и здоровья. Самые интересные направления для путешествий.
+                    Ресторанные новости.
+                </description>
+                <?
+                foreach ($art as $article) {
+                    if (!$lastArtDate)
+                        $lastArtDate = $article["date_publish"];
+                    $article->preview_img = ImageSizes::GismeteoResize($article->preview_img, '16_9_1040');
+                    ?>
+                    <item>
+                        <title><?= $article["name"] ?></title>
+                        <link><?= $host . Url::to(['articles/view', 'url' => $article->url, 'section' => $article->sectionData->url]) . "/" ?></link>
+                        <pubDate><?= gmdate(DATE_RFC822, strtotime($article["date_publish"])) ?></pubDate>
+                        <enclosure url="<?= $host . "/uploads/" . $article->preview_img ?>" type="image/jpeg"/>
+                        <description><?= htmlspecialchars(strip_tags($article['preview_content'])) ?></description>
+                    </item>
+                    <?
+                } ?>
+                <lastBuildDate><?= gmdate(DATE_RFC822, strtotime($lastArtDate)) ?></lastBuildDate>
+            </channel>
+        </rss>
+        <?php
+        $xml = ob_get_clean();
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+        $headers = Yii::$app->response->headers;
+        $headers->add('Content-Type', 'text/xml');
+        return $xml;
+    }
+
     public function actionAmp()
     {
         $art = Articles::find()->where(['status' => 'publish'])->andWhere(['<=', 'date_publish', date('Y-m-d H:i:s')])->orderBy(['date_publish' => SORT_DESC])->limit(10)->all();
         //echo '<pre>', print_r($art[0], true), '</pre>';
-        $host = 'https://www.beicon.ru';
+        $host = 'https://www.beicon.ru/';
         ob_start();
         echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
         <rss xmlns:yandex="http://news.yandex.ru"

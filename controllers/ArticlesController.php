@@ -142,6 +142,10 @@ class ArticlesController extends Controller
             $template = $dom->createDocumentFragment();
             $template->appendXML($value);
             $element->parentNode->insertBefore($template, $element->nextSibling);
+            \Yii::$app->view->registerMetaTag([
+                'name' => 'og:image',
+                'content' => $src
+            ]);
         }
         if ($imgs->length > 0) {
             //$model->content = $dom->saveHTML();
